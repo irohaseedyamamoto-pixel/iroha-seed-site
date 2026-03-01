@@ -337,7 +337,7 @@ const SectionHeader = ({ title, subtitle, theme, light = false }: { title: strin
       viewport={{ once: true }}
     >
       <h2 className={cn("text-xs md:text-sm font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mb-3 md:mb-4", light ? "text-white/50" : "opacity-50", theme.accentText)}>{subtitle}</h2>
-      <p className={cn("text-2xl md:text-5xl font-bold leading-tight text-balance", light ? "text-white" : theme.text)}>title</p>
+      <p className={cn("text-2xl md:text-5xl font-bold leading-tight text-balance", light ? "text-white" : theme.text)}>{title}</p>
     </motion.div>
   </div>
 );
