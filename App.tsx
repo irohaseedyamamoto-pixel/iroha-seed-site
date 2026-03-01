@@ -273,12 +273,10 @@ const Navbar = ({ theme }: { theme: ThemeConfig }) => {
     )}>
       <div className="flex items-center gap-3">
         <img 
-          src="https://drive.google.com/thumbnail?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&sz=w200" 
+          src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
           alt="iroha Seed Logo" 
           className="w-10 h-10 object-contain"
           loading="eager"
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
         />
         <div className="flex flex-col">
           <span className={cn("text-xl font-black tracking-tighter leading-none", isScrolled ? "text-black" : theme.text)}>iroha Seed</span>
@@ -678,12 +676,10 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               {/* Main Image Container */}
               <div className={cn("aspect-[3/4] overflow-hidden relative z-10", theme.radius, theme.shadow)}>
                 <img 
-                  src="https://drive.google.com/thumbnail?id=1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g&sz=w1000" 
+                  src="https://lh3.googleusercontent.com/d/1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g=s1000" 
                   alt="代表取締役社長 山本剛史" 
                   className="w-full h-full object-cover object-top transition-all duration-700"
                   loading="eager"
-                  crossOrigin="anonymous"
-                  referrerPolicy="no-referrer"
                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-30" />
@@ -736,10 +732,9 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               <div className="mt-16 md:mt-24 flex items-center gap-6">
                 <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden", theme.border)}>
                   <img 
-                    src="https://drive.google.com/thumbnail?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&sz=w200" 
+                    src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
                     alt="iroha Seed Logo" 
                     className="w-10 h-10 object-contain"
-                    referrerPolicy="no-referrer"
                   />
                 </div>
                 <div>
@@ -838,10 +833,9 @@ const Footer = ({ theme }: { theme: ThemeConfig }) => {
         <div className="col-span-2">
           <div className="flex items-center gap-3 mb-8">
             <img 
-              src="https://drive.google.com/thumbnail?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&sz=w200" 
+              src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
               alt="iroha Seed Logo" 
               className="w-12 h-12 object-contain"
-              referrerPolicy="no-referrer"
             />
             <div className="flex flex-col">
               <span className={cn("text-2xl font-black tracking-tighter leading-none", theme.accentText)}>iroha Seed</span>
