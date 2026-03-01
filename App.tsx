@@ -17,7 +17,13 @@ import {
   MapPin,
   ChevronDown,
   Layers,
-  Palette
+  Palette,
+  Zap,
+  Heart,
+  Handshake,
+  Target,
+  Users,
+  Maximize
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -565,11 +571,49 @@ const StrengthSection = ({ theme }: { theme: ThemeConfig }) => {
     "経営者の孤独や判断の重さを理解したうえで、表面的ではない打ち手を提示できる"
   ];
 
+  const methods = [
+    { 
+      title: "圧倒的な当事者意識", 
+      desc: "外部のコンサルタントではなく、貴社の一員として結果にコミットします。", 
+      icon: Heart 
+    },
+    { 
+      title: "アナログとデジタルの融合", 
+      desc: "ITツールだけでなく、人脈や紹介、リアルな接点を組み合わせた導線を設計します。", 
+      icon: Zap 
+    },
+    { 
+      title: "現場起点", 
+      desc: "机上の空論ではなく、実際の現場で起きている課題から解決策を導き出します。", 
+      icon: MapPin 
+    },
+    { 
+      title: "経営者視点", 
+      desc: "投資対効果を常に意識し、経営判断に資する本質的な提案を行います。", 
+      icon: TrendingUp 
+    },
+    { 
+      title: "全体最適", 
+      desc: "部分的な改善にとどまらず、事業全体の「売れる構造」を最適化します。", 
+      icon: Layers 
+    },
+    { 
+      title: "伴走型支援", 
+      desc: "提案して終わりではなく、実行から改善まで共に汗をかきながら進めます。", 
+      icon: Handshake 
+    }
+  ];
+
   return (
-    <section id="strengths" className={cn("py-32 px-6 md:px-12", theme.card === 'bg-white' ? 'bg-white' : theme.bg)}>
+    <section id="strengths" className={cn("py-32 px-6 md:px-12 overflow-hidden", theme.bg)}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-20">
-          <div>
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-32">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
             <SectionHeader 
               subtitle="強み" 
               title="なぜ、iroha Seedが選ばれるのか" 
@@ -583,33 +627,100 @@ const StrengthSection = ({ theme }: { theme: ThemeConfig }) => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-6"
+                  className="flex items-start gap-6 group"
                 >
-                  <div className={cn("w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 text-white", theme.accent)}>
-                    <CheckCircle2 className="w-5 h-5" />
+                  <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-1 text-white transition-transform group-hover:scale-110", theme.accent)}>
+                    <CheckCircle2 className="w-6 h-6" />
                   </div>
-                  <p className={cn("text-xl font-bold leading-relaxed", theme.text)}>{strength}</p>
+                  <p className={cn("text-lg md:text-xl font-bold leading-relaxed", theme.text)}>{strength}</p>
                 </motion.div>
               ))}
             </div>
-          </div>
-          <div className={cn("p-6 md:p-12 flex flex-col justify-center", theme.footer, theme.radius, theme.shadow)}>
-            <h3 className="text-xl md:text-2xl font-bold mb-8 md:mb-10 border-b border-white/20 pb-6 uppercase tracking-widest text-white">メソッド</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-              {[
-                "圧倒的な当事者意識",
-                "アナログとデジタルの融合",
-                "現場起点",
-                "経営者視点",
-                "全体最適",
-                "伴走型支援"
-              ].map((m, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <Sparkles className={cn("w-5 h-5", theme.accentText)} />
-                  <span className="font-bold opacity-80 text-white">{m}</span>
-                </div>
-              ))}
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            {/* Decorative background element */}
+            <div className={cn("absolute -inset-4 opacity-10 blur-3xl rounded-full", theme.accent)} />
+            <div className={cn("relative p-8 md:p-12 border overflow-hidden", theme.card, theme.border, theme.radius, theme.shadow)}>
+              <div className="absolute top-0 right-0 p-8 opacity-5">
+                <Sparkles className="w-48 h-48" />
+              </div>
+              <h3 className={cn("text-2xl font-bold mb-8 flex items-center gap-3", theme.text)}>
+                <div className={cn("w-1 h-8", theme.accent)} />
+                私たちのスタンス
+              </h3>
+              <p className={cn("text-lg leading-relaxed mb-8", theme.secondary)}>
+                私たちは単なる制作会社やコンサルティング会社ではありません。
+                「売れる仕組み」を共に創り上げるパートナーとして、現場の熱量を成果に変えるまで伴走します。
+              </p>
+              <div className={cn("p-6 rounded-xl bg-opacity-5", theme.accent)}>
+                <p className={cn("font-bold italic text-xl", theme.text)}>
+                  "現場の解像度を上げ、<br />
+                  経営の精度を高める。"
+                </p>
+              </div>
             </div>
+          </motion.div>
+        </div>
+
+        {/* Method Section Redesign */}
+        <div className="mt-32">
+          <div className="text-center mb-16">
+            <h3 className={cn("text-xs md:text-sm font-bold uppercase tracking-[0.5em] mb-4 opacity-60", theme.text)}>Method</h3>
+            <h2 className={cn("text-3xl md:text-5xl font-black", theme.text)}>iroha Seed メソッド</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {methods.map((method, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={cn(
+                  "group p-8 border transition-all duration-500 hover:shadow-2xl relative overflow-hidden",
+                  theme.card, theme.border, theme.radius
+                )}
+              >
+                {/* Hover background effect */}
+                <div className={cn(
+                  "absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500",
+                  theme.accent
+                )} />
+                
+                <div className="relative z-10">
+                  <div className={cn(
+                    "w-14 h-14 mb-8 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3",
+                    theme.card === 'bg-white' ? 'bg-slate-50 border border-slate-100' : 'bg-white/5 border border-white/10'
+                  )}>
+                    <method.icon className={cn("w-7 h-7", theme.accentText)} />
+                  </div>
+                  
+                  <h4 className={cn("text-xl font-bold mb-4 group-hover:translate-x-1 transition-transform", theme.text)}>
+                    {method.title}
+                  </h4>
+                  
+                  <p className={cn("text-sm leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity", theme.text)}>
+                    {method.desc}
+                  </p>
+                </div>
+
+                {/* Decorative number */}
+                <div className={cn(
+                  "absolute -bottom-4 -right-4 text-8xl font-black opacity-[0.03] select-none group-hover:opacity-[0.07] transition-opacity",
+                  theme.text
+                )}>
+                  0{i + 1}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
