@@ -272,7 +272,12 @@ const Navbar = ({ theme }: { theme: ThemeConfig }) => {
       isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200" : "bg-transparent"
     )}>
       <div className="flex items-center gap-3">
-        <Compass className={cn("w-8 h-8", theme.accentText)} />
+        <img 
+          src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+          alt="iroha Seed Logo" 
+          className="w-10 h-10 object-contain"
+          referrerPolicy="no-referrer"
+        />
         <div className="flex flex-col">
           <span className={cn("text-xl font-black tracking-tighter leading-none", isScrolled ? "text-black" : theme.text)}>iroha Seed</span>
           <span className={cn("text-[10px] font-bold opacity-50 tracking-widest", isScrolled ? "text-black" : theme.text)}>by Hiroso Inc.</span>
@@ -725,8 +730,13 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               </div>
 
               <div className="mt-16 md:mt-24 flex items-center gap-6">
-                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center", theme.border)}>
-                  <Compass className={cn("w-8 h-8", theme.accentText)} />
+                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden", theme.border)}>
+                  <img 
+                    src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+                    alt="iroha Seed Logo" 
+                    className="w-10 h-10 object-contain"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
                 <div>
                   <div className={cn("text-sm font-bold opacity-40 tracking-widest")}>iroha Seed Representative</div>
@@ -823,7 +833,12 @@ const Footer = ({ theme }: { theme: ThemeConfig }) => {
       <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
         <div className="col-span-2">
           <div className="flex items-center gap-3 mb-8">
-            <Compass className={cn("w-8 h-8", theme.accentText)} />
+            <img 
+              src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+              alt="iroha Seed Logo" 
+              className="w-12 h-12 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <div className="flex flex-col">
               <span className={cn("text-2xl font-black tracking-tighter leading-none", theme.accentText)}>iroha Seed</span>
               <span className={cn("text-[10px] font-bold opacity-40 tracking-widest")}>by Hiroso Inc.</span>
