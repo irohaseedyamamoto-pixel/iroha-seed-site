@@ -188,20 +188,6 @@ const THEMES: Record<ThemePattern, ThemeConfig> = {
     radius: 'rounded-lg',
     shadow: 'shadow-sm border'
   },
-  'minimal-clean': {
-    name: 'ミニマル・クリーン',
-    bg: 'bg-white',
-    text: 'text-slate-900',
-    accent: 'bg-black',
-    accentText: 'text-black',
-    secondary: 'text-slate-500',
-    border: 'border-slate-100',
-    card: 'bg-white',
-    footer: 'bg-slate-50',
-    font: 'font-sans',
-    radius: 'rounded-none',
-    shadow: 'shadow-none'
-  },
   'immersive': {
     name: 'イマーシブ',
     bg: 'bg-black',
@@ -291,15 +277,21 @@ const Navbar = ({ theme }: { theme: ThemeConfig }) => {
       "fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-6 md:px-12 py-4 md:py-6 flex justify-between items-center",
       isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200" : "bg-transparent"
     )}>
-      <div className="flex items-center gap-3">
-        <img 
-          src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
-          alt="iroha Seed Logo" 
-          className="w-10 h-10 object-contain"
-          loading="eager"
-          referrerPolicy="no-referrer"
-        />
-        <div className="flex flex-col">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 flex items-center justify-center overflow-hidden">
+            <img 
+              src="https://drive.google.com/uc?export=view&id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+              alt="iroha Seed Logo" 
+              className="w-full h-full object-contain"
+              loading="eager"
+              referrerPolicy="no-referrer"
+              onError={(e) => {
+                // Fallback if image fails
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </div>
+          <div className="flex flex-col">
           <span className={cn("text-xl font-black tracking-tighter leading-none", isScrolled ? "text-black" : theme.text)}>iroha Seed</span>
           <span className={cn("text-[10px] font-bold opacity-50 tracking-widest", isScrolled ? "text-black" : theme.text)}>by Hiroso Inc.</span>
         </div>
@@ -800,9 +792,9 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               className="relative w-full max-w-[280px] md:max-w-sm mx-auto lg:ml-0 lg:mr-auto"
             >
               {/* Main Image Container */}
-              <div className={cn("aspect-[3/4] overflow-hidden relative z-10", theme.radius, theme.shadow)}>
+              <div className={cn("aspect-[3/4] overflow-hidden relative z-10 bg-slate-100", theme.radius, theme.shadow)}>
                 <img 
-                  src="https://lh3.googleusercontent.com/d/1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g=s1000" 
+                  src="https://drive.google.com/uc?export=view&id=1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g" 
                   alt="代表取締役社長 山本剛史" 
                   className="w-full h-full object-cover object-top transition-all duration-700"
                   loading="eager"
@@ -857,9 +849,9 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               </div>
 
               <div className="mt-16 md:mt-24 flex items-center gap-6">
-                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden", theme.border)}>
+                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden bg-slate-50", theme.border)}>
                   <img 
-                    src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
+                    src="https://drive.google.com/uc?export=view&id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
                     alt="iroha Seed Logo" 
                     className="w-10 h-10 object-contain"
                     referrerPolicy="no-referrer"
@@ -960,12 +952,14 @@ const Footer = ({ theme }: { theme: ThemeConfig }) => {
       <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
         <div className="col-span-2">
           <div className="flex items-center gap-3 mb-8">
-            <img 
-              src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
-              alt="iroha Seed Logo" 
-              className="w-12 h-12 object-contain"
-              referrerPolicy="no-referrer"
-            />
+            <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+              <img 
+                src="https://drive.google.com/uc?export=view&id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+                alt="iroha Seed Logo" 
+                className="w-full h-full object-contain"
+                referrerPolicy="no-referrer"
+              />
+            </div>
             <div className="flex flex-col">
               <span className={cn("text-2xl font-black tracking-tighter leading-none", theme.accentText)}>iroha Seed</span>
               <span className={cn("text-[10px] font-bold opacity-40 tracking-widest")}>by Hiroso Inc.</span>
