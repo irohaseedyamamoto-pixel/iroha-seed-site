@@ -277,21 +277,21 @@ const Navbar = ({ theme }: { theme: ThemeConfig }) => {
       "fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-6 md:px-12 py-4 md:py-6 flex justify-between items-center",
       isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200" : "bg-transparent"
     )}>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center overflow-hidden">
-            <img 
-              src="https://drive.google.com/uc?export=view&id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
-              alt="iroha Seed Logo" 
-              className="w-full h-full object-contain"
-              loading="eager"
-              referrerPolicy="no-referrer"
-              onError={(e) => {
-                // Fallback if image fails
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </div>
-          <div className="flex flex-col">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 flex items-center justify-center overflow-hidden bg-slate-50 rounded-lg">
+          <img 
+            src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&w=200&output=png" 
+            alt="iroha Seed Logo" 
+            className="w-full h-full object-contain"
+            loading="eager"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              // If image fails, hide it and rely on the text logo next to it
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+        <div className="flex flex-col">
           <span className={cn("text-xl font-black tracking-tighter leading-none", isScrolled ? "text-black" : theme.text)}>iroha Seed</span>
           <span className={cn("text-[10px] font-bold opacity-50 tracking-widest", isScrolled ? "text-black" : theme.text)}>by Hiroso Inc.</span>
         </div>
@@ -792,13 +792,17 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               className="relative w-full max-w-[280px] md:max-w-sm mx-auto lg:ml-0 lg:mr-auto"
             >
               {/* Main Image Container */}
-              <div className={cn("aspect-[3/4] overflow-hidden relative z-10 bg-slate-100", theme.radius, theme.shadow)}>
+              <div className={cn("aspect-[3/4] overflow-hidden relative z-10 bg-slate-200", theme.radius, theme.shadow)}>
                 <img 
-                  src="https://drive.google.com/uc?export=view&id=1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g" 
+                  src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g&w=1000&output=jpg&q=80" 
                   alt="代表取締役社長 山本剛史" 
                   className="w-full h-full object-cover object-top transition-all duration-700"
                   loading="eager"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    // Fallback to a professional placeholder if the specific photo fails
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=1000";
+                  }}
                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-30" />
@@ -849,9 +853,9 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
               </div>
 
               <div className="mt-16 md:mt-24 flex items-center gap-6">
-                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden bg-slate-50", theme.border)}>
+                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden bg-slate-100", theme.border)}>
                   <img 
-                    src="https://drive.google.com/uc?export=view&id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+                    src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&w=200&output=png" 
                     alt="iroha Seed Logo" 
                     className="w-10 h-10 object-contain"
                     referrerPolicy="no-referrer"
@@ -952,9 +956,9 @@ const Footer = ({ theme }: { theme: ThemeConfig }) => {
       <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
         <div className="col-span-2">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+            <div className="w-12 h-12 flex items-center justify-center overflow-hidden bg-white/10 rounded-xl">
               <img 
-                src="https://drive.google.com/uc?export=view&id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj" 
+                src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&w=200&output=png" 
                 alt="iroha Seed Logo" 
                 className="w-full h-full object-contain"
                 referrerPolicy="no-referrer"
