@@ -188,6 +188,20 @@ const THEMES: Record<ThemePattern, ThemeConfig> = {
     radius: 'rounded-lg',
     shadow: 'shadow-sm border'
   },
+  'minimal-clean': {
+    name: 'ミニマル・クリーン',
+    bg: 'bg-white',
+    text: 'text-slate-900',
+    accent: 'bg-black',
+    accentText: 'text-black',
+    secondary: 'text-slate-500',
+    border: 'border-slate-100',
+    card: 'bg-white',
+    footer: 'bg-slate-50',
+    font: 'font-sans',
+    radius: 'rounded-none',
+    shadow: 'shadow-none'
+  },
   'immersive': {
     name: 'イマーシブ',
     bg: 'bg-black',
@@ -283,6 +297,7 @@ const Navbar = ({ theme }: { theme: ThemeConfig }) => {
           alt="iroha Seed Logo" 
           className="w-10 h-10 object-contain"
           loading="eager"
+          referrerPolicy="no-referrer"
         />
         <div className="flex flex-col">
           <span className={cn("text-xl font-black tracking-tighter leading-none", isScrolled ? "text-black" : theme.text)}>iroha Seed</span>
@@ -791,6 +806,7 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
                   alt="代表取締役社長 山本剛史" 
                   className="w-full h-full object-cover object-top transition-all duration-700"
                   loading="eager"
+                  referrerPolicy="no-referrer"
                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-30" />
@@ -846,6 +862,7 @@ const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
                     src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
                     alt="iroha Seed Logo" 
                     className="w-10 h-10 object-contain"
+                    referrerPolicy="no-referrer"
                   />
                 </div>
                 <div>
@@ -947,6 +964,7 @@ const Footer = ({ theme }: { theme: ThemeConfig }) => {
               src="https://lh3.googleusercontent.com/d/1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj=s200" 
               alt="iroha Seed Logo" 
               className="w-12 h-12 object-contain"
+              referrerPolicy="no-referrer"
             />
             <div className="flex flex-col">
               <span className={cn("text-2xl font-black tracking-tighter leading-none", theme.accentText)}>iroha Seed</span>
