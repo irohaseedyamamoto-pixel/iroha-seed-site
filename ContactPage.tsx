@@ -1,109 +1,5 @@
-import { useSearchParams, Link } from 'react-router-dom';
-import { ArrowLeft, Send, CheckCircle } from 'lucide-react';
-
-// ─── 送信完了画面 ─────────────────────────────────────────────────────────────
-
-function SuccessMessage() {
-  return (
-    <div className="text-center py-16">
-      <CheckCircle size={56} className="text-green-500 mx-auto mb-6" />
-      <h3 className="text-2xl font-black text-slate-900 mb-3">送信が完了しました</h3>
-      <p className="text-slate-500 leading-relaxed mb-8">
-        お問い合わせありがとうございます。<br />
-        通常2営業日以内にご返信いたします。
-      </p>
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition-colors"
-      >
-        <ArrowLeft size={18} />
-        トップページへ戻る
-      </Link>
-    </div>
-  );
-}
-
-// ─── お問い合わせフォーム ─────────────────────────────────────────────────────
-
-function ContactForm() {
-  return (
-    <form
-      action="https://formsubmit.co/iroha.seed.yamamoto@gmail.com"
-      method="POST"
-      className="space-y-6"
-    >
-      {/* Formsubmit.co 設定 */}
-      <input type="hidden" name="_next" value="https://www.iroha-seed.com/contact?sent=true" />
-      <input type="hidden" name="_subject" value="【iroha Seed】新しいお問い合わせが届きました" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_template" value="table" />
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-bold text-slate-700 mb-2">
-            お名前 <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            name="お名前"
-            required
-            placeholder="山本 剛史"
-            className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-slate-700 mb-2">
-            会社名
-          </label>
-          <input
-            type="text"
-            name="会社名"
-            placeholder="株式会社〇〇"
-            className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-bold text-slate-700 mb-2">
-          メールアドレス <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="email"
-          name="メールアドレス"
-          required
-          placeholder="example@company.com"
-          className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-bold text-slate-700 mb-2">
-          お問い合わせ内容 <span className="text-red-500">*</span>
-        </label>
-        <textarea
-          name="お問い合わせ内容"
-          required
-          rows={6}
-          placeholder="ご相談内容をご自由にお書きください。"
-          className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
-        />
-      </div>
-
-      <p className="text-xs text-slate-400">
-        送信前に下記のプライバシーポリシーをご確認ください。送信をもってご同意いただいたものとみなします。
-      </p>
-
-      <button
-        type="submit"
-        className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg py-4 rounded-xl transition-colors shadow-lg"
-      >
-        <Send size={20} />
-        送信する
-      </button>
-    </form>
-  );
-}
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 // ─── プライバシーポリシー ──────────────────────────────────────────────────────
 
@@ -188,9 +84,6 @@ function PrivacyPolicy() {
 // ─── お問い合わせページ本体 ───────────────────────────────────────────────────
 
 export default function ContactPage() {
-  const [searchParams] = useSearchParams();
-  const sent = searchParams.get('sent') === 'true';
-
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ヘッダー */}
@@ -213,7 +106,7 @@ export default function ContactPage() {
 
       {/* コンテンツ */}
       <main className="max-w-4xl mx-auto px-6 py-16">
-        <div className="mb-12">
+        <div className="mb-10">
           <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">CONTACT</div>
           <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">お問い合わせ</h1>
           <p className="text-slate-500 leading-relaxed">
@@ -222,11 +115,23 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-12 shadow-sm">
-          {sent ? <SuccessMessage /> : <ContactForm />}
+        {/* Google フォーム埋め込み */}
+        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSf97oAUOKluVJKb4TRWIQJ--tlJwfiTVF29SUAo3J74mehHRA/viewform?embedded=true"
+            width="100%"
+            height="820"
+            frameBorder="0"
+            marginHeight={0}
+            marginWidth={0}
+            title="お問い合わせフォーム"
+            className="block"
+          >
+            読み込んでいます…
+          </iframe>
         </div>
 
-        {!sent && <PrivacyPolicy />}
+        <PrivacyPolicy />
       </main>
 
       {/* フッター */}
