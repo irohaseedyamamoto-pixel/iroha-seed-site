@@ -1,68 +1,43 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { ArrowLeft, Send, CheckCircle } from 'lucide-react';
+
+// ─── 送信完了画面 ─────────────────────────────────────────────────────────────
+
+function SuccessMessage() {
+  return (
+    <div className="text-center py-16">
+      <CheckCircle size={56} className="text-green-500 mx-auto mb-6" />
+      <h3 className="text-2xl font-black text-slate-900 mb-3">送信が完了しました</h3>
+      <p className="text-slate-500 leading-relaxed mb-8">
+        お問い合わせありがとうございます。<br />
+        通常2営業日以内にご返信いたします。
+      </p>
+      <Link
+        to="/"
+        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition-colors"
+      >
+        <ArrowLeft size={18} />
+        トップページへ戻る
+      </Link>
+    </div>
+  );
+}
 
 // ─── お問い合わせフォーム ─────────────────────────────────────────────────────
 
-type Status = 'idle' | 'sending' | 'success' | 'error';
-
 function ContactForm() {
-  const [form, setForm] = useState({ name: '', company: '', email: '', message: '' });
-  const [status, setStatus] = useState<Status>('idle');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('sending');
-    try {
-      const res = await fetch('https://formsubmit.co/ajax/iroha.seed.yamamoto@gmail.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          お名前: form.name,
-          会社名: form.company,
-          メールアドレス: form.email,
-          お問い合わせ内容: form.message,
-          _subject: `【iroha Seed】お問い合わせ：${form.name} 様`,
-        }),
-      });
-      const data = await res.json();
-      if (data.success === 'true' || data.success === true) {
-        setStatus('success');
-        setForm({ name: '', company: '', email: '', message: '' });
-      } else {
-        setStatus('error');
-      }
-    } catch {
-      setStatus('error');
-    }
-  };
-
-  if (status === 'success') {
-    return (
-      <div className="text-center py-16">
-        <CheckCircle size={56} className="text-green-500 mx-auto mb-6" />
-        <h3 className="text-2xl font-black text-slate-900 mb-3">送信が完了しました</h3>
-        <p className="text-slate-500 leading-relaxed mb-8">
-          お問い合わせありがとうございます。<br />
-          通常2営業日以内にご返信いたします。
-        </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition-colors"
-        >
-          <ArrowLeft size={18} />
-          トップページへ戻る
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      action="https://formsubmit.co/iroha.seed.yamamoto@gmail.com"
+      method="POST"
+      className="space-y-6"
+    >
+      {/* Formsubmit.co 設定 */}
+      <input type="hidden" name="_next" value="https://www.iroha-seed.com/contact?sent=true" />
+      <input type="hidden" name="_subject" value="【iroha Seed】新しいお問い合わせが届きました" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_template" value="table" />
+
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-2">
@@ -70,9 +45,7 @@ function ContactForm() {
           </label>
           <input
             type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
+            name="お名前"
             required
             placeholder="山本 剛史"
             className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
@@ -84,9 +57,7 @@ function ContactForm() {
           </label>
           <input
             type="text"
-            name="company"
-            value={form.company}
-            onChange={handleChange}
+            name="会社名"
             placeholder="株式会社〇〇"
             className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
@@ -99,9 +70,7 @@ function ContactForm() {
         </label>
         <input
           type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
+          name="メールアドレス"
           required
           placeholder="example@company.com"
           className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
@@ -113,9 +82,7 @@ function ContactForm() {
           お問い合わせ内容 <span className="text-red-500">*</span>
         </label>
         <textarea
-          name="message"
-          value={form.message}
-          onChange={handleChange}
+          name="お問い合わせ内容"
           required
           rows={6}
           placeholder="ご相談内容をご自由にお書きください。"
@@ -127,26 +94,12 @@ function ContactForm() {
         送信前に下記のプライバシーポリシーをご確認ください。送信をもってご同意いただいたものとみなします。
       </p>
 
-      {status === 'error' && (
-        <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
-          <AlertCircle size={20} className="flex-shrink-0" />
-          <p className="text-sm">送信に失敗しました。時間をおいて再度お試しいただくか、直接メールにてご連絡ください。</p>
-        </div>
-      )}
-
       <button
         type="submit"
-        disabled={status === 'sending'}
-        className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-black text-lg py-4 rounded-xl transition-colors shadow-lg"
+        className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg py-4 rounded-xl transition-colors shadow-lg"
       >
-        {status === 'sending' ? (
-          <>送信中…</>
-        ) : (
-          <>
-            <Send size={20} />
-            送信する
-          </>
-        )}
+        <Send size={20} />
+        送信する
       </button>
     </form>
   );
@@ -235,6 +188,9 @@ function PrivacyPolicy() {
 // ─── お問い合わせページ本体 ───────────────────────────────────────────────────
 
 export default function ContactPage() {
+  const [searchParams] = useSearchParams();
+  const sent = searchParams.get('sent') === 'true';
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ヘッダー */}
@@ -267,10 +223,10 @@ export default function ContactPage() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-8 md:p-12 shadow-sm">
-          <ContactForm />
+          {sent ? <SuccessMessage /> : <ContactForm />}
         </div>
 
-        <PrivacyPolicy />
+        {!sent && <PrivacyPolicy />}
       </main>
 
       {/* フッター */}
