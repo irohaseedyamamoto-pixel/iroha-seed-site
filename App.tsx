@@ -720,7 +720,7 @@ function Footer() {
         {/* SNSリンク */}
         <div className="border-t border-slate-800 pt-8 mb-6 flex justify-center gap-4">
           <a
-            href="https://www.instagram.com/INSTAGRAM_ID/"
+            href="https://www.instagram.com/irohaseed.yamamoto?igsh=Y2o2bGRlbXJrMjRy&utm_source=qr"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -729,7 +729,7 @@ function Footer() {
             <Instagram size={18} className="text-white" />
           </a>
           <a
-            href="https://www.facebook.com/FACEBOOK_ID/"
+            href="https://www.facebook.com/share/1JKihxjj6A/?mibextid=wwXIfr"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
