@@ -666,12 +666,6 @@ function Footer() {
                 </div>
               ))}
             </div>
-            <div>
-              <div className="text-white font-bold mb-3">連絡先</div>
-              <div className="space-y-1 text-sm">
-                <div>iroha.seed.yamamoto@gmail.com</div>
-              </div>
-            </div>
           </div>
         </div>
 
