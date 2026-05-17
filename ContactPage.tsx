@@ -131,10 +131,6 @@ export default function ContactPage() {
           <h1 className="font-serif text-4xl md:text-5xl font-black text-white leading-tight">
             無料相談・お問い合わせ
           </h1>
-          <p className="text-slate-400 mt-4 text-[15px] max-w-lg leading-relaxed">
-            サービスに関するご質問・無料相談のお申し込みは下記フォームよりお送りください。<br />
-            通常2営業日以内にご返信いたします。
-          </p>
         </div>
       </div>
 

@@ -60,11 +60,8 @@ export default function CompanyPage() {
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-20">
           <Label light>会社概要 / COMPANY</Label>
           <h1 className="font-serif text-4xl md:text-5xl font-black text-white leading-tight">
-            株式会社廣創について
+            会社概要
           </h1>
-          <p className="text-slate-400 mt-4 text-[15px] max-w-lg leading-relaxed">
-            iroha Seedを展開する株式会社廣創の企業情報です。
-          </p>
         </div>
       </div>
 
