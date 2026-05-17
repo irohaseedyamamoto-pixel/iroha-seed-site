@@ -141,7 +141,7 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-slate-900">
+    <section className="relative min-h-[88vh] flex flex-col justify-center overflow-hidden bg-slate-900">
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
