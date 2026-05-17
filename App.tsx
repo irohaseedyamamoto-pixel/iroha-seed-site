@@ -10,8 +10,8 @@ import {
 
 function Label({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
-    <div className={`flex items-center gap-3 mb-6 ${light ? 'text-amber-400' : 'text-amber-600'}`}>
-      <span className={`w-10 h-[1.5px] ${light ? 'bg-amber-400' : 'bg-amber-500'}`} />
+    <div className={`flex items-center gap-3 mb-6 ${light ? 'text-sky-400' : 'text-blue-700'}`}>
+      <span className={`w-10 h-[1.5px] ${light ? 'bg-sky-400' : 'bg-blue-600'}`} />
       <span className="text-[10px] tracking-[0.4em] font-bold uppercase">{children}</span>
     </div>
   );
@@ -45,13 +45,13 @@ function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-white/96 backdrop-blur-md border-b border-zinc-200 shadow-sm'
+          ? 'bg-white/96 backdrop-blur-md border-b border-slate-200 shadow-sm'
           : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
         <a href="#" className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-colors ${scrolled ? 'bg-zinc-100' : 'bg-white/15'}`}>
+          <div className={`w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-colors ${scrolled ? 'bg-slate-100' : 'bg-white/15'}`}>
             <img
               src="/logo.png"
               alt="iroha Seed"
@@ -60,10 +60,10 @@ function Navbar() {
             />
           </div>
           <div>
-            <div className={`font-bold text-base leading-none tracking-tight transition-colors ${scrolled ? 'text-zinc-900' : 'text-white'}`}>
+            <div className={`font-bold text-base leading-none tracking-tight transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`}>
               iroha Seed
             </div>
-            <div className={`text-[9px] tracking-[0.22em] font-medium mt-0.5 transition-colors ${scrolled ? 'text-zinc-400' : 'text-white/50'}`}>
+            <div className={`text-[9px] tracking-[0.22em] font-medium mt-0.5 transition-colors ${scrolled ? 'text-slate-400' : 'text-white/50'}`}>
               BY HIROSO INC.
             </div>
           </div>
@@ -74,8 +74,8 @@ function Navbar() {
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}
-              className={`text-[13px] font-medium tracking-wide transition-colors hover:text-amber-500 ${
-                scrolled ? 'text-zinc-600' : 'text-white/80'
+              className={`text-[13px] font-medium tracking-wide transition-colors hover:text-sky-400 ${
+                scrolled ? 'text-slate-600' : 'text-white/80'
               }`}
             >
               {link.label}
@@ -83,8 +83,8 @@ function Navbar() {
           ))}
           <Link
             to="/company"
-            className={`text-[13px] font-medium tracking-wide transition-colors hover:text-amber-500 ${
-              scrolled ? 'text-zinc-600' : 'text-white/80'
+            className={`text-[13px] font-medium tracking-wide transition-colors hover:text-sky-400 ${
+              scrolled ? 'text-slate-600' : 'text-white/80'
             }`}
           >
             会社概要
@@ -93,8 +93,8 @@ function Navbar() {
             to="/contact"
             className={`flex items-center gap-1.5 text-[13px] font-bold px-5 py-2 rounded-full border-2 transition-all duration-200 ${
               scrolled
-                ? 'border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white'
-                : 'border-white text-white hover:bg-white hover:text-zinc-900'
+                ? 'border-blue-800 text-blue-900 hover:bg-blue-900 hover:text-white'
+                : 'border-white text-white hover:bg-white hover:text-blue-900'
             }`}
           >
             無料相談
@@ -102,7 +102,7 @@ function Navbar() {
         </nav>
 
         <button
-          className={`md:hidden p-1 ${scrolled ? 'text-zinc-700' : 'text-white'}`}
+          className={`md:hidden p-1 ${scrolled ? 'text-slate-700' : 'text-white'}`}
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -110,23 +110,23 @@ function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-zinc-100">
+        <div className="md:hidden bg-white border-t border-slate-100">
           <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className="text-left text-zinc-700 font-medium py-3 border-b border-zinc-100 text-sm"
+                className="text-left text-slate-700 font-medium py-3 border-b border-slate-100 text-sm"
               >
                 {link.label}
               </button>
             ))}
-            <Link to="/company" className="text-zinc-700 font-medium py-3 border-b border-zinc-100 text-sm block">
+            <Link to="/company" className="text-slate-700 font-medium py-3 border-b border-slate-100 text-sm block">
               会社概要
             </Link>
             <Link
               to="/contact"
-              className="mt-4 bg-zinc-900 text-white font-bold py-3.5 rounded-xl text-center text-sm"
+              className="mt-4 bg-blue-800 text-white font-bold py-3.5 rounded-xl text-center text-sm"
             >
               無料相談を予約する →
             </Link>
@@ -141,27 +141,27 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-end overflow-hidden bg-zinc-950">
+    <section className="relative min-h-screen flex flex-col justify-end overflow-hidden bg-slate-900">
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
           alt=""
           className="w-full h-full object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/55 to-transparent" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-20 pt-40 w-full">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pb-24 pt-40 w-full">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
+            <div className="inline-flex items-center gap-2 bg-sky-400/15 border border-sky-400/30 text-sky-300 text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
               実戦型マーケティングパートナー
             </div>
             <h1 className="font-serif text-5xl md:text-7xl font-black text-white leading-[1.08] tracking-tight mb-6">
               売れる仕組みを、<br />
-              <span className="text-amber-400">再設計する。</span>
+              <span className="text-sky-400">再設計する。</span>
             </h1>
-            <p className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-xl">
+            <p className="text-slate-400 text-base md:text-lg leading-relaxed max-w-xl">
               机上の空論ではない、経営者視点の実戦型マーケティング支援。<br />
               売上が積み上がる全体構造を、現場理解から組み直します。
             </p>
@@ -170,7 +170,7 @@ function Hero() {
           <div className="flex flex-col gap-3 md:items-end shrink-0">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-zinc-900 font-black text-sm px-8 py-4 rounded-full transition-all duration-200 shadow-xl shadow-amber-400/20"
+              className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-600 text-white font-black text-sm px-8 py-4 rounded-full transition-all duration-200 shadow-xl shadow-blue-700/30"
             >
               無料で相談する
               <ArrowRight size={16} />
@@ -182,21 +182,6 @@ function Hero() {
               サービスを見る <ArrowRight size={14} />
             </button>
           </div>
-        </div>
-
-        <div className="mt-16 pt-8 border-t border-white/10 grid grid-cols-3 gap-8 max-w-sm">
-          {[
-            { num: '14', unit: '年', label: '事業経験' },
-            { num: '166', unit: '%', label: '売上成長事例' },
-            { num: '全国', unit: '', label: 'オンライン対応' },
-          ].map(({ num, unit, label }) => (
-            <div key={label}>
-              <div className="text-white font-black text-2xl leading-none">
-                {num}<span className="text-amber-400 text-sm ml-0.5">{unit}</span>
-              </div>
-              <div className="text-zinc-500 text-[11px] mt-1.5 tracking-wide">{label}</div>
-            </div>
-          ))}
         </div>
       </div>
     </section>
@@ -212,12 +197,12 @@ function Marquee() {
   ];
   const doubled = [...items, ...items];
   return (
-    <div className="bg-amber-400 py-3 overflow-hidden select-none">
+    <div className="bg-blue-900 py-3 overflow-hidden select-none">
       <div className="animate-marquee">
         {doubled.map((item, i) => (
-          <span key={i} className="mx-8 text-zinc-900 font-bold text-xs tracking-[0.22em] uppercase">
+          <span key={i} className="mx-8 text-sky-200 font-bold text-xs tracking-[0.22em] uppercase">
             {item}
-            <span className="ml-8 text-zinc-900/30">◆</span>
+            <span className="ml-8 text-sky-200/30">◆</span>
           </span>
         ))}
       </div>
@@ -241,11 +226,11 @@ function ProblemSection() {
         <div className="grid md:grid-cols-2 gap-16 items-start">
           <div>
             <Label>課題 / PROBLEM</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-zinc-900 leading-snug mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-black text-slate-900 leading-snug mb-6">
               なぜ、施策を増やしても<br />
               売上が伸びないのか？
             </h2>
-            <p className="text-zinc-500 leading-relaxed text-[15px]">
+            <p className="text-slate-500 leading-relaxed text-[15px]">
               売上が伸びない原因は、広告だけ、LPだけ、営業だけの問題ではありません。
               集客・訴求・導線・提案・改善が分断されていると、
               施策を増やしても成果は安定しません。
@@ -256,12 +241,12 @@ function ProblemSection() {
             {PROBLEMS.map((text, i) => (
               <div
                 key={i}
-                className="flex items-start gap-5 p-5 border border-zinc-200 rounded-xl hover:border-amber-300 hover:shadow-md hover:shadow-amber-50 transition-all group"
+                className="flex items-start gap-5 p-5 border border-slate-200 rounded-xl hover:border-blue-300 hover:shadow-md hover:shadow-blue-50 transition-all group"
               >
-                <span className="text-zinc-200 font-black text-3xl leading-none select-none group-hover:text-amber-300 transition-colors">
+                <span className="text-slate-200 font-black text-3xl leading-none select-none group-hover:text-blue-300 transition-colors">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <p className="text-zinc-700 font-medium leading-relaxed text-sm pt-1">{text}</p>
+                <p className="text-slate-700 font-medium leading-relaxed text-sm pt-1">{text}</p>
               </div>
             ))}
           </div>
@@ -299,18 +284,18 @@ const METHODS = [
 
 function SolutionSection() {
   return (
-    <section className="py-28 bg-zinc-950">
+    <section className="py-28 bg-slate-900">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
             <Label light>解決策 / SOLUTION</Label>
             <h2 className="font-serif text-4xl md:text-5xl font-black text-white leading-snug">
               部分的な改善ではなく、<br />
-              <span className="text-amber-400">売れる構造</span>そのものを<br />
+              <span className="text-sky-400">売れる構造</span>そのものを<br />
               組み直す。
             </h2>
           </div>
-          <p className="text-zinc-500 max-w-xs leading-relaxed text-sm md:text-right">
+          <p className="text-slate-500 max-w-xs leading-relaxed text-sm md:text-right">
             集客・訴求・導線・成約・改善を一気通貫で繋ぎ直す「売れる仕組みの再設計」が必要です。
           </p>
         </div>
@@ -319,7 +304,7 @@ function SolutionSection() {
           {METHODS.map(({ num, icon: Icon, title, desc, img }) => (
             <div
               key={num}
-              className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-amber-400/40 transition-all duration-300"
+              className="group relative bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-sky-400/40 transition-all duration-300"
             >
               <div className="h-40 overflow-hidden">
                 <img
@@ -331,11 +316,11 @@ function SolutionSection() {
               </div>
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-amber-400 font-black text-xs tracking-[0.3em]">{num}</span>
-                  <Icon size={18} className="text-zinc-600 group-hover:text-amber-400 transition-colors" />
+                  <span className="text-sky-400 font-black text-xs tracking-[0.3em]">{num}</span>
+                  <Icon size={18} className="text-slate-600 group-hover:text-sky-400 transition-colors" />
                 </div>
                 <h3 className="text-white font-black text-xl mb-3">{title}</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">{desc}</p>
+                <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -388,38 +373,38 @@ const SERVICES = [
 
 function ServicesSection() {
   return (
-    <section id="services" className="py-28 bg-zinc-50">
+    <section id="services" className="py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
             <Label>サービス / SERVICES</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-zinc-900 leading-snug">
+            <h2 className="font-serif text-4xl md:text-5xl font-black text-slate-900 leading-snug">
               売上を最大化させる、<br />6つの支援領域
             </h2>
           </div>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 text-sm font-bold text-zinc-900 border-b-2 border-amber-400 pb-0.5 hover:text-amber-600 transition-colors self-start md:self-end"
+            className="inline-flex items-center gap-2 text-sm font-bold text-blue-800 border-b-2 border-blue-600 pb-0.5 hover:text-blue-600 transition-colors self-start md:self-end"
           >
             無料相談はこちら <ArrowUpRight size={14} />
           </Link>
         </div>
 
-        <div className="divide-y divide-zinc-200">
+        <div className="divide-y divide-slate-200">
           {SERVICES.map(({ num, title, desc, icon: Icon }) => (
             <div
               key={num}
-              className="group flex items-center gap-8 py-6 hover:bg-zinc-100/80 px-4 -mx-4 rounded-xl transition-all cursor-default"
+              className="group flex items-center gap-8 py-6 hover:bg-blue-50/60 px-4 -mx-4 rounded-xl transition-all cursor-default"
             >
-              <span className="text-zinc-200 font-black text-4xl w-16 leading-none shrink-0 group-hover:text-amber-300 transition-colors">
+              <span className="text-slate-200 font-black text-4xl w-16 leading-none shrink-0 group-hover:text-blue-300 transition-colors">
                 {num}
               </span>
               <div className="flex-1 min-w-0">
-                <h3 className="text-zinc-900 font-black text-lg mb-1 group-hover:text-zinc-700 transition-colors">{title}</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed">{desc}</p>
+                <h3 className="text-slate-900 font-black text-lg mb-1 group-hover:text-blue-900 transition-colors">{title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
-              <div className="w-10 h-10 rounded-full bg-white border border-zinc-200 flex items-center justify-center shrink-0 group-hover:bg-amber-400 group-hover:border-amber-400 transition-all shadow-sm">
-                <Icon size={16} className="text-zinc-400 group-hover:text-zinc-900 transition-colors" />
+              <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 group-hover:bg-blue-700 group-hover:border-blue-700 transition-all shadow-sm">
+                <Icon size={16} className="text-slate-400 group-hover:text-white transition-colors" />
               </div>
             </div>
           ))}
@@ -441,7 +426,7 @@ const STRENGTHS = [
 
 function StrengthsSection() {
   return (
-    <section id="strengths" className="relative py-28 bg-zinc-950 overflow-hidden">
+    <section id="strengths" className="relative py-28 bg-slate-900 overflow-hidden">
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=80"
@@ -456,9 +441,9 @@ function StrengthsSection() {
           <Label light>強み / STRENGTHS</Label>
           <blockquote className="font-serif text-4xl md:text-6xl font-black text-white leading-tight mb-6">
             "現場の解像度を上げ、<br />
-            <span className="text-amber-400">経営の精度を高める。</span>"
+            <span className="text-sky-400">経営の精度を高める。</span>"
           </blockquote>
-          <p className="text-zinc-400 leading-relaxed max-w-xl text-[15px]">
+          <p className="text-slate-400 leading-relaxed max-w-xl text-[15px]">
             私たちは単なる制作会社やコンサルティング会社ではありません。「売れる仕組み」を共に創り上げるパートナーとして、現場の熱量を成果に変えるまで伴走します。
           </p>
         </div>
@@ -467,10 +452,10 @@ function StrengthsSection() {
           {STRENGTHS.map((text, i) => (
             <div
               key={i}
-              className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/8 hover:border-amber-400/30 transition-all"
+              className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/8 hover:border-sky-400/30 transition-all"
             >
-              <CheckCircle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
-              <p className="text-zinc-300 font-medium leading-relaxed text-sm">{text}</p>
+              <CheckCircle size={18} className="text-sky-400 flex-shrink-0 mt-0.5" />
+              <p className="text-slate-300 font-medium leading-relaxed text-sm">{text}</p>
             </div>
           ))}
         </div>
@@ -515,11 +500,11 @@ function AchievementsSection() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
             <Label>実績 / RESULTS</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-zinc-900 leading-snug">
+            <h2 className="font-serif text-4xl md:text-5xl font-black text-slate-900 leading-snug">
               確かな実績に裏打ちされた、<br />実戦力
             </h2>
           </div>
-          <p className="text-zinc-400 text-sm max-w-xs leading-relaxed md:text-right">
+          <p className="text-slate-400 text-sm max-w-xs leading-relaxed md:text-right">
             それぞれの業界で、数字と結果で証明し続けてきた支援実績です。
           </p>
         </div>
@@ -528,20 +513,20 @@ function AchievementsSection() {
           {ACHIEVEMENTS.map(({ tag, title, highlight, desc, num, numUnit }) => (
             <div
               key={title}
-              className="border border-zinc-200 rounded-2xl overflow-hidden hover:border-amber-300 hover:shadow-lg hover:shadow-amber-50 transition-all group"
+              className="border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all group"
             >
-              <div className="bg-zinc-950 p-8 relative overflow-hidden">
+              <div className="bg-slate-900 p-8 relative overflow-hidden">
                 <div className="absolute -right-4 -top-2 text-8xl font-black text-white/5 leading-none select-none">
                   {num}
                 </div>
-                <div className="text-amber-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-3">{tag}</div>
+                <div className="text-sky-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-3">{tag}</div>
                 <div className="text-white font-black text-4xl md:text-5xl leading-none">{num}</div>
-                <div className="text-zinc-500 text-xs mt-2 tracking-wide">{numUnit}</div>
+                <div className="text-slate-500 text-xs mt-2 tracking-wide">{numUnit}</div>
               </div>
               <div className="p-6">
-                <h3 className="text-zinc-900 font-black text-xl mb-1">{title}</h3>
-                <div className="text-amber-600 font-bold text-xs mb-4 tracking-wide">{highlight}</div>
-                <p className="text-zinc-500 text-sm leading-relaxed">{desc}</p>
+                <h3 className="text-slate-900 font-black text-xl mb-1">{title}</h3>
+                <div className="text-blue-700 font-bold text-xs mb-4 tracking-wide">{highlight}</div>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -555,13 +540,13 @@ function AchievementsSection() {
 
 function RepresentativeSection() {
   return (
-    <section id="representative" className="py-28 bg-zinc-50">
+    <section id="representative" className="py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid md:grid-cols-5 gap-12 md:gap-20 items-center">
           <div className="md:col-span-2 flex justify-center md:justify-start">
             <div className="relative">
-              <div className="absolute -top-4 -left-4 w-24 h-24 border-2 border-amber-400 rounded-xl opacity-50" />
-              <div className="relative w-64 md:w-72 rounded-2xl overflow-hidden shadow-2xl shadow-zinc-900/20">
+              <div className="absolute -top-4 -left-4 w-24 h-24 border-2 border-sky-400 rounded-xl opacity-50" />
+              <div className="relative w-64 md:w-72 rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/20">
                 <img
                   src="/profile.png"
                   alt="山本 剛史"
@@ -571,31 +556,31 @@ function RepresentativeSection() {
                     el.style.display = 'none';
                     const parent = el.parentElement;
                     if (parent) {
-                      parent.classList.add('h-80', 'flex', 'items-center', 'justify-center', 'bg-zinc-200');
-                      parent.innerHTML = '<span style="color:#18181b;font-size:3.5rem;font-weight:900;font-family:serif">TY</span>';
+                      parent.classList.add('h-80', 'flex', 'items-center', 'justify-center', 'bg-slate-200');
+                      parent.innerHTML = '<span style="color:#0f172a;font-size:3.5rem;font-weight:900;font-family:serif">TY</span>';
                     }
                   }}
                 />
               </div>
-              <div className="absolute -bottom-5 -right-5 bg-amber-400 text-zinc-900 rounded-xl px-4 py-2.5 shadow-lg">
+              <div className="absolute -bottom-5 -right-5 bg-blue-800 text-white rounded-xl px-4 py-2.5 shadow-lg">
                 <div className="font-black text-xs leading-tight">代表取締役社長</div>
-                <div className="text-zinc-700 text-[10px] mt-0.5">株式会社廣創</div>
+                <div className="text-blue-300 text-[10px] mt-0.5">株式会社廣創</div>
               </div>
             </div>
           </div>
 
           <div className="md:col-span-3">
             <Label>代表メッセージ / MESSAGE</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-zinc-900 mb-1">山本 剛史</h2>
-            <div className="text-zinc-400 text-sm tracking-[0.2em] mb-8">TSUYOSHI YAMAMOTO</div>
+            <h2 className="font-serif text-4xl md:text-5xl font-black text-slate-900 mb-1">山本 剛史</h2>
+            <div className="text-slate-400 text-sm tracking-[0.2em] mb-8">TSUYOSHI YAMAMOTO</div>
 
-            <blockquote className="font-serif text-2xl md:text-3xl font-black text-zinc-900 leading-tight mb-8 border-l-[3px] border-amber-400 pl-6">
+            <blockquote className="font-serif text-2xl md:text-3xl font-black text-slate-900 leading-tight mb-8 border-l-[3px] border-blue-600 pl-6">
               "マーケティングは、<br />
               机の上ではなく<br />
               現場で起きている"
             </blockquote>
 
-            <div className="space-y-4 text-zinc-500 leading-relaxed text-[15px]">
+            <div className="space-y-4 text-slate-500 leading-relaxed text-[15px]">
               <p>
                 世の中に"アドバイスだけ"で終わる支援が多い中、私は自ら事業の立ち上げから組織再生までを当事者として経験してきました。
               </p>
@@ -617,7 +602,7 @@ function RepresentativeSection() {
 
 function CtaSection() {
   return (
-    <section className="relative py-32 bg-zinc-950 overflow-hidden">
+    <section className="relative py-32 bg-slate-900 overflow-hidden">
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
@@ -625,7 +610,7 @@ function CtaSection() {
           loading="lazy"
           className="w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-950/90 to-zinc-900/80" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900/90 to-slate-800/80" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 text-center">
@@ -634,18 +619,18 @@ function CtaSection() {
           あなたのビジネスに、<br />
           新しい風を。
         </h2>
-        <p className="text-zinc-400 leading-relaxed max-w-xl mx-auto mb-12 text-[15px]">
+        <p className="text-slate-400 leading-relaxed max-w-xl mx-auto mb-12 text-[15px]">
           まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。<br />
           福岡市内・近郊は対面可、オンラインは全国対応可能です。
         </p>
         <Link
           to="/contact"
-          className="inline-flex items-center gap-3 bg-amber-400 hover:bg-amber-300 text-zinc-900 font-black text-base px-12 py-5 rounded-full transition-all duration-200 shadow-2xl shadow-amber-400/20"
+          className="inline-flex items-center gap-3 bg-blue-700 hover:bg-blue-600 text-white font-black text-base px-12 py-5 rounded-full transition-all duration-200 shadow-2xl shadow-blue-700/30"
         >
           無料相談を予約する
           <ArrowRight size={18} />
         </Link>
-        <p className="text-zinc-600 text-xs mt-6 tracking-wide">相談無料・オンライン対応可・強引な営業は一切ありません</p>
+        <p className="text-slate-600 text-xs mt-6 tracking-wide">相談無料・オンライン対応可・強引な営業は一切ありません</p>
       </div>
     </section>
   );
@@ -655,7 +640,7 @@ function CtaSection() {
 
 function Footer() {
   return (
-    <footer className="bg-zinc-950 border-t border-zinc-900">
+    <footer className="bg-slate-900 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           <div>
@@ -670,10 +655,10 @@ function Footer() {
               </div>
               <div>
                 <div className="text-white font-bold text-sm">iroha Seed</div>
-                <div className="text-zinc-600 text-[9px] tracking-[0.2em]">BY HIROSO INC.</div>
+                <div className="text-slate-600 text-[9px] tracking-[0.2em]">BY HIROSO INC.</div>
               </div>
             </div>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-6">
+            <p className="text-slate-500 text-sm leading-relaxed mb-6">
               売上につながる全体構造を、現場理解から組み直す実戦型マーケティング支援。
             </p>
             <div className="flex gap-3">
@@ -707,35 +692,35 @@ function Footer() {
                     e.preventDefault();
                     document.querySelector(l.href)?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="block text-zinc-500 hover:text-white text-sm transition-colors"
+                  className="block text-slate-500 hover:text-white text-sm transition-colors"
                 >
                   {l.label}
                 </a>
               ))}
-              <Link to="/company" className="block text-zinc-500 hover:text-white text-sm transition-colors">会社概要</Link>
-              <Link to="/contact" className="block text-zinc-500 hover:text-white text-sm transition-colors">お問い合わせ</Link>
+              <Link to="/company" className="block text-slate-500 hover:text-white text-sm transition-colors">会社概要</Link>
+              <Link to="/contact" className="block text-slate-500 hover:text-white text-sm transition-colors">お問い合わせ</Link>
             </div>
           </div>
 
           <div>
             <h4 className="text-white text-[10px] font-bold tracking-[0.25em] uppercase mb-5">Contact</h4>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-6">
+            <p className="text-slate-500 text-sm leading-relaxed mb-6">
               福岡市内・近郊は対面でのご相談に対応。<br />オンラインにて全国どこでもご対応可能です。
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-zinc-900 font-black text-sm px-6 py-3 rounded-full transition-all"
+              className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-600 text-white font-black text-sm px-6 py-3 rounded-full transition-all"
             >
               無料相談を予約する <ArrowRight size={14} />
             </Link>
           </div>
         </div>
 
-        <div className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-600">
+        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-600">
           <div>© 2026 Hiroso Inc. All rights reserved.</div>
           <div className="flex gap-6">
-            <Link to="/contact" className="hover:text-zinc-400 transition-colors">プライバシーポリシー</Link>
-            <Link to="/company" className="hover:text-zinc-400 transition-colors">会社概要</Link>
+            <Link to="/contact" className="hover:text-slate-400 transition-colors">プライバシーポリシー</Link>
+            <Link to="/company" className="hover:text-slate-400 transition-colors">会社概要</Link>
           </div>
         </div>
       </div>
