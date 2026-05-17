@@ -5,7 +5,6 @@ import {
   TrendingUp,
   CheckCircle,
   Phone,
-  Mail,
   MapPin,
   ChevronRight,
   Target,
@@ -605,19 +604,6 @@ function CtaSection() {
           </p>
         </div>
 
-        <div className="flex justify-center mb-12">
-          <a
-            href="mailto:iroha.seed.yamamoto@gmail.com"
-            className="flex items-center gap-4 bg-white/10 border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-colors"
-          >
-            <Mail size={22} className="text-blue-300 flex-shrink-0" />
-            <div>
-              <div className="text-white/60 text-xs mb-1">メール</div>
-              <div className="text-white text-sm font-medium">iroha.seed.yamamoto@gmail.com</div>
-            </div>
-          </a>
-        </div>
-
         <div className="text-center">
           <a
             href="https://docs.google.com/forms/d/e/1FAIpQLSf97oAUOKluVJKb4TRWIQJ--tlJwfiTVF29SUAo3J74mehHRA/viewform"
@@ -634,34 +620,6 @@ function CtaSection() {
   );
 }
 
-// ─── お問い合わせフォーム ─────────────────────────────────────────────────────
-
-function ContactForm() {
-  return (
-    <section id="contact-form" className="py-24 bg-white">
-      <div className="max-w-2xl mx-auto px-6 text-center">
-        <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">お問い合わせ</div>
-        <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">無料相談フォーム</h2>
-        <p className="text-slate-500 mb-10">
-          下記ボタンよりお問い合わせフォームにお進みください。<br />
-          通常2営業日以内にご返信いたします。
-        </p>
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSf97oAUOKluVJKb4TRWIQJ--tlJwfiTVF29SUAo3J74mehHRA/viewform"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg px-12 py-5 rounded-2xl transition-colors shadow-lg"
-        >
-          お問い合わせフォームへ
-          <ArrowRight size={20} />
-        </a>
-        <p className="text-slate-400 text-sm mt-6">
-          ※ Googleフォームが開きます
-        </p>
-      </div>
-    </section>
-  );
-}
 
 // ─── フッター ─────────────────────────────────────────────────────────────────
 
@@ -766,7 +724,6 @@ export default function App() {
       <RepresentativeSection />
       <CompanySection />
       <CtaSection />
-      <ContactForm />
       <Footer />
     </div>
   );
