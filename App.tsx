@@ -24,7 +24,6 @@ const NAV_LINKS = [
   { label: '強み', href: '#strengths' },
   { label: '実績', href: '#achievements' },
   { label: '代表メッセージ', href: '#representative' },
-  { label: '会社概要', href: '#company' },
 ];
 
 function Navbar() {
@@ -82,6 +81,14 @@ function Navbar() {
             </button>
           ))}
           <Link
+            to="/company"
+            className={`text-sm font-medium transition-colors hover:text-blue-400 ${
+              scrolled ? 'text-slate-700' : 'text-white/90'
+            }`}
+          >
+            会社概要
+          </Link>
+          <Link
             to="/contact"
             className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors"
           >
@@ -109,6 +116,12 @@ function Navbar() {
                 {link.label}
               </button>
             ))}
+            <Link
+              to="/company"
+              className="text-left text-slate-700 font-medium py-2 border-b border-slate-100 block"
+            >
+              会社概要
+            </Link>
             <Link
               to="/contact"
               className="bg-blue-600 text-white font-bold py-3 rounded-lg mt-2 text-center block"
@@ -564,44 +577,6 @@ function RepresentativeSection() {
   );
 }
 
-// ─── 会社概要セクション ───────────────────────────────────────────────────────
-
-const COMPANY_INFO = [
-  { label: '法人名', value: '株式会社廣創 (Hiroso Inc.)' },
-  { label: '設立', value: '2012年10月1日' },
-  { label: '事業ブランド', value: 'iroha Seed（イロハシード）' },
-  { label: '代表者', value: '山本 剛史' },
-  { label: '本社所在地', value: '山口県' },
-  { label: '福岡拠点', value: '福岡県福岡市城南区七隈3-2-29-101' },
-  { label: '事業内容', value: 'マーケティング戦略コンサルティング、プロモーション支援、事業開発' },
-];
-
-function CompanySection() {
-  return (
-    <section id="company" className="py-24 bg-slate-50">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-14">
-          <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">会社概要</div>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900">企業情報</h2>
-        </div>
-
-        <div className="max-w-3xl mx-auto border border-slate-200 rounded-2xl overflow-hidden shadow-sm bg-white">
-          {COMPANY_INFO.map(({ label, value }, i) => (
-            <div
-              key={label}
-              className={`flex items-start gap-6 px-8 py-5 ${
-                i % 2 === 0 ? 'bg-slate-50' : 'bg-white'
-              } border-b border-slate-200 last:border-b-0`}
-            >
-              <div className="text-sm font-bold text-blue-900 w-32 flex-shrink-0 pt-0.5">{label}</div>
-              <div className="text-slate-700 text-sm leading-relaxed">{value}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─── CTAセクション ────────────────────────────────────────────────────────────
 
@@ -687,6 +662,8 @@ function Footer() {
                   </a>
                 </div>
               ))}
+              <Link to="/company" className="hover:text-white transition-colors block py-1">会社概要</Link>
+              <Link to="/contact" className="hover:text-white transition-colors block py-1">お問い合わせ</Link>
             </div>
           </div>
         </div>
@@ -738,7 +715,6 @@ export default function App() {
       <StrengthsSection />
       <AchievementsSection />
       <RepresentativeSection />
-      <CompanySection />
       <CtaSection />
       <Footer />
     </div>
