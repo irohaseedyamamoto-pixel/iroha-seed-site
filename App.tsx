@@ -529,7 +529,7 @@ function RepresentativeSection() {
                   }}
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-blue-600 text-white rounded-xl px-5 py-3 shadow-lg">
+              <div className="absolute -bottom-4 -right-4 bg-blue-900 text-white rounded-xl px-5 py-3 shadow-lg">
                 <div className="font-black text-sm">代表取締役社長</div>
                 <div className="text-blue-200 text-xs">株式会社廣創</div>
               </div>
