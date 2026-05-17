@@ -4,8 +4,6 @@ import {
   X,
   TrendingUp,
   CheckCircle,
-  Phone,
-  MapPin,
   ChevronRight,
   Target,
   Users,
@@ -51,16 +49,13 @@ function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* ロゴ */}
         <a href="#" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden bg-blue-50 flex items-center justify-center">
             <img
               src="/logo.png"
               alt="iroha Seed"
               className="w-full h-full object-contain"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
           <div>
@@ -73,7 +68,6 @@ function Navbar() {
           </div>
         </a>
 
-        {/* デスクトップナビ */}
         <nav className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <button
@@ -94,7 +88,6 @@ function Navbar() {
           </button>
         </nav>
 
-        {/* モバイルメニューボタン */}
         <button
           className={`md:hidden ${scrolled ? 'text-slate-700' : 'text-white'}`}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -103,7 +96,6 @@ function Navbar() {
         </button>
       </div>
 
-      {/* モバイルメニュー */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-slate-100 shadow-lg">
           <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4">
@@ -133,13 +125,16 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 overflow-hidden">
-      {/* 背景装飾 */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-white/20 blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-blue-300/30 blur-3xl" />
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* 背景写真 */}
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
+          alt=""
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-blue-900/78" />
       </div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptNiA2djZoNnYtNmgtNnptLTEyIDBoNnY2aC02di02em0tNiAwaDZ2Nmgtdi02eiIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
 
       <div className="relative max-w-6xl mx-auto px-6 py-32">
         <div className="max-w-3xl">
@@ -227,7 +222,7 @@ function ProblemSection() {
 
         <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
           {PROBLEMS.map((text, i) => (
-            <div key={i} className="bg-white border border-slate-200 rounded-xl p-6 flex items-start gap-4">
+            <div key={i} className="bg-white border border-slate-200 rounded-xl p-6 flex items-start gap-4 shadow-sm">
               <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <X size={16} className="text-red-500" />
               </div>
@@ -243,9 +238,24 @@ function ProblemSection() {
 // ─── 解決策セクション ─────────────────────────────────────────────────────────
 
 const METHODS = [
-  { icon: Target, title: '現場起点', desc: '経営・営業・現場の実態を深く理解することから始めます。' },
-  { icon: Globe, title: '全体最適', desc: '点ではなく線で捉え、売上につながる全体設計を見直します。' },
-  { icon: Handshake, title: '実戦型伴走', desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。' },
+  {
+    icon: Target,
+    title: '現場起点',
+    desc: '経営・営業・現場の実態を深く理解することから始めます。',
+    img: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=75',
+  },
+  {
+    icon: Globe,
+    title: '全体最適',
+    desc: '点ではなく線で捉え、売上につながる全体設計を見直します。',
+    img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=75',
+  },
+  {
+    icon: Handshake,
+    title: '実戦型伴走',
+    desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。',
+    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=75',
+  },
 ];
 
 function SolutionSection() {
@@ -266,13 +276,23 @@ function SolutionSection() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {METHODS.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="text-center group">
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-5 group-hover:bg-blue-600 transition-colors">
-                <Icon size={28} className="text-blue-600 group-hover:text-white transition-colors" />
+          {METHODS.map(({ icon: Icon, title, desc, img }) => (
+            <div key={title} className="border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow group">
+              <div className="h-44 overflow-hidden">
+                <img
+                  src={img}
+                  alt={title}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
-              <p className="text-slate-500 leading-relaxed">{desc}</p>
+              <div className="p-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+                  <Icon size={20} className="text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{title}</h3>
+                <p className="text-slate-500 leading-relaxed text-sm">{desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -289,36 +309,42 @@ const SERVICES = [
     title: 'マーケティング戦略コンサルティング',
     desc: '集客から販売までの全体設計を整理し、売上につながる流れを現場レベルで整えます。',
     icon: BarChart3,
+    img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '02',
     title: 'セールスプロモーションツール制作',
     desc: 'HP・LP・チラシ等を、見た目ではなく成果につながる訴求設計で制作・改善します。',
     icon: Zap,
+    img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '03',
     title: '販売導線・既存導線の見直し',
     desc: '既存の販売戦略や導線の詰まりを見直し、成約につながる流れへ改善します。',
     icon: ArrowRight,
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '04',
     title: 'ビジネスマッチング',
     desc: '新しい販路、提携先、売上機会を生み出す接点をつくります。',
     icon: Users,
+    img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '05',
     title: 'アライアンス調整',
     desc: '提携先との接続や協業設計を通じて、事業拡大のきっかけをつくります。',
     icon: Handshake,
+    img: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '06',
     title: 'イベント・セミナー企画運営',
     desc: '信頼関係ベースの接点をつくり、商談や紹介につながる場を設計します。',
     icon: Globe,
+    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=75',
   },
 ];
 
@@ -336,21 +362,28 @@ function ServicesSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES.map(({ num, title, desc, icon: Icon }) => (
+          {SERVICES.map(({ num, title, desc, icon: Icon, img }) => (
             <div
               key={num}
-              className="bg-white border border-slate-200 rounded-2xl p-8 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all group"
+              className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all group"
             >
-              <div className="flex items-start justify-between mb-5">
-                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
-                  <Icon size={22} className="text-blue-600 group-hover:text-white transition-colors" />
-                </div>
-                <span className="text-4xl font-black text-slate-100 group-hover:text-blue-100 transition-colors">
-                  {num}
-                </span>
+              <div className="h-36 overflow-hidden relative">
+                <img
+                  src={img}
+                  alt={title}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-blue-900/30" />
+                <span className="absolute top-3 right-3 text-3xl font-black text-white/60">{num}</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3 leading-tight">{title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+              <div className="p-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                  <Icon size={20} className="text-blue-600 group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-2 leading-snug">{title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -371,37 +404,46 @@ const STRENGTHS = [
 
 function StrengthsSection() {
   return (
-    <section id="strengths" className="py-24 bg-blue-900">
+    <section id="strengths" className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-14">
-          <div className="text-blue-300 font-bold text-sm tracking-widest uppercase mb-3">強み</div>
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
-            なぜ、iroha Seedが
-            <br />
-            選ばれるのか
-          </h2>
+        {/* セクションヘッダー写真 */}
+        <div className="rounded-2xl overflow-hidden mb-14 relative h-52 md:h-64">
+          <img
+            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1600&q=80"
+            alt="強み"
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-blue-900/65 flex flex-col items-center justify-center text-center px-6">
+            <div className="text-blue-300 font-bold text-sm tracking-widest uppercase mb-3">強み</div>
+            <h2 className="text-3xl md:text-4xl font-black text-white">
+              なぜ、iroha Seedが
+              <br />
+              選ばれるのか
+            </h2>
+          </div>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-4">
           {STRENGTHS.map((text, i) => (
             <div
               key={i}
-              className="flex items-start gap-5 bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors"
+              className="flex items-start gap-5 bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition-all shadow-sm"
             >
-              <CheckCircle size={22} className="text-blue-400 flex-shrink-0 mt-0.5" />
-              <p className="text-white/90 font-medium leading-relaxed">{text}</p>
+              <CheckCircle size={22} className="text-blue-500 flex-shrink-0 mt-0.5" />
+              <p className="text-slate-800 font-medium leading-relaxed">{text}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-14 text-center">
-          <div className="inline-block bg-white/5 border border-white/20 rounded-2xl p-8 max-w-2xl">
-            <p className="text-blue-200 text-lg leading-relaxed mb-4">
+          <div className="inline-block border-2 border-blue-600 rounded-2xl p-8 max-w-2xl">
+            <p className="text-slate-600 text-lg leading-relaxed mb-4">
               私たちは単なる制作会社やコンサルティング会社ではありません。<br />
               「売れる仕組み」を共に創り上げるパートナーとして、<br />
               現場の熱量を成果に変えるまで伴走します。
             </p>
-            <div className="text-white font-black text-xl italic">
+            <div className="text-blue-700 font-black text-xl italic">
               "現場の解像度を上げ、<br />経営の精度を高める。"
             </div>
           </div>
@@ -445,7 +487,7 @@ const ACHIEVEMENTS = [
 
 function AchievementsSection() {
   return (
-    <section id="achievements" className="py-24 bg-white">
+    <section id="achievements" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">実績</div>
@@ -458,8 +500,8 @@ function AchievementsSection() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {ACHIEVEMENTS.map(({ label, tag, title, highlight, desc, num, unit }) => (
-            <div key={label} className="border border-slate-200 rounded-2xl overflow-hidden">
-              <div className="bg-blue-600 p-6">
+            <div key={label} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="bg-blue-700 p-6">
                 <div className="text-blue-200 text-xs font-bold tracking-widest mb-1">{tag}</div>
                 <div className="text-4xl font-black text-white">{num}</div>
                 <div className="text-blue-200 text-sm">{unit}</div>
@@ -482,10 +524,9 @@ function AchievementsSection() {
 
 function RepresentativeSection() {
   return (
-    <section id="representative" className="py-24 bg-slate-50">
+    <section id="representative" className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* プロフィール写真 */}
           <div className="flex justify-center">
             <div className="relative">
               <div className="w-full max-w-xs h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden bg-blue-100 shadow-2xl shadow-blue-900/20">
@@ -512,13 +553,12 @@ function RepresentativeSection() {
             </div>
           </div>
 
-          {/* メッセージ */}
           <div>
             <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">代表メッセージ</div>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">山本 剛史</h2>
             <div className="text-slate-400 font-medium mb-8">TSUYOSHI YAMAMOTO</div>
 
-            <blockquote className="text-2xl font-black text-slate-900 leading-tight mb-8 italic">
+            <blockquote className="text-2xl font-black text-slate-900 leading-tight mb-8 italic border-l-4 border-blue-500 pl-6">
               "マーケティングは、<br />
               机の上ではなく<br />
               現場で起きている"
@@ -556,14 +596,14 @@ const COMPANY_INFO = [
 
 function CompanySection() {
   return (
-    <section id="company" className="py-24 bg-white">
+    <section id="company" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">会社概要</div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900">企業情報</h2>
         </div>
 
-        <div className="max-w-3xl mx-auto border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="max-w-3xl mx-auto border border-slate-200 rounded-2xl overflow-hidden shadow-sm bg-white">
           {COMPANY_INFO.map(({ label, value }, i) => (
             <div
               key={label}
@@ -585,14 +625,20 @@ function CompanySection() {
 
 function CtaSection() {
   return (
-    <section id="contact" className="py-24 bg-blue-900 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-blue-300 blur-3xl" />
+    <section id="contact" className="relative py-24 overflow-hidden">
+      {/* 背景写真 */}
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
+          alt=""
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-blue-900/82" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6">
-        <div className="max-w-3xl mx-auto text-center mb-14">
+        <div className="max-w-3xl mx-auto text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-black text-white mb-6">
             あなたのビジネスに、
             <br />
@@ -619,7 +665,6 @@ function CtaSection() {
     </section>
   );
 }
-
 
 // ─── フッター ─────────────────────────────────────────────────────────────────
 
@@ -648,7 +693,7 @@ function Footer() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-16 gap-y-2 text-sm">
+          <div className="grid grid-cols-1 gap-x-16 gap-y-2 text-sm">
             <div>
               <div className="text-white font-bold mb-3">ナビゲーション</div>
               {NAV_LINKS.map((l) => (
