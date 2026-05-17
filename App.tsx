@@ -134,23 +134,23 @@ function Hero() {
           alt=""
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-blue-900/78" />
+        <div className="absolute inset-0 bg-slate-950/72" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6 py-32">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-blue-100 text-sm font-medium px-4 py-2 rounded-full mb-8">
+          <div className="inline-flex items-center gap-2 bg-white/15 border border-white/30 text-white text-sm font-medium px-4 py-2 rounded-full mb-8">
             <TrendingUp size={14} />
             実戦型マーケティングパートナー
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-6 tracking-tight drop-shadow-lg">
             売れる仕組みを、
             <br />
-            <span className="text-blue-300">再設計する。</span>
+            <span className="text-sky-300">再設計する。</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-blue-100 leading-relaxed mb-10 max-w-2xl">
+          <p className="text-lg md:text-xl text-white/85 leading-relaxed mb-10 max-w-2xl drop-shadow">
             机上の空論ではない、経営者視点の実戦型マーケティング支援。<br />
             売上が積み上がる全体構造を、現場理解から組み直します。
           </p>
@@ -158,14 +158,14 @@ function Hero() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               to="/contact"
-              className="bg-white text-blue-900 font-bold text-base px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+              className="bg-white text-blue-900 font-bold text-base px-8 py-4 rounded-xl hover:bg-blue-700 hover:text-white transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
             >
               無料で相談する
               <ArrowRight size={18} />
             </Link>
             <button
               onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })}
-              className="border-2 border-white/40 text-white font-bold text-base px-8 py-4 rounded-xl hover:border-white hover:bg-white/10 transition-colors"
+              className="border-2 border-white/60 text-white font-bold text-base px-8 py-4 rounded-xl hover:border-white hover:bg-white hover:text-blue-900 transition-all duration-200"
             >
               サービスを見る
             </button>
@@ -617,26 +617,23 @@ function CtaSection() {
           loading="lazy"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-blue-900/82" />
+        <div className="absolute inset-0 bg-slate-900/60" />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6">
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-6">
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl px-10 py-12 text-center">
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-5">
             あなたのビジネスに、
             <br />
             新しい風を。
           </h2>
-          <p className="text-blue-200 leading-relaxed text-lg">
+          <p className="text-slate-600 leading-relaxed text-base mb-10">
             まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。<br />
             福岡市内・近郊は対面可、オンラインは全国対応可能です。
           </p>
-        </div>
-
-        <div className="text-center">
           <Link
             to="/contact"
-            className="inline-flex items-center gap-3 bg-white text-blue-900 font-black text-lg px-12 py-5 rounded-2xl hover:bg-blue-50 transition-colors shadow-2xl shadow-blue-950/30"
+            className="inline-flex items-center gap-3 bg-blue-600 text-white font-black text-lg px-12 py-5 rounded-2xl hover:bg-white hover:text-blue-700 border-2 border-blue-600 transition-all duration-200 shadow-lg"
           >
             無料相談を予約する
             <ArrowRight size={20} />
