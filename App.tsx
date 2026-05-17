@@ -484,7 +484,7 @@ function AchievementsSection() {
         <div className="grid md:grid-cols-3 gap-8">
           {ACHIEVEMENTS.map(({ label, tag, title, highlight, desc, num, unit }) => (
             <div key={label} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="bg-blue-700 p-6">
+              <div className="bg-blue-900 p-6">
                 <div className="text-blue-200 text-xs font-bold tracking-widest mb-1">{tag}</div>
                 <div className="text-4xl font-black text-white">{num}</div>
                 <div className="text-blue-200 text-sm">{unit}</div>
