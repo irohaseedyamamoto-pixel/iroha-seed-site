@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Building2, MapPin, Calendar, Briefcase, User } from 'lucide-react';
 
@@ -12,6 +13,10 @@ const COMPANY_INFO = [
 ];
 
 export default function CompanyPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ヘッダー */}

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
@@ -84,6 +85,10 @@ function PrivacyPolicy() {
 // ─── お問い合わせページ本体 ───────────────────────────────────────────────────
 
 export default function ContactPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ヘッダー */}
@@ -126,6 +131,8 @@ export default function ContactPage() {
             marginWidth={0}
             title="お問い合わせフォーム"
             className="block"
+            tabIndex={-1}
+            onLoad={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
           >
             読み込んでいます…
           </iframe>
