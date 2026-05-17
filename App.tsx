@@ -139,35 +139,169 @@ function Navbar() {
 
 // ─── ヒーロー ─────────────────────────────────────────────────────────────────
 
+function SystemGraphic() {
+  return (
+    <div className="absolute right-0 inset-y-0 w-[52%] hidden lg:block pointer-events-none overflow-hidden">
+      <svg
+        viewBox="0 0 520 580"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <style>{`
+          @keyframes sg-hub-pulse {
+            0%,100%{r:34;opacity:.12}50%{r:44;opacity:.25}
+          }
+          @keyframes sg-hub-mid {
+            0%,100%{opacity:.6}50%{opacity:1}
+          }
+          @keyframes sg-node {
+            0%,100%{opacity:.35}50%{opacity:.85}
+          }
+          @keyframes sg-line-flow {
+            0%{stroke-dashoffset:320;opacity:0}
+            15%{opacity:.7}
+            100%{stroke-dashoffset:0;opacity:.55}
+          }
+          @keyframes sg-out-glow {
+            0%,100%{opacity:.6}50%{opacity:1}
+          }
+          .sg-hub-pulse{animation:sg-hub-pulse 3.2s ease-in-out infinite}
+          .sg-hub-mid{animation:sg-hub-mid 2.4s ease-in-out infinite}
+          .sg-node-a{animation:sg-node 2.8s ease-in-out infinite}
+          .sg-node-b{animation:sg-node 2.8s ease-in-out .4s infinite}
+          .sg-node-c{animation:sg-node 2.8s ease-in-out .8s infinite}
+          .sg-node-d{animation:sg-node 2.8s ease-in-out 1.2s infinite}
+          .sg-node-e{animation:sg-node 2.8s ease-in-out 1.6s infinite}
+          .sg-node-f{animation:sg-node 2.8s ease-in-out 2.0s infinite}
+          .sg-line1{stroke-dasharray:320;animation:sg-line-flow 4s ease-in-out .0s infinite}
+          .sg-line2{stroke-dasharray:320;animation:sg-line-flow 4s ease-in-out .5s infinite}
+          .sg-line3{stroke-dasharray:320;animation:sg-line-flow 4s ease-in-out 1.0s infinite}
+          .sg-line4{stroke-dasharray:320;animation:sg-line-flow 4s ease-in-out 1.5s infinite}
+          .sg-line5{stroke-dasharray:320;animation:sg-line-flow 4s ease-in-out 2.0s infinite}
+          .sg-line6{stroke-dasharray:320;animation:sg-line-flow 4s ease-in-out 2.5s infinite}
+          .sg-out{animation:sg-out-glow 2s ease-in-out infinite}
+        `}</style>
+
+        <defs>
+          <pattern id="sgGrid" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.9" fill="rgba(148,163,184,0.14)" />
+          </pattern>
+          <radialGradient id="sgHub" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#7DD3FC" />
+            <stop offset="100%" stopColor="#0369A1" />
+          </radialGradient>
+          <radialGradient id="sgBg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#0EA5E9" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#0EA5E9" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {/* ドットグリッド */}
+        <rect width="520" height="580" fill="url(#sgGrid)" />
+
+        {/* ハブ周囲のグロー */}
+        <ellipse cx="272" cy="300" rx="130" ry="130" fill="url(#sgBg)" />
+
+        {/* 装飾リング */}
+        <circle cx="272" cy="300" r="210" stroke="rgba(148,163,184,0.05)" strokeWidth="1" />
+        <circle cx="272" cy="300" r="150" stroke="rgba(56,189,248,0.07)" strokeWidth="1" strokeDasharray="6 12" />
+        <circle cx="272" cy="300" r="95"  stroke="rgba(56,189,248,0.10)" strokeWidth="1" strokeDasharray="3 8" />
+
+        {/* グリッド軸線（薄い） */}
+        <line x1="0" y1="300" x2="520" y2="300" stroke="rgba(148,163,184,0.05)" strokeWidth="1" />
+        <line x1="272" y1="0" x2="272" y2="580" stroke="rgba(148,163,184,0.05)" strokeWidth="1" />
+
+        {/* ━━━ 入力ライン（6本 → ハブへ収束） ━━━ */}
+        <line x1="48"  y1="70"  x2="272" y2="300" stroke="rgba(56,189,248,0.5)" strokeWidth="1.2" className="sg-line1" />
+        <line x1="28"  y1="195" x2="272" y2="300" stroke="rgba(56,189,248,0.5)" strokeWidth="1.4" className="sg-line2" />
+        <line x1="38"  y1="340" x2="272" y2="300" stroke="rgba(56,189,248,0.5)" strokeWidth="1.5" className="sg-line3" />
+        <line x1="110" y1="490" x2="272" y2="300" stroke="rgba(56,189,248,0.45)" strokeWidth="1.3" className="sg-line4" />
+        <line x1="310" y1="520" x2="272" y2="300" stroke="rgba(56,189,248,0.40)" strokeWidth="1.1" className="sg-line5" />
+        <line x1="470" y1="440" x2="272" y2="300" stroke="rgba(56,189,248,0.30)" strokeWidth="1"   className="sg-line6" strokeDasharray="5 7" />
+
+        {/* 入力ノード */}
+        <circle cx="48"  cy="70"  r="6" fill="rgba(56,189,248,0.45)" className="sg-node-a" />
+        <text x="56" y="67" fill="rgba(56,189,248,0.45)" fontSize="8" fontFamily="monospace">集客</text>
+
+        <circle cx="28"  cy="195" r="6" fill="rgba(56,189,248,0.50)" className="sg-node-b" />
+        <text x="36" y="192" fill="rgba(56,189,248,0.45)" fontSize="8" fontFamily="monospace">訴求</text>
+
+        <circle cx="38"  cy="340" r="7" fill="rgba(56,189,248,0.55)" className="sg-node-c" />
+        <text x="46" y="337" fill="rgba(56,189,248,0.45)" fontSize="8" fontFamily="monospace">導線</text>
+
+        <circle cx="110" cy="490" r="6" fill="rgba(56,189,248,0.45)" className="sg-node-d" />
+        <text x="118" y="487" fill="rgba(56,189,248,0.40)" fontSize="8" fontFamily="monospace">提案</text>
+
+        <circle cx="310" cy="520" r="5" fill="rgba(56,189,248,0.38)" className="sg-node-e" />
+        <circle cx="470" cy="440" r="5" fill="rgba(56,189,248,0.30)" className="sg-node-f" />
+
+        {/* ━━━ 中央ハブ ━━━ */}
+        <circle cx="272" cy="300" r="38" stroke="rgba(56,189,248,0.12)" strokeWidth="1" className="sg-hub-pulse" />
+        <circle cx="272" cy="300" r="28" stroke="rgba(56,189,248,0.28)" strokeWidth="1.5" />
+        <circle cx="272" cy="300" r="20" stroke="rgba(56,189,248,0.50)" strokeWidth="1" className="sg-hub-mid" />
+        <circle cx="272" cy="300" r="13" fill="url(#sgHub)" />
+        {/* ハブのクロスマーク */}
+        <line x1="264" y1="300" x2="280" y2="300" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+        <line x1="272" y1="292" x2="272" y2="308" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+
+        {/* ━━━ 出力ライン（ハブ → 右上：成果へ） ━━━ */}
+        <line x1="272" y1="300" x2="490" y2="55" stroke="rgba(56,189,248,0.80)" strokeWidth="2.8" className="sg-out" />
+
+        {/* 出力ノード（成長の段階） */}
+        <circle cx="335" cy="233" r="10" stroke="rgba(56,189,248,0.65)" strokeWidth="1.8" fill="rgba(56,189,248,0.18)" />
+        <circle cx="396" cy="168" r="13" stroke="rgba(56,189,248,0.75)" strokeWidth="2"   fill="rgba(56,189,248,0.25)" />
+        <circle cx="450" cy="108" r="10" stroke="rgba(56,189,248,0.65)" strokeWidth="1.8" fill="rgba(56,189,248,0.18)" />
+
+        {/* 出力の矢印ヘッド */}
+        <polygon points="490,55 472,72 480,80" fill="rgba(56,189,248,0.90)" />
+
+        {/* 出力ラベル */}
+        <text x="496" y="50" fill="rgba(56,189,248,0.70)" fontSize="9" fontFamily="monospace" letterSpacing="1.5">GROWTH</text>
+
+        {/* ━━━ 装飾ディテール ━━━ */}
+
+        {/* 直角マーク（テクニカル感） */}
+        <path d="M272,276 L294,276 L294,300" stroke="rgba(255,255,255,0.13)" strokeWidth="1" />
+
+        {/* ダイヤモンドマーク */}
+        <rect x="162" y="198" width="9" height="9" stroke="rgba(56,189,248,0.30)" strokeWidth="1" fill="none" transform="rotate(45,166,202)" />
+        <rect x="368" y="378" width="7" height="7" stroke="rgba(56,189,248,0.22)" strokeWidth="1" fill="none" transform="rotate(45,371,381)" />
+        <rect x="190" y="420" width="6" height="6" stroke="rgba(56,189,248,0.20)" strokeWidth="1" fill="none" transform="rotate(45,193,423)" />
+
+        {/* プラスマーク */}
+        <g stroke="rgba(56,189,248,0.28)" strokeWidth="1">
+          <line x1="148" y1="140" x2="158" y2="140" /><line x1="153" y1="135" x2="153" y2="145" />
+        </g>
+        <g stroke="rgba(56,189,248,0.22)" strokeWidth="1">
+          <line x1="408" y1="360" x2="418" y2="360" /><line x1="413" y1="355" x2="413" y2="365" />
+        </g>
+
+        {/* コーナーフレーム */}
+        <path d="M22,22 L44,22 L44,44" stroke="rgba(148,163,184,0.18)" strokeWidth="1.5" fill="none" />
+        <path d="M498,558 L476,558 L476,536" stroke="rgba(148,163,184,0.18)" strokeWidth="1.5" fill="none" />
+
+        {/* ラベル */}
+        <text x="22" y="17" fill="rgba(148,163,184,0.28)" fontSize="8" fontFamily="monospace" letterSpacing="1">SYS-REDESIGN</text>
+        <text x="390" y="232" fill="rgba(56,189,248,0.40)" fontSize="7" fontFamily="monospace">成約</text>
+        <text x="412" y="170" fill="rgba(56,189,248,0.45)" fontSize="7" fontFamily="monospace">継続</text>
+      </svg>
+    </div>
+  );
+}
+
 function Hero() {
   return (
     <section className="relative min-h-[88vh] flex flex-col justify-center overflow-hidden bg-slate-900">
-      {/* 背景画像 - 全面カバー */}
+      {/* 背景テクスチャ（薄く） */}
       <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
-          alt=""
-          className="w-full h-full object-cover opacity-50"
-        />
-        {/* 左から右へのグラデーション（テキスト側を暗く）*/}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-slate-900/30" />
-        {/* 上下の補助グラデーション（切れ目をなくす）*/}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-slate-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-transparent to-slate-900/50" />
       </div>
 
-      {/* 人物シルエット - デスクトップのみ */}
-      <div className="absolute right-0 bottom-0 w-[42%] h-full hidden lg:block pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=700&q=80"
-          alt=""
-          className="absolute bottom-0 right-4 h-[96%] w-auto object-contain object-bottom"
-          style={{ filter: 'brightness(0.28) contrast(1.2) saturate(0.4) sepia(0.3) hue-rotate(185deg)' }}
-        />
-        {/* 左側ブレンド */}
-        <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-slate-900/90 to-transparent" />
-        {/* 下部ブレンド */}
-        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-900 to-transparent" />
-      </div>
+      {/* SVGグラフィック */}
+      <SystemGraphic />
 
       {/* コンテンツ */}
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-16 w-full">
