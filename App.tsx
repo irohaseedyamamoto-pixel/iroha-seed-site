@@ -141,12 +141,12 @@ function Navbar() {
 
 function SystemGraphic() {
   return (
-    <div className="absolute right-0 inset-y-0 w-[52%] hidden lg:block pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 lg:inset-y-0 lg:right-0 lg:left-auto lg:w-[52%] pointer-events-none overflow-hidden">
       <svg
         viewBox="0 0 520 580"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full opacity-[0.14] lg:opacity-90"
         preserveAspectRatio="xMidYMid meet"
       >
         <style>{`
