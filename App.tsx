@@ -191,7 +191,7 @@ function ProblemSection() {
     <section className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">課題</div>
+          <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">課題</div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
             なぜ、施策を増やしても
             <br />
@@ -246,7 +246,7 @@ function SolutionSection() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">解決策</div>
+          <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">解決策</div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
             部分的な改善ではなく、
             <br />
@@ -271,7 +271,7 @@ function SolutionSection() {
               </div>
               <div className="p-6">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
-                  <Icon size={20} className="text-blue-600" />
+                  <Icon size={20} className="text-blue-800" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">{title}</h3>
                 <p className="text-slate-500 leading-relaxed text-sm">{desc}</p>
@@ -336,7 +336,7 @@ function ServicesSection() {
     <section id="services" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">サービス</div>
+          <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">サービス</div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
             売上を最大化させる、
             <br />
@@ -362,7 +362,7 @@ function ServicesSection() {
               </div>
               <div className="p-6">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
-                  <Icon size={20} className="text-blue-600 group-hover:text-white transition-colors" />
+                  <Icon size={20} className="text-blue-800 group-hover:text-white transition-colors" />
                 </div>
                 <h3 className="text-base font-bold text-slate-900 mb-2 leading-snug">{title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
@@ -413,20 +413,20 @@ function StrengthsSection() {
               key={i}
               className="flex items-start gap-5 bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition-all shadow-sm"
             >
-              <CheckCircle size={22} className="text-blue-500 flex-shrink-0 mt-0.5" />
+              <CheckCircle size={22} className="text-blue-700 flex-shrink-0 mt-0.5" />
               <p className="text-slate-800 font-medium leading-relaxed">{text}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-14 text-center">
-          <div className="inline-block border-2 border-blue-600 rounded-2xl p-8 max-w-2xl">
+          <div className="inline-block border-2 border-blue-800 rounded-2xl p-8 max-w-2xl">
             <p className="text-slate-600 text-lg leading-relaxed mb-4">
               私たちは単なる制作会社やコンサルティング会社ではありません。<br />
               「売れる仕組み」を共に創り上げるパートナーとして、<br />
               現場の熱量を成果に変えるまで伴走します。
             </p>
-            <div className="text-blue-700 font-black text-xl italic">
+            <div className="text-blue-900 font-black text-xl italic">
               "現場の解像度を上げ、<br />経営の精度を高める。"
             </div>
           </div>
@@ -473,7 +473,7 @@ function AchievementsSection() {
     <section id="achievements" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">実績</div>
+          <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">実績</div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
             確かな実績に裏打ちされた、
             <br />
@@ -492,7 +492,7 @@ function AchievementsSection() {
               <div className="p-6">
                 <div className="text-xs text-slate-400 font-bold mb-2">{label}</div>
                 <h3 className="text-xl font-black text-slate-900 mb-1">{title}</h3>
-                <div className="text-blue-600 font-bold text-sm mb-4">{highlight}</div>
+                <div className="text-blue-800 font-bold text-sm mb-4">{highlight}</div>
                 <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             </div>
@@ -537,11 +537,11 @@ function RepresentativeSection() {
           </div>
 
           <div>
-            <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">代表メッセージ</div>
+            <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">代表メッセージ</div>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">山本 剛史</h2>
             <div className="text-slate-400 font-medium mb-8">TSUYOSHI YAMAMOTO</div>
 
-            <blockquote className="text-2xl font-black text-slate-900 leading-tight mb-8 italic border-l-4 border-blue-500 pl-6">
+            <blockquote className="text-2xl font-black text-slate-900 leading-tight mb-8 italic border-l-4 border-blue-700 pl-6">
               "マーケティングは、<br />
               机の上ではなく<br />
               現場で起きている"
@@ -582,7 +582,7 @@ function CompanySection() {
     <section id="company" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
-          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">会社概要</div>
+          <div className="text-blue-800 font-bold text-sm tracking-widest uppercase mb-3">会社概要</div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900">企業情報</h2>
         </div>
 
@@ -594,7 +594,7 @@ function CompanySection() {
                 i % 2 === 0 ? 'bg-slate-50' : 'bg-white'
               } border-b border-slate-200 last:border-b-0`}
             >
-              <div className="text-sm font-bold text-blue-700 w-32 flex-shrink-0 pt-0.5">{label}</div>
+              <div className="text-sm font-bold text-blue-900 w-32 flex-shrink-0 pt-0.5">{label}</div>
               <div className="text-slate-700 text-sm leading-relaxed">{value}</div>
             </div>
           ))}
