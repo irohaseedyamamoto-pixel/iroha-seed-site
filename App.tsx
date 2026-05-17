@@ -511,20 +511,19 @@ function RepresentativeSection() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-full max-w-xs h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden bg-blue-100 shadow-2xl shadow-blue-900/20">
+            <div className="relative inline-block">
+              <div className="w-64 md:w-80 rounded-2xl overflow-hidden shadow-xl shadow-slate-900/20 ring-1 ring-slate-200">
                 <img
                   src="/profile.png"
                   alt="山本 剛史"
-                  className="w-full h-full object-contain object-top"
+                  className="w-full h-auto block"
                   onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const parent = e.currentTarget.parentElement;
+                    const el = e.currentTarget as HTMLImageElement;
+                    el.style.display = 'none';
+                    const parent = el.parentElement;
                     if (parent) {
-                      parent.style.display = 'flex';
-                      parent.style.alignItems = 'center';
-                      parent.style.justifyContent = 'center';
-                      parent.innerHTML = '<span style="color:#3b82f6;font-size:4rem;font-weight:900">TY</span>';
+                      parent.classList.add('h-96', 'flex', 'items-center', 'justify-center', 'bg-slate-100');
+                      parent.innerHTML = '<span style="color:#1e3a8a;font-size:4rem;font-weight:900">TY</span>';
                     }
                   }}
                 />
