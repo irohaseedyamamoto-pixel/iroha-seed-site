@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Menu,
   X,
@@ -80,12 +81,12 @@ function Navbar() {
               {link.label}
             </button>
           ))}
-          <button
-            onClick={() => handleNavClick('#contact')}
+          <Link
+            to="/contact"
             className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors"
           >
             無料相談
-          </button>
+          </Link>
         </nav>
 
         <button
@@ -108,12 +109,12 @@ function Navbar() {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={() => handleNavClick('#contact')}
-              className="bg-blue-600 text-white font-bold py-3 rounded-lg mt-2"
+            <Link
+              to="/contact"
+              className="bg-blue-600 text-white font-bold py-3 rounded-lg mt-2 text-center block"
             >
               無料相談
-            </button>
+            </Link>
           </div>
         </div>
       )}
@@ -155,13 +156,13 @@ function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+            <Link
+              to="/contact"
               className="bg-white text-blue-900 font-bold text-base px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
             >
               無料で相談する
               <ArrowRight size={18} />
-            </button>
+            </Link>
             <button
               onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })}
               className="border-2 border-white/40 text-white font-bold text-base px-8 py-4 rounded-xl hover:border-white hover:bg-white/10 transition-colors"
@@ -633,15 +634,13 @@ function CtaSection() {
         </div>
 
         <div className="text-center">
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSf97oAUOKluVJKb4TRWIQJ--tlJwfiTVF29SUAo3J74mehHRA/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/contact"
             className="inline-flex items-center gap-3 bg-white text-blue-900 font-black text-lg px-12 py-5 rounded-2xl hover:bg-blue-50 transition-colors shadow-2xl shadow-blue-950/30"
           >
             無料相談を予約する
             <ArrowRight size={20} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
