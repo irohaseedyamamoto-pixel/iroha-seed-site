@@ -236,7 +236,7 @@ const METHODS = [
     icon: Handshake,
     title: '実戦型伴走',
     desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。',
-    img: 'https://images.unsplash.com/photo-1497366858526-0766c4f15c48?auto=format&fit=crop&w=800&q=75',
+    img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=75',
   },
 ];
 
@@ -298,7 +298,7 @@ const SERVICES = [
     title: 'セールスプロモーションツール制作',
     desc: 'HP・LP・チラシ等を、見た目ではなく成果につながる訴求設計で制作・改善します。',
     icon: Zap,
-    img: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?auto=format&fit=crop&w=600&q=75',
+    img: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '03',
@@ -396,9 +396,9 @@ function StrengthsSection() {
             loading="lazy"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-blue-900/65 flex flex-col items-center justify-center text-center px-6">
-            <div className="text-blue-300 font-bold text-sm tracking-widest uppercase mb-3">強み</div>
-            <h2 className="text-3xl md:text-4xl font-black text-white">
+          <div className="absolute inset-0 bg-slate-900/82 flex flex-col items-center justify-center text-center px-6">
+            <div className="text-blue-400 font-bold text-sm tracking-widest uppercase mb-3">強み</div>
+            <h2 className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">
               なぜ、iroha Seedが
               <br />
               選ばれるのか
