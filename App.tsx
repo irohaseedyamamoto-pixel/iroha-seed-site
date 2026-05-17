@@ -170,24 +170,6 @@ function Hero() {
             </button>
           </div>
 
-          <div className="mt-16 pt-8 border-t border-white/20">
-            <div className="flex flex-wrap items-center gap-6 md:gap-8">
-              <div>
-                <div className="text-3xl md:text-4xl font-black text-white">+166%</div>
-                <div className="text-blue-200 text-xs md:text-sm mt-1">売上成長率（支援実績）</div>
-              </div>
-              <div className="w-px h-10 bg-white/20" />
-              <div>
-                <div className="text-3xl md:text-4xl font-black text-white">全国3位</div>
-                <div className="text-blue-200 text-xs md:text-sm mt-1">FC店舗オープン初日</div>
-              </div>
-              <div className="w-px h-10 bg-white/20" />
-              <div>
-                <div className="text-3xl md:text-4xl font-black text-white">CMO</div>
-                <div className="text-blue-200 text-xs md:text-sm mt-1">製薬会社 社外取締役就任</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -242,19 +224,19 @@ const METHODS = [
     icon: Target,
     title: '現場起点',
     desc: '経営・営業・現場の実態を深く理解することから始めます。',
-    img: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=75',
+    img: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=75',
   },
   {
     icon: Globe,
     title: '全体最適',
     desc: '点ではなく線で捉え、売上につながる全体設計を見直します。',
-    img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=75',
+    img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=75',
   },
   {
     icon: Handshake,
     title: '実戦型伴走',
     desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。',
-    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=75',
+    img: 'https://images.unsplash.com/photo-1497366858526-0766c4f15c48?auto=format&fit=crop&w=800&q=75',
   },
 ];
 
@@ -316,7 +298,7 @@ const SERVICES = [
     title: 'セールスプロモーションツール制作',
     desc: 'HP・LP・チラシ等を、見た目ではなく成果につながる訴求設計で制作・改善します。',
     icon: Zap,
-    img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=75',
+    img: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '03',
@@ -330,14 +312,14 @@ const SERVICES = [
     title: 'ビジネスマッチング',
     desc: '新しい販路、提携先、売上機会を生み出す接点をつくります。',
     icon: Users,
-    img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=75',
+    img: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '05',
     title: 'アライアンス調整',
     desc: '提携先との接続や協業設計を通じて、事業拡大のきっかけをつくります。',
     icon: Handshake,
-    img: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=600&q=75',
+    img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=600&q=75',
   },
   {
     num: '06',
@@ -409,7 +391,7 @@ function StrengthsSection() {
         {/* セクションヘッダー写真 */}
         <div className="rounded-2xl overflow-hidden mb-14 relative h-52 md:h-64">
           <img
-            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1600&q=80"
+            src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=80"
             alt="強み"
             loading="lazy"
             className="w-full h-full object-cover"
