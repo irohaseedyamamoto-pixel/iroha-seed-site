@@ -13,6 +13,8 @@ import {
   Handshake,
   Zap,
   BarChart3,
+  Instagram,
+  Facebook,
   Globe,
   ArrowRight,
 } from 'lucide-react';
@@ -175,20 +177,20 @@ function Hero() {
           </div>
 
           <div className="mt-16 pt-8 border-t border-white/20">
-            <div className="flex items-center gap-8">
+            <div className="flex flex-wrap items-center gap-6 md:gap-8">
               <div>
-                <div className="text-4xl font-black text-white">+166%</div>
-                <div className="text-blue-200 text-sm mt-1">売上成長率（支援実績）</div>
+                <div className="text-3xl md:text-4xl font-black text-white">+166%</div>
+                <div className="text-blue-200 text-xs md:text-sm mt-1">売上成長率（支援実績）</div>
               </div>
-              <div className="w-px h-12 bg-white/20" />
+              <div className="w-px h-10 bg-white/20" />
               <div>
-                <div className="text-4xl font-black text-white">全国3位</div>
-                <div className="text-blue-200 text-sm mt-1">FC店舗オープン初日</div>
+                <div className="text-3xl md:text-4xl font-black text-white">全国3位</div>
+                <div className="text-blue-200 text-xs md:text-sm mt-1">FC店舗オープン初日</div>
               </div>
-              <div className="hidden sm:block w-px h-12 bg-white/20" />
-              <div className="hidden sm:block">
-                <div className="text-4xl font-black text-white">CMO</div>
-                <div className="text-blue-200 text-sm mt-1">製薬会社 社外取締役就任</div>
+              <div className="w-px h-10 bg-white/20" />
+              <div>
+                <div className="text-3xl md:text-4xl font-black text-white">CMO</div>
+                <div className="text-blue-200 text-xs md:text-sm mt-1">製薬会社 社外取締役就任</div>
               </div>
             </div>
           </div>
@@ -487,7 +489,7 @@ function RepresentativeSection() {
           {/* プロフィール写真 */}
           <div className="flex justify-center">
             <div className="relative">
-              <div className="w-72 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden bg-blue-100 shadow-2xl shadow-blue-900/20">
+              <div className="w-full max-w-xs h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden bg-blue-100 shadow-2xl shadow-blue-900/20">
                 <img
                   src="/profile.png"
                   alt="山本 剛史"
@@ -715,7 +717,29 @@ function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+        {/* SNSリンク */}
+        <div className="border-t border-slate-800 pt-8 mb-6 flex justify-center gap-4">
+          <a
+            href="https://www.instagram.com/INSTAGRAM_ID/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="w-10 h-10 rounded-full bg-white/10 hover:bg-pink-600 flex items-center justify-center transition-colors"
+          >
+            <Instagram size={18} className="text-white" />
+          </a>
+          <a
+            href="https://www.facebook.com/FACEBOOK_ID/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            className="w-10 h-10 rounded-full bg-white/10 hover:bg-blue-600 flex items-center justify-center transition-colors"
+          >
+            <Facebook size={18} className="text-white" />
+          </a>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
           <div>© 2026 Hiroso Inc. All rights reserved.</div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
