@@ -1,1030 +1,736 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  TrendingUp, 
-  Menu, 
-  X, 
-  Sparkles,
-  Compass,
-  CheckCircle2,
+import {
+  Menu,
+  X,
+  TrendingUp,
+  CheckCircle,
   Phone,
   Mail,
   MapPin,
-  ChevronDown,
-  Layers,
-  Palette,
-  Zap,
-  Heart,
-  Handshake,
+  ChevronRight,
   Target,
   Users,
-  Maximize
+  Handshake,
+  Zap,
+  BarChart3,
+  Globe,
+  ArrowRight,
 } from 'lucide-react';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 
-// Utility for tailwind classes
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+// ─── ナビゲーション ───────────────────────────────────────────────────────────
 
-// --- Theme Definitions ---
-type ThemePattern = 
-  | 'modern-kyoto' 
-  | 'minimal-clean' 
-  | 'dark-pro' 
-  | 'editorial' 
-  | 'technical' 
-  | 'warm-organic' 
-  | 'brutalist' 
-  | 'luxury' 
-  | 'utility' 
-  | 'immersive';
+const NAV_LINKS = [
+  { label: 'サービス', href: '#services' },
+  { label: '強み', href: '#strengths' },
+  { label: '実績', href: '#achievements' },
+  { label: '代表メッセージ', href: '#representative' },
+  { label: '会社概要', href: '#company' },
+];
 
-interface ThemeConfig {
-  name: string;
-  bg: string;
-  text: string;
-  accent: string;
-  accentText: string;
-  secondary: string;
-  border: string;
-  card: string;
-  footer: string;
-  font: string;
-  radius: string;
-  shadow: string;
-}
-
-const THEMES: Record<ThemePattern, ThemeConfig> = {
-  'modern-kyoto': {
-    name: 'モダン京都',
-    bg: 'bg-[#F5F5F0]',
-    text: 'text-[#1A1A1A]',
-    accent: 'bg-[#2B4C7E]',
-    accentText: 'text-[#2B4C7E]',
-    secondary: 'text-[#1A1A1A]/70',
-    border: 'border-[#2B4C7E]/10',
-    card: 'bg-white',
-    footer: 'bg-[#1A1A1A]',
-    font: 'font-serif',
-    radius: 'rounded-sm',
-    shadow: 'shadow-sm'
-  },
-  'minimal-clean': {
-    name: 'ミニマル・クリーン',
-    bg: 'bg-white',
-    text: 'text-slate-900',
-    accent: 'bg-black',
-    accentText: 'text-black',
-    secondary: 'text-slate-500',
-    border: 'border-slate-100',
-    card: 'bg-white',
-    footer: 'bg-slate-50',
-    font: 'font-sans',
-    radius: 'rounded-none',
-    shadow: 'shadow-none'
-  },
-  'dark-pro': {
-    name: 'ダーク・プロ',
-    bg: 'bg-[#0F172A]',
-    text: 'text-slate-100',
-    accent: 'bg-emerald-500',
-    accentText: 'text-emerald-400',
-    secondary: 'text-slate-400',
-    border: 'border-slate-800',
-    card: 'bg-slate-900',
-    footer: 'bg-black',
-    font: 'font-sans',
-    radius: 'rounded-2xl',
-    shadow: 'shadow-2xl shadow-emerald-500/10'
-  },
-  'editorial': {
-    name: 'エディトリアル',
-    bg: 'bg-[#FAFAFA]',
-    text: 'text-black',
-    accent: 'bg-[#D4AF37]',
-    accentText: 'text-[#D4AF37]',
-    secondary: 'text-black/60',
-    border: 'border-black/5',
-    card: 'bg-white',
-    footer: 'bg-black',
-    font: 'font-serif',
-    radius: 'rounded-none',
-    shadow: 'shadow-xl'
-  },
-  'technical': {
-    name: 'テクニカル',
-    bg: 'bg-[#F1F5F9]',
-    text: 'text-slate-900',
-    accent: 'bg-indigo-600',
-    accentText: 'text-indigo-600',
-    secondary: 'text-slate-500',
-    border: 'border-slate-200',
-    card: 'bg-white',
-    footer: 'bg-slate-900',
-    font: 'font-mono',
-    radius: 'rounded-md',
-    shadow: 'shadow-md'
-  },
-  'warm-organic': {
-    name: 'ウォーム・オーガニック',
-    bg: 'bg-[#FDF8F3]',
-    text: 'text-[#4A3728]',
-    accent: 'bg-[#8B5E3C]',
-    accentText: 'text-[#8B5E3C]',
-    secondary: 'text-[#4A3728]/70',
-    border: 'border-[#8B5E3C]/10',
-    card: 'bg-white',
-    footer: 'bg-[#2D1E12]',
-    font: 'font-sans',
-    radius: 'rounded-[2rem]',
-    shadow: 'shadow-lg shadow-[#8B5E3C]/5'
-  },
-  'brutalist': {
-    name: 'ブルータリスト',
-    bg: 'bg-white',
-    text: 'text-black',
-    accent: 'bg-[#FF3E00]',
-    accentText: 'text-[#FF3E00]',
-    secondary: 'text-black/80',
-    border: 'border-4 border-black',
-    card: 'bg-white',
-    footer: 'bg-black',
-    font: 'font-sans font-black',
-    radius: 'rounded-none',
-    shadow: 'shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'
-  },
-  'luxury': {
-    name: 'ラグジュアリー',
-    bg: 'bg-[#0A0A0A]',
-    text: 'text-[#E5E5E5]',
-    accent: 'bg-[#C5A059]',
-    accentText: 'text-[#C5A059]',
-    secondary: 'text-[#E5E5E5]/60',
-    border: 'border-[#C5A059]/20',
-    card: 'bg-[#141414]',
-    footer: 'bg-black',
-    font: 'font-serif',
-    radius: 'rounded-sm',
-    shadow: 'shadow-2xl'
-  },
-  'utility': {
-    name: 'ユーティリティ',
-    bg: 'bg-slate-50',
-    text: 'text-slate-900',
-    accent: 'bg-blue-600',
-    accentText: 'text-blue-600',
-    secondary: 'text-slate-600',
-    border: 'border-slate-200',
-    card: 'bg-white',
-    footer: 'bg-white',
-    font: 'font-sans',
-    radius: 'rounded-lg',
-    shadow: 'shadow-sm border'
-  },
-  'immersive': {
-    name: 'イマーシブ',
-    bg: 'bg-black',
-    text: 'text-white',
-    accent: 'bg-white/20',
-    accentText: 'text-white',
-    secondary: 'text-white/60',
-    border: 'border-white/10',
-    card: 'bg-white/5 backdrop-blur-xl',
-    footer: 'bg-black',
-    font: 'font-sans',
-    radius: 'rounded-3xl',
-    shadow: 'shadow-2xl'
-  }
-};
-
-// --- Components ---
-
-const PatternSwitcher = ({ current, onSelect }: { current: ThemePattern, onSelect: (p: ThemePattern) => void }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="fixed bottom-8 right-8 z-[100]">
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="absolute bottom-16 right-0 bg-white shadow-2xl rounded-2xl p-4 w-64 border border-slate-200 overflow-hidden"
-          >
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2 flex items-center gap-2">
-              <Palette className="w-3 h-3" /> デザインパターン選択
-            </div>
-            <div className="grid grid-cols-1 gap-1 max-h-[60vh] overflow-y-auto pr-2">
-              {(Object.keys(THEMES) as ThemePattern[]).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => {
-                    onSelect(p);
-                    setIsOpen(false);
-                  }}
-                  className={cn(
-                    "flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all",
-                    current === p 
-                      ? "bg-slate-900 text-white" 
-                      : "hover:bg-slate-100 text-slate-600"
-                  )}
-                >
-                  {THEMES[p].name}
-                  {current === p && <CheckCircle2 className="w-4 h-4" />}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95"
-      >
-        {isOpen ? <X /> : <Layers />}
-      </button>
-    </div>
-  );
-};
-
-const Navbar = ({ theme }: { theme: ThemeConfig }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'サービス', href: '#services' },
-    { name: '強み', href: '#strengths' },
-    { name: '実績', href: '#achievements' },
-    { name: '会社概要', href: '#company' },
-  ];
+  const handleNavClick = (href: string) => {
+    setMenuOpen(false);
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-6 md:px-12 py-4 md:py-6 flex justify-between items-center",
-      isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200" : "bg-transparent"
-    )}>
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 flex items-center justify-center overflow-hidden bg-slate-50 rounded-lg">
-          <img 
-            src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&w=200&output=png" 
-            alt="iroha Seed Logo" 
-            className="w-full h-full object-contain"
-            loading="eager"
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              // If image fails, hide it and rely on the text logo next to it
-              e.currentTarget.style.display = 'none';
-            }}
-          />
-        </div>
-        <div className="flex flex-col">
-          <span className={cn("text-xl font-black tracking-tighter leading-none", isScrolled ? "text-black" : theme.text)}>iroha Seed</span>
-          <span className={cn("text-[10px] font-bold opacity-50 tracking-widest", isScrolled ? "text-black" : theme.text)}>by Hiroso Inc.</span>
-        </div>
-      </div>
-
-      <div className={cn("hidden md:flex items-center gap-10 text-sm font-bold uppercase tracking-widest", isScrolled ? "text-black" : theme.text)}>
-        {navLinks.map(link => (
-          <a key={link.name} href={link.href} className="hover:opacity-50 transition-opacity">{link.name}</a>
-        ))}
-        <a href="#contact" className={cn("px-8 py-3 text-white transition-transform hover:scale-105 shadow-lg", theme.accent, theme.radius)}>
-          無料相談
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-md' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* ロゴ */}
+        <a href="#" className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg overflow-hidden bg-blue-50 flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="iroha Seed"
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </div>
+          <div>
+            <div className={`font-bold text-lg leading-tight tracking-tight ${scrolled ? 'text-blue-900' : 'text-white'}`}>
+              iroha Seed
+            </div>
+            <div className={`text-[10px] tracking-widest font-medium opacity-70 ${scrolled ? 'text-blue-900' : 'text-white'}`}>
+              by Hiroso Inc.
+            </div>
+          </div>
         </a>
+
+        {/* デスクトップナビ */}
+        <nav className="hidden md:flex items-center gap-8">
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link.href}
+              onClick={() => handleNavClick(link.href)}
+              className={`text-sm font-medium transition-colors hover:text-blue-400 ${
+                scrolled ? 'text-slate-700' : 'text-white/90'
+              }`}
+            >
+              {link.label}
+            </button>
+          ))}
+          <button
+            onClick={() => handleNavClick('#contact')}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors"
+          >
+            無料相談
+          </button>
+        </nav>
+
+        {/* モバイルメニューボタン */}
+        <button
+          className={`md:hidden ${scrolled ? 'text-slate-700' : 'text-white'}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      <button className={cn("md:hidden p-2", isScrolled ? "text-black" : theme.text)} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-        {isMobileMenuOpen ? <X /> : <Menu />}
-      </button>
-
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 p-6 flex flex-col gap-6 md:hidden shadow-xl"
-          >
-            {navLinks.map(link => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className="text-lg font-bold text-black"
-                onClick={() => setIsMobileMenuOpen(false)}
+      {/* モバイルメニュー */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t border-slate-100 shadow-lg">
+          <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4">
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.href}
+                onClick={() => handleNavClick(link.href)}
+                className="text-left text-slate-700 font-medium py-2 border-b border-slate-100"
               >
-                {link.name}
-              </a>
+                {link.label}
+              </button>
             ))}
-            <a 
-              href="#contact" 
-              className={cn("px-8 py-4 text-white text-center font-bold", theme.accent, theme.radius)}
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              onClick={() => handleNavClick('#contact')}
+              className="bg-blue-600 text-white font-bold py-3 rounded-lg mt-2"
             >
               無料相談
-            </a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
   );
-};
+}
 
-const SectionHeader = ({ title, subtitle, theme, light = false }: { title: string, subtitle: string, theme: ThemeConfig, light?: boolean }) => (
-  <div className="mb-12 md:mb-20">
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-    >
-      <h2 className={cn("text-xs md:text-sm font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mb-3 md:mb-4", light ? "text-white/50" : "opacity-50", theme.accentText)}>{subtitle}</h2>
-      <p className={cn("text-2xl md:text-5xl font-bold leading-tight text-balance", light ? "text-white" : theme.text)}>{title}</p>
-    </motion.div>
-  </div>
-);
+// ─── ヒーローセクション ──────────────────────────────────────────────────────
 
-const Hero = ({ theme }: { theme: ThemeConfig }) => {
+function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center px-6 md:px-12 pt-20 overflow-hidden">
-      <div className={cn("absolute top-0 right-0 w-1/2 h-full -z-10 hidden lg:block opacity-10", theme.accent)} />
-      
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <div className={cn("inline-block px-4 py-1 mb-6 md:mb-8 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] border", theme.accentText, theme.border)}>
+    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 overflow-hidden">
+      {/* 背景装飾 */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-white/20 blur-3xl" />
+        <div className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-blue-300/30 blur-3xl" />
+      </div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptNiA2djZoNnYtNmgtNnptLTEyIDBoNnY2aC02di02em0tNiAwaDZ2Nmgtdi02eiIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
+
+      <div className="relative max-w-6xl mx-auto px-6 py-32">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-blue-100 text-sm font-medium px-4 py-2 rounded-full mb-8">
+            <TrendingUp size={14} />
             実戦型マーケティングパートナー
           </div>
-          <h1 className={cn("text-3xl sm:text-5xl md:text-8xl font-black leading-[1.2] md:leading-[1.1] mb-8 md:mb-10 tracking-tighter text-balance", theme.text)}>
-            売れる仕組みを、<br className="hidden sm:block" />
-            <span className={cn("underline underline-offset-8 decoration-2", theme.accentText)}>再設計</span>する。
+
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-6 tracking-tight">
+            売れる仕組みを、
+            <br />
+            <span className="text-blue-300">再設計する。</span>
           </h1>
-          <p className={cn("text-base md:text-2xl mb-10 md:mb-12 max-w-xl leading-relaxed font-medium text-balance", theme.secondary)}>
-            机上の空論ではない、経営者視点の実戦型マーケティング支援。
+
+          <p className="text-lg md:text-xl text-blue-100 leading-relaxed mb-10 max-w-2xl">
+            机上の空論ではない、経営者視点の実戦型マーケティング支援。<br />
             売上が積み上がる全体構造を、現場理解から組み直します。
           </p>
-          <div className="flex flex-wrap gap-6">
-            <a href="#contact" className={cn(
-              "px-10 py-5 font-bold text-white text-lg transition-all hover:-translate-y-1 active:scale-95",
-              theme.accent,
-              theme.radius,
-              theme.shadow
-            )}>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-white text-blue-900 font-bold text-base px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+            >
               無料で相談する
-            </a>
-            <a href="#services" className={cn(
-              "px-10 py-5 font-bold border text-lg transition-all hover:bg-black/5",
-              theme.border,
-              theme.text,
-              theme.radius
-            )}>
+              <ArrowRight size={18} />
+            </button>
+            <button
+              onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })}
+              className="border-2 border-white/40 text-white font-bold text-base px-8 py-4 rounded-xl hover:border-white hover:bg-white/10 transition-colors"
+            >
               サービスを見る
-            </a>
+            </button>
           </div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.2 }}
-          className="relative mt-12 lg:mt-0"
-        >
-          <div className={cn("aspect-[4/5] overflow-hidden", theme.radius, theme.shadow)}>
-            <img 
-              src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1000" 
-              alt="戦略設計" 
-              className="w-full h-full object-cover grayscale-[0.3] hover:grayscale-0 transition-all duration-1000"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <motion.div
-            animate={{ y: [0, -15, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className={cn(
-              "absolute bottom-4 left-4 md:-bottom-10 md:-left-10 p-5 md:p-8 border bg-white text-black z-10",
-              theme.radius,
-              theme.shadow
-            )}
-          >
-            <div className="flex items-center gap-3 md:gap-4">
-              <div className={cn("w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white", theme.accent)}>
-                <TrendingUp className="w-5 h-5 md:w-6 md:h-6" />
-              </div>
+          <div className="mt-16 pt-8 border-t border-white/20">
+            <div className="flex items-center gap-8">
               <div>
-                <div className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest opacity-50">売上成長率</div>
-                <div className="text-xl md:text-2xl font-black">+166%</div>
+                <div className="text-4xl font-black text-white">+166%</div>
+                <div className="text-blue-200 text-sm mt-1">売上成長率（支援実績）</div>
+              </div>
+              <div className="w-px h-12 bg-white/20" />
+              <div>
+                <div className="text-4xl font-black text-white">全国3位</div>
+                <div className="text-blue-200 text-sm mt-1">FC店舗オープン初日</div>
+              </div>
+              <div className="hidden sm:block w-px h-12 bg-white/20" />
+              <div className="hidden sm:block">
+                <div className="text-4xl font-black text-white">CMO</div>
+                <div className="text-blue-200 text-sm mt-1">製薬会社 社外取締役就任</div>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      </div>
-      
-      <div className={cn("absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-30", theme.text)}>
-        <ChevronDown className="w-8 h-8" />
-      </div>
-    </section>
-  );
-};
-
-const ProblemSection = ({ theme }: { theme: ThemeConfig }) => {
-  const problems = [
-    "広告や集客施策を行っているのに、売上の伸びにつながっていない",
-    "問い合わせや見込み客はいるのに、成約や継続につながらない",
-    "LP、営業、導線、商品設計がバラバラで、全体最適になっていない",
-    "表面的なアドバイスではなく、現場まで踏み込んだ実務支援がほしい"
-  ];
-
-  return (
-    <section className={cn("py-20 md:py-32 px-6 md:px-12", theme.card === 'bg-white' ? 'bg-white' : theme.bg)}>
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
-          <div>
-            <SectionHeader 
-              subtitle="課題" 
-              title="なぜ、施策を増やしても売上が伸びないのか？" 
-              theme={theme}
-            />
-            <p className={cn("text-base md:text-lg mb-12 leading-relaxed text-balance", theme.secondary)}>
-              売上が伸びない原因は、広告だけ、LPだけ、営業だけの問題ではありません。
-              現場理解、訴求、導線、提案、改善が分断されていると、施策を増やしても成果は安定しません。
-            </p>
-          </div>
-          <div className="space-y-6">
-            {problems.map((problem, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className={cn("flex items-start gap-4 p-4 sm:p-6 border", theme.card, theme.border, theme.radius, theme.shadow)}
-              >
-                <X className="w-6 h-6 text-red-500 shrink-0 mt-1" />
-                <span className={cn("font-bold text-lg", theme.text)}>{problem}</span>
-              </motion.div>
-            ))}
           </div>
         </div>
       </div>
     </section>
   );
-};
+}
 
-const SolutionSection = ({ theme }: { theme: ThemeConfig }) => {
+// ─── 課題セクション ───────────────────────────────────────────────────────────
+
+const PROBLEMS = [
+  '広告や集客施策を行っているのに、売上の伸びにつながっていない',
+  '問い合わせや見込み客はいるのに、成約や継続につながらない',
+  'LP、営業、導線、商品設計がバラバラで、全体最適になっていない',
+  '表面的なアドバイスではなく、現場まで踏み込んだ実務支援がほしい',
+];
+
+function ProblemSection() {
   return (
-    <section className={cn("py-20 md:py-32 px-6 md:px-12 text-white", theme.accent)}>
-      <div className="max-w-5xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-xs md:text-sm font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mb-6 md:mb-8 opacity-60">解決策</h2>
-          <p className="text-2xl md:text-6xl font-black mb-10 md:mb-12 leading-tight text-balance">
-            部分的な改善ではなく、<br className="hidden sm:block" />
+    <section className="py-24 bg-slate-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-14">
+          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">課題</div>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
+            なぜ、施策を増やしても
+            <br />
+            売上が伸びないのか？
+          </h2>
+          <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            売上が伸びない原因は、広告だけ、LPだけ、営業だけの問題ではありません。<br />
+            現場理解・訴求・導線・提案・改善が分断されていると、施策を増やしても成果は安定しません。
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          {PROBLEMS.map((text, i) => (
+            <div key={i} className="bg-white border border-slate-200 rounded-xl p-6 flex items-start gap-4">
+              <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <X size={16} className="text-red-500" />
+              </div>
+              <p className="text-slate-700 font-medium leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 解決策セクション ─────────────────────────────────────────────────────────
+
+const METHODS = [
+  { icon: Target, title: '現場起点', desc: '経営・営業・現場の実態を深く理解することから始めます。' },
+  { icon: Globe, title: '全体最適', desc: '点ではなく線で捉え、売上につながる全体設計を見直します。' },
+  { icon: Handshake, title: '実戦型伴走', desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。' },
+];
+
+function SolutionSection() {
+  return (
+    <section className="py-24 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-14">
+          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">解決策</div>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
+            部分的な改善ではなく、
+            <br />
             売れる構造そのものを組み直す。
+          </h2>
+          <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            必要なのは、事業の現場を理解したうえで、集客・訴求・導線・成約・改善を<br />
+            一気通貫で繋ぎ直す「売れる仕組みの再設計」です。
           </p>
-          <div className="text-4xl md:text-8xl font-black mb-10 md:mb-12 opacity-20 tracking-tighter">
-            RE-DESIGN
-          </div>
-          <p className="text-base md:text-2xl mb-12 md:mb-16 opacity-80 leading-relaxed max-w-3xl mx-auto text-balance">
-            必要なのは、事業の現場を理解したうえで、集客・訴求・導線・成約・改善を
-            一気通貫で繋ぎ直す「売れる仕組み再設計」です。
-          </p>
-          <div className="grid md:grid-cols-3 gap-8 text-left">
-            {[
-              { title: "現場起点", desc: "経営・営業・現場の実態を深く理解することから始めます。" },
-              { title: "全体最適", desc: "点ではなく線で捉え、売上につながる全体設計を見直します。" },
-              { title: "実戦型伴走", desc: "アドバイスで終わらず、実行と改善まで共に歩みます。" }
-            ].map((item, i) => (
-              <div key={i} className={cn("p-8 bg-white/10 backdrop-blur-md border border-white/10", theme.radius)}>
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                  {item.title}
-                </h3>
-                <p className="text-sm opacity-70 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
+        </div>
 
-const ServiceSection = ({ theme }: { theme: ThemeConfig }) => {
-  const services = [
-    { name: "マーケティング戦略コンサルティング", purpose: "集客から販売までの全体設計を整理し、売上につながる流れを現場レベルで整えます。" },
-    { name: "セールスプロモーションツール制作", purpose: "HP・LP・チラシ等を、見た目ではなく成果につながる訴求設計で制作・改善します。" },
-    { name: "販売導線・既存導線の見直し", purpose: "既存の販売戦略や導線の詰まりを見直し、成約につながる流れへ改善します。" },
-    { name: "ビジネスマッチング", purpose: "新しい販路、提携先、売上機会を生み出す接点をつくります。" },
-    { name: "アライアンス調整", purpose: "提携先との接続や協業設計を通じて、事業拡大のきっかけをつくります。" },
-    { name: "イベント・セミナー企画運営", purpose: "信頼関係ベースの接点をつくり、商談や紹介につながる場を設計します。" }
-  ];
-
-  return (
-    <section id="services" className={cn("py-32 px-6 md:px-12", theme.bg)}>
-      <div className="max-w-7xl mx-auto">
-        <SectionHeader 
-          subtitle="サービス" 
-          title="売上を最大化させる、6つの支援領域" 
-          theme={theme}
-        />
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className={cn("p-6 sm:p-10 border transition-all hover:-translate-y-2 group", theme.card, theme.border, theme.radius, theme.shadow)}
-            >
-              <div className={cn("w-12 h-12 mb-8 flex items-center justify-center text-white", theme.accent, theme.radius)}>
-                <span className="text-lg font-bold">{i + 1}</span>
+        <div className="grid md:grid-cols-3 gap-8">
+          {METHODS.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="text-center group">
+              <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-5 group-hover:bg-blue-600 transition-colors">
+                <Icon size={28} className="text-blue-600 group-hover:text-white transition-colors" />
               </div>
-              <h3 className={cn("text-2xl font-bold mb-6 leading-tight", theme.text)}>{service.name}</h3>
-              <p className={cn("leading-relaxed", theme.secondary)}>
-                {service.purpose}
-              </p>
-            </motion.div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
+              <p className="text-slate-500 leading-relaxed">{desc}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
+}
 
-const StrengthSection = ({ theme }: { theme: ThemeConfig }) => {
-  const strengths = [
-    "実業の現場で結果を求められてきた当事者として、経営者と同じ目線で課題を捉えられる",
-    "建設・リフォームの現場経験があり、机上ではなく現場理解を前提に提案できる",
-    "戦略提案だけで終わらず、制作・導線設計・実行・改善まで一気通貫で支援できる",
-    "デジタル施策だけでなく、人脈・紹介・リアル接点まで含めて売上導線を設計できる",
-    "経営者の孤独や判断の重さを理解したうえで、表面的ではない打ち手を提示できる"
-  ];
+// ─── サービスセクション ───────────────────────────────────────────────────────
 
-  const methods = [
-    { 
-      title: "圧倒的な当事者意識", 
-      desc: "外部のコンサルタントではなく、貴社の一員として結果にコミットします。", 
-      icon: Heart 
-    },
-    { 
-      title: "アナログとデジタルの融合", 
-      desc: "ITツールだけでなく、人脈や紹介、リアルな接点を組み合わせた導線を設計します。", 
-      icon: Zap 
-    },
-    { 
-      title: "現場起点", 
-      desc: "机上の空論ではなく、実際の現場で起きている課題から解決策を導き出します。", 
-      icon: MapPin 
-    },
-    { 
-      title: "経営者視点", 
-      desc: "投資対効果を常に意識し、経営判断に資する本質的な提案を行います。", 
-      icon: TrendingUp 
-    },
-    { 
-      title: "全体最適", 
-      desc: "部分的な改善にとどまらず、事業全体の「売れる構造」を最適化します。", 
-      icon: Layers 
-    },
-    { 
-      title: "伴走型支援", 
-      desc: "提案して終わりではなく、実行から改善まで共に汗をかきながら進めます。", 
-      icon: Handshake 
-    }
-  ];
+const SERVICES = [
+  {
+    num: '01',
+    title: 'マーケティング戦略コンサルティング',
+    desc: '集客から販売までの全体設計を整理し、売上につながる流れを現場レベルで整えます。',
+    icon: BarChart3,
+  },
+  {
+    num: '02',
+    title: 'セールスプロモーションツール制作',
+    desc: 'HP・LP・チラシ等を、見た目ではなく成果につながる訴求設計で制作・改善します。',
+    icon: Zap,
+  },
+  {
+    num: '03',
+    title: '販売導線・既存導線の見直し',
+    desc: '既存の販売戦略や導線の詰まりを見直し、成約につながる流れへ改善します。',
+    icon: ArrowRight,
+  },
+  {
+    num: '04',
+    title: 'ビジネスマッチング',
+    desc: '新しい販路、提携先、売上機会を生み出す接点をつくります。',
+    icon: Users,
+  },
+  {
+    num: '05',
+    title: 'アライアンス調整',
+    desc: '提携先との接続や協業設計を通じて、事業拡大のきっかけをつくります。',
+    icon: Handshake,
+  },
+  {
+    num: '06',
+    title: 'イベント・セミナー企画運営',
+    desc: '信頼関係ベースの接点をつくり、商談や紹介につながる場を設計します。',
+    icon: Globe,
+  },
+];
 
+function ServicesSection() {
   return (
-    <section id="strengths" className={cn("py-32 px-6 md:px-12 overflow-hidden", theme.bg)}>
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-32">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <SectionHeader 
-              subtitle="強み" 
-              title="なぜ、iroha Seedが選ばれるのか" 
-              theme={theme}
-            />
-            <div className="space-y-8">
-              {strengths.map((strength, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-6 group"
-                >
-                  <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-1 text-white transition-transform group-hover:scale-110", theme.accent)}>
-                    <CheckCircle2 className="w-6 h-6" />
-                  </div>
-                  <p className={cn("text-lg md:text-xl font-bold leading-relaxed", theme.text)}>{strength}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            {/* Decorative background element */}
-            <div className={cn("absolute -inset-4 opacity-10 blur-3xl rounded-full", theme.accent)} />
-            <div className={cn("relative p-8 md:p-12 border overflow-hidden", theme.card, theme.border, theme.radius, theme.shadow)}>
-              <div className="absolute top-0 right-0 p-8 opacity-5">
-                <Sparkles className="w-48 h-48" />
-              </div>
-              <h3 className={cn("text-2xl font-bold mb-8 flex items-center gap-3", theme.text)}>
-                <div className={cn("w-1 h-8", theme.accent)} />
-                私たちのスタンス
-              </h3>
-              <p className={cn("text-lg leading-relaxed mb-8", theme.secondary)}>
-                私たちは単なる制作会社やコンサルティング会社ではありません。
-                「売れる仕組み」を共に創り上げるパートナーとして、現場の熱量を成果に変えるまで伴走します。
-              </p>
-              <div className={cn("p-6 rounded-xl bg-opacity-5", theme.accent)}>
-                <p className={cn("font-bold italic text-xl", theme.text)}>
-                  "現場の解像度を上げ、<br />
-                  経営の精度を高める。"
-                </p>
-              </div>
-            </div>
-          </motion.div>
+    <section id="services" className="py-24 bg-slate-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-14">
+          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">サービス</div>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
+            売上を最大化させる、
+            <br />
+            6つの支援領域
+          </h2>
         </div>
 
-        {/* Method Section Redesign */}
-        <div className="mt-32">
-          <div className="text-center mb-16">
-            <h3 className={cn("text-xs md:text-sm font-bold uppercase tracking-[0.5em] mb-4 opacity-60", theme.text)}>Method</h3>
-            <h2 className={cn("text-3xl md:text-5xl font-black", theme.text)}>iroha Seed メソッド</h2>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {methods.map((method, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className={cn(
-                  "group p-8 border transition-all duration-500 hover:shadow-2xl relative overflow-hidden",
-                  theme.card, theme.border, theme.radius
-                )}
-              >
-                {/* Hover background effect */}
-                <div className={cn(
-                  "absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500",
-                  theme.accent
-                )} />
-                
-                <div className="relative z-10">
-                  <div className={cn(
-                    "w-14 h-14 mb-8 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3",
-                    theme.card === 'bg-white' ? 'bg-slate-50 border border-slate-100' : 'bg-white/5 border border-white/10'
-                  )}>
-                    <method.icon className={cn("w-7 h-7", theme.accentText)} />
-                  </div>
-                  
-                  <h4 className={cn("text-xl font-bold mb-4 group-hover:translate-x-1 transition-transform", theme.text)}>
-                    {method.title}
-                  </h4>
-                  
-                  <p className={cn("text-sm leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity", theme.text)}>
-                    {method.desc}
-                  </p>
-                </div>
-
-                {/* Decorative number */}
-                <div className={cn(
-                  "absolute -bottom-4 -right-4 text-8xl font-black opacity-[0.03] select-none group-hover:opacity-[0.07] transition-opacity",
-                  theme.text
-                )}>
-                  0{i + 1}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const AchievementSection = ({ theme }: { theme: ThemeConfig }) => {
-  const achievements = [
-    { title: "建設業 V字回復支援", result: "売上昨年対比166%達成", desc: "事業承継時に参画し、組織改革と営業戦略を刷新。物件選定から採用、販促まで一貫して統括。" },
-    { title: "FC店舗 垂直立ち上げ", result: "オープン初日 全国3位", desc: "新規出店におけるマーケティング戦略を統括。圧倒的なスタートダッシュを実現。" },
-    { title: "製薬会社 経営戦略参画", result: "社外取締役 CMO就任", desc: "CEOから直接オファーを受け、最高マーケティング責任者として経営戦略の根幹から支援。" }
-  ];
-
-  return (
-    <section id="achievements" className={cn("py-32 px-6 md:px-12", theme.bg)}>
-      <div className="max-w-7xl mx-auto">
-        <SectionHeader 
-          subtitle="実績" 
-          title="確かな実績に裏打ちされた、実戦力" 
-          theme={theme}
-        />
-        <div className="grid md:grid-cols-3 gap-12">
-          {achievements.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className={cn("p-6 sm:p-12 border transition-all", theme.card, theme.border, theme.radius, theme.shadow)}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {SERVICES.map(({ num, title, desc, icon: Icon }) => (
+            <div
+              key={num}
+              className="bg-white border border-slate-200 rounded-2xl p-8 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50 transition-all group"
             >
-              <div className={cn("text-xs font-bold uppercase tracking-widest mb-4", theme.accentText)}>事例 {i + 1}</div>
-              <h3 className={cn("text-2xl font-bold mb-4", theme.text)}>{item.title}</h3>
-              <div className={cn("text-3xl font-black mb-6", theme.accentText)}>{item.result}</div>
-              <p className={cn("leading-relaxed", theme.secondary)}>
-                {item.desc}
-              </p>
-            </motion.div>
+              <div className="flex items-start justify-between mb-5">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                  <Icon size={22} className="text-blue-600 group-hover:text-white transition-colors" />
+                </div>
+                <span className="text-4xl font-black text-slate-100 group-hover:text-blue-100 transition-colors">
+                  {num}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-3 leading-tight">{title}</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
+}
 
-const RepresentativeSection = ({ theme }: { theme: ThemeConfig }) => {
+// ─── 強みセクション ───────────────────────────────────────────────────────────
+
+const STRENGTHS = [
+  '実業の現場で結果を求められてきた当事者として、経営者と同じ目線で課題を捉えられる',
+  '建設・リフォームの現場経験があり、机上ではなく現場理解を前提に提案できる',
+  '戦略提案だけで終わらず、制作・導線設計・実行・改善まで一気通貫で支援できる',
+  'デジタル施策だけでなく、人脈・紹介・リアル接点まで含めて売上導線を設計できる',
+  '経営者の孤独や判断の重さを理解したうえで、表面的ではない打ち手を提示できる',
+];
+
+function StrengthsSection() {
   return (
-    <section className={cn("py-20 md:py-40 px-6 md:px-12 relative overflow-hidden", theme.card === 'bg-white' ? 'bg-white' : theme.bg)}>
-      {/* Decorative background text */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black opacity-[0.02] pointer-events-none select-none whitespace-nowrap">
-        TSUYOSHI YAMAMOTO
-      </div>
+    <section id="strengths" className="py-24 bg-blue-900">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-14">
+          <div className="text-blue-300 font-bold text-sm tracking-widest uppercase mb-3">強み</div>
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+            なぜ、iroha Seedが
+            <br />
+            選ばれるのか
+          </h2>
+        </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 md:gap-24 items-center">
-          <div className="lg:col-span-4 lg:col-start-2 relative">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative w-full max-w-[280px] md:max-w-sm mx-auto lg:ml-0 lg:mr-auto"
+        <div className="max-w-4xl mx-auto space-y-4">
+          {STRENGTHS.map((text, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-5 bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors"
             >
-              {/* Main Image Container */}
-              <div className={cn("aspect-[3/4] overflow-hidden relative z-10 bg-slate-200", theme.radius, theme.shadow)}>
-                <img 
-                  src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1MKnTG0HAYUdRxW0QUi8eeoU0Khy1zG2g&w=1000&output=jpg&q=80" 
-                  alt="代表取締役社長 山本剛史" 
-                  className="w-full h-full object-cover object-top transition-all duration-700"
-                  loading="eager"
-                  referrerPolicy="no-referrer"
+              <CheckCircle size={22} className="text-blue-400 flex-shrink-0 mt-0.5" />
+              <p className="text-white/90 font-medium leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-14 text-center">
+          <div className="inline-block bg-white/5 border border-white/20 rounded-2xl p-8 max-w-2xl">
+            <p className="text-blue-200 text-lg leading-relaxed mb-4">
+              私たちは単なる制作会社やコンサルティング会社ではありません。<br />
+              「売れる仕組み」を共に創り上げるパートナーとして、<br />
+              現場の熱量を成果に変えるまで伴走します。
+            </p>
+            <div className="text-white font-black text-xl italic">
+              "現場の解像度を上げ、<br />経営の精度を高める。"
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 実績セクション ───────────────────────────────────────────────────────────
+
+const ACHIEVEMENTS = [
+  {
+    label: '事例 1',
+    tag: '建設業',
+    title: 'V字回復支援',
+    highlight: '売上昨年対比166%達成',
+    desc: '事業承継時に参画し、組織改革と営業戦略を刷新。物件選定から採用、販促まで一貫して統括。',
+    num: '+166%',
+    unit: '売上成長率',
+  },
+  {
+    label: '事例 2',
+    tag: 'FC店舗',
+    title: '垂直立ち上げ',
+    highlight: 'オープン初日 全国3位',
+    desc: '新規出店におけるマーケティング戦略を統括。圧倒的なスタートダッシュを実現。',
+    num: '全国3位',
+    unit: 'オープン初日',
+  },
+  {
+    label: '事例 3',
+    tag: '製薬会社',
+    title: '経営戦略参画',
+    highlight: '社外取締役 CMO就任',
+    desc: 'CEOから直接オファーを受け、最高マーケティング責任者として経営戦略の根幹から支援。',
+    num: 'CMO',
+    unit: '社外取締役就任',
+  },
+];
+
+function AchievementsSection() {
+  return (
+    <section id="achievements" className="py-24 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-14">
+          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">実績</div>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
+            確かな実績に裏打ちされた、
+            <br />
+            実戦力
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {ACHIEVEMENTS.map(({ label, tag, title, highlight, desc, num, unit }) => (
+            <div key={label} className="border border-slate-200 rounded-2xl overflow-hidden">
+              <div className="bg-blue-600 p-6">
+                <div className="text-blue-200 text-xs font-bold tracking-widest mb-1">{tag}</div>
+                <div className="text-4xl font-black text-white">{num}</div>
+                <div className="text-blue-200 text-sm">{unit}</div>
+              </div>
+              <div className="p-6">
+                <div className="text-xs text-slate-400 font-bold mb-2">{label}</div>
+                <h3 className="text-xl font-black text-slate-900 mb-1">{title}</h3>
+                <div className="text-blue-600 font-bold text-sm mb-4">{highlight}</div>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 代表メッセージセクション ─────────────────────────────────────────────────
+
+function RepresentativeSection() {
+  return (
+    <section id="representative" className="py-24 bg-slate-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          {/* プロフィール写真 */}
+          <div className="flex justify-center">
+            <div className="relative">
+              <div className="w-72 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden bg-blue-100 shadow-2xl shadow-blue-900/20">
+                <img
+                  src="/profile.png"
+                  alt="山本 剛史"
+                  className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback to a professional placeholder if the specific photo fails
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=1000";
+                    e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      parent.style.display = 'flex';
+                      parent.style.alignItems = 'center';
+                      parent.style.justifyContent = 'center';
+                      parent.innerHTML = '<span style="color:#3b82f6;font-size:4rem;font-weight:900">TY</span>';
+                    }
                   }}
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-30" />
               </div>
-
-              {/* Decorative Frame */}
-              <div className={cn("absolute -top-3 -left-3 md:-top-4 md:-left-4 w-full h-full border-2 opacity-20 pointer-events-none", theme.border, theme.radius)} />
-              
-              {/* Floating Name Card */}
-              <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className={cn("absolute -bottom-4 -right-2 md:-bottom-6 md:-right-6 p-4 md:p-10 text-white z-20", theme.accent, theme.radius, theme.shadow)}
-              >
-                <div className="text-[8px] md:text-xs font-bold opacity-60 mb-1 md:mb-2 uppercase tracking-widest">Founder & CEO</div>
-                <div className="text-base md:text-3xl font-black tracking-tighter whitespace-nowrap">山本 剛史</div>
-                <div className="text-[6px] md:text-xs font-bold tracking-[0.3em] mt-1 md:mt-4 opacity-40 uppercase">TSUYOSHI YAMAMOTO</div>
-              </motion.div>
-            </motion.div>
+              <div className="absolute -bottom-4 -right-4 bg-blue-600 text-white rounded-xl px-5 py-3 shadow-lg">
+                <div className="font-black text-sm">FOUNDER & CEO</div>
+                <div className="text-blue-200 text-xs">Hiroso Inc.</div>
+              </div>
+            </div>
           </div>
 
-          <div className="lg:col-span-6 lg:col-start-7 text-center lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className={cn("text-xs md:text-sm font-bold uppercase tracking-[0.5em] mb-8 md:mb-12 opacity-50 flex items-center justify-center lg:justify-start gap-4", theme.accentText)}>
-                <span className={cn("w-8 md:w-12 h-[1px]", theme.accent)}></span>
-                Representative Message
-              </h2>
-              <p className={cn("text-xl md:text-5xl font-bold mb-10 md:mb-16 leading-[1.3] md:leading-[1.1] text-balance", theme.text)}>
-                「マーケティングは、<br className="hidden sm:block" />机の上ではなく<span className={cn("italic", theme.accentText)}>現場</span>で起きている」
+          {/* メッセージ */}
+          <div>
+            <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">代表メッセージ</div>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">山本 剛史</h2>
+            <div className="text-slate-400 font-medium mb-8">TSUYOSHI YAMAMOTO</div>
+
+            <blockquote className="text-2xl font-black text-slate-900 leading-tight mb-8 italic">
+              "マーケティングは、<br />
+              机の上ではなく<br />
+              現場で起きている"
+            </blockquote>
+
+            <div className="space-y-4 text-slate-600 leading-relaxed">
+              <p>
+                世の中に"アドバイスだけ"で終わる支援が多い中、私は自ら事業の立ち上げから組織再生までを当事者として経験してきました。
               </p>
-              <div className={cn("space-y-8 md:space-y-10 text-base md:text-xl leading-relaxed text-balance font-medium", theme.secondary)}>
-                <p className="relative inline-block lg:block">
-                  <span className="hidden lg:block absolute -left-8 top-0 text-6xl opacity-10 font-serif">“</span>
-                  世の中に“アドバイスだけ”で終わる支援が多い中、私は自ら事業の立ち上げから組織再生までを当事者として経験してきました。
-                </p>
-                <p>
-                  だからこそ、表面的なノウハウではなく、経営者が本当に必要としている打ち手を、実務目線で一緒に組み立てたいと考えています。
-                </p>
-                <p>
-                  経営者の孤独や判断の重さを理解したうえで、あなたの事業の「種」を共に育て、確かな売上へと繋げていく。それがiroha Seedの使命です。
-                </p>
-              </div>
-
-              <div className="mt-16 md:mt-24 flex items-center gap-6">
-                <div className={cn("w-16 h-16 rounded-full border flex items-center justify-center overflow-hidden bg-slate-100", theme.border)}>
-                  <img 
-                    src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&w=200&output=png" 
-                    alt="iroha Seed Logo" 
-                    className="w-10 h-10 object-contain"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <div>
-                  <div className={cn("text-sm font-bold opacity-40 tracking-widest")}>iroha Seed Representative</div>
-                  <div className={cn("text-xl font-black tracking-tighter", theme.text)}>Tsuyoshi Yamamoto</div>
-                </div>
-              </div>
-            </motion.div>
+              <p>
+                だからこそ、表面的なノウハウではなく、経営者が本当に必要としている打ち手を、実務目線で一緒に組み立てたいと考えています。
+              </p>
+              <p>
+                経営者の孤独や判断の重さを理解したうえで、あなたの事業の「種」を共に育て、確かな売上へと繋げていく。それがiroha Seedの使命です。
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
-};
+}
 
-const CompanySection = ({ theme }: { theme: ThemeConfig }) => {
-  const info = [
-    { label: "法人名", value: "株式会社廣創 (Hiroso Inc.)" },
-    { label: "設立", value: "2012年10月1日" },
-    { label: "事業ブランド", value: "iroha Seed (イロハシード)" },
-    { label: "代表者", value: "山本 剛史" },
-    { label: "本社所在地", value: "山口県" },
-    { label: "福岡拠点", value: "福岡県福岡市城南区七隈3-2-29-101" },
-    { label: "事業内容", value: "マーケティング戦略コンサルティング、プロモーション支援、事業開発" }
-  ];
+// ─── 会社概要セクション ───────────────────────────────────────────────────────
 
+const COMPANY_INFO = [
+  { label: '法人名', value: '株式会社廣創 (Hiroso Inc.)' },
+  { label: '設立', value: '2012年10月1日' },
+  { label: '事業ブランド', value: 'iroha Seed（イロハシード）' },
+  { label: '代表者', value: '山本 剛史' },
+  { label: '本社所在地', value: '山口県' },
+  { label: '福岡拠点', value: '福岡県福岡市城南区七隈3-2-29-101' },
+  { label: '事業内容', value: 'マーケティング戦略コンサルティング、プロモーション支援、事業開発' },
+];
+
+function CompanySection() {
   return (
-    <section id="company" className={cn("py-20 md:py-32 px-6 md:px-12", theme.bg)}>
-      <div className="max-w-7xl mx-auto">
-        <SectionHeader 
-          subtitle="会社概要" 
-          title="企業情報" 
-          theme={theme}
-        />
-        <div className="max-w-3xl mx-auto">
-          <div className="space-y-6">
-            {info.map((item, i) => (
-              <div key={i} className={cn("flex flex-col sm:flex-row border-b pb-6", theme.border)}>
-                <div className={cn("w-full sm:w-48 shrink-0 font-bold text-xs opacity-50 uppercase tracking-widest mb-2 sm:mb-0", theme.text)}>{item.label}</div>
-                <div className={cn("font-bold text-base md:text-lg", theme.text)}>{item.value}</div>
-              </div>
-            ))}
-          </div>
+    <section id="company" className="py-24 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-14">
+          <div className="text-blue-600 font-bold text-sm tracking-widest uppercase mb-3">会社概要</div>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900">企業情報</h2>
+        </div>
+
+        <div className="max-w-3xl mx-auto border border-slate-200 rounded-2xl overflow-hidden">
+          {COMPANY_INFO.map(({ label, value }, i) => (
+            <div
+              key={label}
+              className={`flex items-start gap-6 px-8 py-5 ${
+                i % 2 === 0 ? 'bg-slate-50' : 'bg-white'
+              } border-b border-slate-200 last:border-b-0`}
+            >
+              <div className="text-sm font-bold text-blue-700 w-32 flex-shrink-0 pt-0.5">{label}</div>
+              <div className="text-slate-700 text-sm leading-relaxed">{value}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
-};
+}
 
-const ContactSection = ({ theme }: { theme: ThemeConfig }) => {
+// ─── CTAセクション ────────────────────────────────────────────────────────────
+
+function CtaSection() {
   return (
-    <section id="contact" className={cn("py-20 md:py-32 px-6 md:px-12 text-white", theme.accent)}>
-      <div className="max-w-4xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-2xl md:text-6xl font-black mb-10 md:mb-12 leading-tight text-balance">
-            あなたのビジネスに、<br className="hidden sm:block" />新しい風を。
+    <section id="contact" className="py-24 bg-blue-900 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-blue-300 blur-3xl" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-6">
+        <div className="max-w-3xl mx-auto text-center mb-14">
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-6">
+            あなたのビジネスに、
+            <br />
+            新しい風を。
           </h2>
-          <p className="text-base md:text-2xl mb-12 md:mb-16 opacity-80 leading-relaxed px-4 text-balance">
-            まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。
+          <p className="text-blue-200 leading-relaxed text-lg">
+            まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。<br />
             福岡市内・近郊は対面可、オンラインは全国対応可能です。
           </p>
-          
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
-            <div className={cn("p-8 md:p-10 border border-white/10 flex flex-col items-center bg-white/10 backdrop-blur-md", theme.radius)}>
-              <Mail className="w-6 h-6 md:w-8 md:h-8 mb-4" />
-              <div className="text-xs md:text-sm opacity-60 mb-1 md:mb-2">メール</div>
-              <div className="text-[min(4.2vw,18px)] sm:text-lg md:text-xl font-bold">iroha.seed.yamamoto@gmail.com</div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-12">
+          <a
+            href="mailto:iroha.seed.yamamoto@gmail.com"
+            className="flex items-center gap-4 bg-white/10 border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-colors"
+          >
+            <Mail size={22} className="text-blue-300 flex-shrink-0" />
+            <div>
+              <div className="text-white/60 text-xs mb-1">メール</div>
+              <div className="text-white text-sm font-medium break-all">iroha.seed.yamamoto@gmail.com</div>
             </div>
-            <div className={cn("p-8 md:p-10 border border-white/10 flex flex-col items-center bg-white/10 backdrop-blur-md", theme.radius)}>
-              <Phone className="w-6 h-6 md:w-8 md:h-8 mb-4" />
-              <div className="text-xs md:text-sm opacity-60 mb-1 md:mb-2">電話</div>
-              <div className="text-lg md:text-xl font-bold">090-8243-3923</div>
+          </a>
+          <a
+            href="tel:09082433923"
+            className="flex items-center gap-4 bg-white/10 border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-colors"
+          >
+            <Phone size={22} className="text-blue-300 flex-shrink-0" />
+            <div>
+              <div className="text-white/60 text-xs mb-1">電話</div>
+              <div className="text-white text-sm font-medium">090-8243-3923</div>
+            </div>
+          </a>
+          <div className="flex items-center gap-4 bg-white/10 border border-white/20 rounded-xl p-6">
+            <MapPin size={22} className="text-blue-300 flex-shrink-0" />
+            <div>
+              <div className="text-white/60 text-xs mb-1">所在地</div>
+              <div className="text-white text-sm font-medium">福岡市城南区七隈</div>
             </div>
           </div>
+        </div>
 
-          <button className={cn(
-            "px-8 md:px-12 py-5 md:py-6 bg-white text-black font-black text-xl md:text-2xl shadow-2xl transition-all hover:scale-105 active:scale-95",
-            theme.radius
-          )}>
+        <div className="text-center">
+          <a
+            href="mailto:iroha.seed.yamamoto@gmail.com"
+            className="inline-flex items-center gap-3 bg-white text-blue-900 font-black text-lg px-12 py-5 rounded-2xl hover:bg-blue-50 transition-colors shadow-2xl shadow-blue-950/30"
+          >
             無料相談を予約する
-          </button>
-        </motion.div>
+            <ArrowRight size={20} />
+          </a>
+        </div>
       </div>
     </section>
   );
-};
+}
 
-const Footer = ({ theme }: { theme: ThemeConfig }) => {
+// ─── フッター ─────────────────────────────────────────────────────────────────
+
+function Footer() {
   return (
-    <footer className={cn("py-20 px-6 md:px-12 text-white", theme.footer)}>
-      <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
-        <div className="col-span-2">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 flex items-center justify-center overflow-hidden bg-white/10 rounded-xl">
-              <img 
-                src="https://wsrv.nl/?url=https://drive.google.com/uc?id=1yqIub1aBMMsKDQHG1iH5IjUAKKMCl-Fj&w=200&output=png" 
-                alt="iroha Seed Logo" 
-                className="w-full h-full object-contain"
-                referrerPolicy="no-referrer"
-              />
+    <footer className="bg-slate-900 text-slate-400 py-12">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-10">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-lg overflow-hidden bg-white/10 flex items-center justify-center">
+                <img
+                  src="/logo.png"
+                  alt="iroha Seed"
+                  className="w-full h-full object-contain"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
+              </div>
+              <div>
+                <div className="text-white font-bold">iroha Seed</div>
+                <div className="text-slate-500 text-xs tracking-widest">by Hiroso Inc.</div>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className={cn("text-2xl font-black tracking-tighter leading-none", theme.accentText)}>iroha Seed</span>
-              <span className={cn("text-[10px] font-bold opacity-40 tracking-widest")}>by Hiroso Inc.</span>
+            <p className="text-sm leading-relaxed max-w-xs">
+              売上につながる全体構造を、現場理解から組み直す実戦型マーケティング支援。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-16 gap-y-2 text-sm">
+            <div>
+              <div className="text-white font-bold mb-3">ナビゲーション</div>
+              {NAV_LINKS.map((l) => (
+                <div key={l.href}>
+                  <a
+                    href={l.href}
+                    className="hover:text-white transition-colors block py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector(l.href)?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    {l.label}
+                  </a>
+                </div>
+              ))}
+            </div>
+            <div>
+              <div className="text-white font-bold mb-3">連絡先</div>
+              <div className="space-y-1 text-sm">
+                <div>iroha.seed.yamamoto@gmail.com</div>
+                <div>090-8243-3923</div>
+                <div>福岡県福岡市城南区七隈</div>
+              </div>
             </div>
           </div>
-          <p className="max-w-sm leading-relaxed opacity-60 font-medium text-balance">
-            売上につながる全体構造を、現場理解から組み直す実戦型マーケティング支援。
-            中小企業の成長に伴走し、確かな成果を創出します。
-          </p>
         </div>
-        <div>
-          <h4 className="font-bold mb-8 uppercase tracking-widest text-sm opacity-40">ナビゲーション</h4>
-          <ul className="space-y-4 font-bold">
-            <li><a href="#services" className="hover:opacity-50 transition-colors">サービス</a></li>
-            <li><a href="#strengths" className="hover:opacity-50 transition-colors">強み</a></li>
-            <li><a href="#achievements" className="hover:opacity-50 transition-colors">実績</a></li>
-            <li><a href="#company" className="hover:opacity-50 transition-colors">会社概要</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-8 uppercase tracking-widest text-sm opacity-40">連絡先</h4>
-          <ul className="space-y-4 font-bold opacity-80">
-            <li className="flex items-center gap-2 text-sm sm:text-base"><Mail className="w-4 h-4 shrink-0" /> <span className="break-all sm:break-normal">iroha.seed.yamamoto@gmail.com</span></li>
-            <li className="flex items-center gap-2 text-sm sm:text-base"><Phone className="w-4 h-4 shrink-0" /> 090-8243-3923</li>
-            <li className="flex items-center gap-2 text-sm sm:text-base"><MapPin className="w-4 h-4 shrink-0" /> 福岡県福岡市城南区七隈</li>
-          </ul>
-        </div>
-      </div>
-      <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs opacity-40 font-bold tracking-widest">
-        <p>&copy; {new Date().getFullYear()} Hiroso Inc. All rights reserved.</p>
-        <div className="flex gap-8">
-          <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
-          <a href="#" className="hover:text-white transition-colors">利用規約</a>
+
+        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+          <div>© 2026 Hiroso Inc. All rights reserved.</div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
+            <a href="#" className="hover:text-white transition-colors">利用規約</a>
+          </div>
         </div>
       </div>
     </footer>
   );
-};
+}
+
+// ─── メインアプリ ─────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [pattern, setPattern] = useState<ThemePattern>('modern-kyoto');
-  const theme = THEMES[pattern];
-
-  useEffect(() => {
-    document.title = 'iroha Seed';
-  }, []);
-
   return (
-    <div className={cn("min-h-screen selection:bg-slate-900 selection:text-white", theme.bg, theme.text, theme.font)}>
-      <Navbar theme={theme} />
-      <Hero theme={theme} />
-      <ProblemSection theme={theme} />
-      <SolutionSection theme={theme} />
-      <ServiceSection theme={theme} />
-      <StrengthSection theme={theme} />
-      <AchievementSection theme={theme} />
-      <RepresentativeSection theme={theme} />
-      <CompanySection theme={theme} />
-      <ContactSection theme={theme} />
-      <Footer theme={theme} />
-      <PatternSwitcher current={pattern} onSelect={setPattern} />
+    <div className="font-sans antialiased">
+      <Navbar />
+      <Hero />
+      <ProblemSection />
+      <SolutionSection />
+      <ServicesSection />
+      <StrengthsSection />
+      <AchievementsSection />
+      <RepresentativeSection />
+      <CompanySection />
+      <CtaSection />
+      <Footer />
     </div>
   );
 }
