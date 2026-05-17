@@ -459,7 +459,7 @@ const ACHIEVEMENTS = [
   },
   {
     label: '事例 3',
-    tag: '製薬会社',
+    tag: '医療業界',
     title: '経営戦略参画',
     highlight: '社外取締役 CMO就任',
     desc: 'CEOから直接オファーを受け、最高マーケティング責任者として経営戦略の根幹から支援。',
