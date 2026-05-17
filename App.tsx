@@ -142,42 +142,58 @@ function Navbar() {
 function Hero() {
   return (
     <section className="relative min-h-[88vh] flex flex-col justify-center overflow-hidden bg-slate-900">
+      {/* 背景画像 - 全面カバー */}
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
           alt=""
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-50"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/55 to-transparent" />
+        {/* 左から右へのグラデーション（テキスト側を暗く）*/}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-slate-900/30" />
+        {/* 上下の補助グラデーション（切れ目をなくす）*/}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-slate-900/60" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-16 w-full">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-sky-400/15 border border-sky-400/30 text-sky-300 text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
-              実戦型マーケティングパートナー
-            </div>
-            <h1 className="font-serif text-5xl md:text-7xl font-black text-white leading-[1.08] tracking-tight mb-6">
-              売れる仕組みを、<br />
-              <span className="text-sky-400">再設計する。</span>
-            </h1>
-            <p className="text-slate-400 text-base md:text-lg leading-relaxed max-w-xl">
-              机上の空論ではない、経営者視点の実戦型マーケティング支援。<br />
-              売上が積み上がる全体構造を、現場理解から組み直します。
-            </p>
-          </div>
+      {/* 人物シルエット - デスクトップのみ */}
+      <div className="absolute right-0 bottom-0 w-[42%] h-full hidden lg:block pointer-events-none">
+        <img
+          src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=700&q=80"
+          alt=""
+          className="absolute bottom-0 right-4 h-[96%] w-auto object-contain object-bottom"
+          style={{ filter: 'brightness(0.28) contrast(1.2) saturate(0.4) sepia(0.3) hue-rotate(185deg)' }}
+        />
+        {/* 左側ブレンド */}
+        <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-slate-900/90 to-transparent" />
+        {/* 下部ブレンド */}
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-900 to-transparent" />
+      </div>
 
-          <div className="flex flex-col gap-3 md:items-end shrink-0">
+      {/* コンテンツ */}
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-16 w-full">
+        <div className="max-w-xl">
+          <div className="inline-flex items-center gap-2 bg-sky-400/15 border border-sky-400/30 text-sky-300 text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
+            実戦型マーケティングパートナー
+          </div>
+          <h1 className="font-serif text-5xl md:text-7xl font-black text-white leading-[1.08] tracking-tight mb-6">
+            売れる仕組みを、<br />
+            <span className="text-sky-400">再設計する。</span>
+          </h1>
+          <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-10">
+            机上の空論ではない、経営者視点の実戦型マーケティング支援。<br />
+            売上が積み上がる全体構造を、現場理解から組み直します。
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-600 text-white font-black text-sm px-8 py-4 rounded-full transition-all duration-200 shadow-xl shadow-blue-700/30"
+              className="inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-600 text-white font-black text-sm px-8 py-4 rounded-full transition-all duration-200 shadow-xl shadow-blue-700/30"
             >
               無料で相談する
               <ArrowRight size={16} />
             </Link>
             <button
               onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm font-medium transition-colors"
+              className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white/50 text-white/60 hover:text-white text-sm font-medium transition-all px-8 py-4 rounded-full"
             >
               サービスを見る <ArrowRight size={14} />
             </button>
