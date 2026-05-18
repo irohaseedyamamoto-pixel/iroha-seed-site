@@ -315,12 +315,14 @@ function SvgInternals({ prefix: p }: { prefix: string }) {
 
 function Hero() {
   return (
-    <section className="relative min-h-[88vh] flex flex-col lg:justify-center overflow-hidden bg-[#1e3a22]">
+    <section className="relative min-h-[88vh] flex flex-col justify-center overflow-hidden bg-[#1e3a22]">
+      {/* 共通背景グラデーション */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a22] via-[#1e3a22]/90 to-[#1e3a22]/35" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1e3a22]/50 via-transparent to-[#1e3a22]/50" />
       </div>
 
+      {/* PC用SVG（右半分に絶対配置・変更なし） */}
       <div className="hidden lg:block absolute right-0 inset-y-0 w-[52%] pointer-events-none overflow-hidden">
         <svg viewBox="0 0 520 580" fill="none" xmlns="http://www.w3.org/2000/svg"
           className="absolute inset-0 w-full h-full opacity-90" preserveAspectRatio="xMidYMid meet">
@@ -329,7 +331,21 @@ function Hero() {
         </svg>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-4 lg:pb-16 w-full">
+      {/* スマホ用SVG（全面背景として絶対配置） */}
+      <div className="lg:hidden absolute inset-0 pointer-events-none overflow-hidden">
+        <svg viewBox="0 0 520 580" fill="none" xmlns="http://www.w3.org/2000/svg"
+          className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="xMidYMid meet">
+          <style>{svgStyles('m')}</style>
+          <SvgInternals prefix="m" />
+        </svg>
+        {/* テキスト視認性のためのオーバーレイ：左〜中央を濃く */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a22]/85 via-[#1e3a22]/65 to-[#1e3a22]/30" />
+        {/* 上下もやや引き締め */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1e3a22]/55 via-transparent to-[#1e3a22]/55" />
+      </div>
+
+      {/* テキストコンテンツ */}
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-16 w-full">
         <div className="max-w-xl">
           <div className="inline-flex items-center gap-2 bg-[#a8c08a]/15 border border-[#a8c08a]/30 text-[#b8d09a] text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
             実戦型マーケティングパートナー
@@ -353,15 +369,6 @@ function Hero() {
             </button>
           </div>
         </div>
-      </div>
-
-      <div className="lg:hidden relative flex-1 min-h-[220px] pointer-events-none overflow-hidden">
-        <svg viewBox="0 0 520 580" fill="none" xmlns="http://www.w3.org/2000/svg"
-          className="absolute inset-0 w-full h-full opacity-75" preserveAspectRatio="xMidYMid meet">
-          <style>{svgStyles('m')}</style>
-          <SvgInternals prefix="m" />
-        </svg>
-        <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[#1e3a22] to-transparent" />
       </div>
     </section>
   );
