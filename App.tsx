@@ -315,7 +315,7 @@ function SvgInternals({ prefix: p }: { prefix: string }) {
 
 function Hero() {
   return (
-    <section className="relative min-h-[88vh] flex flex-col justify-center overflow-hidden bg-[#1e3a22]">
+    <section className="relative min-h-[80vh] lg:min-h-[88vh] flex flex-col justify-center overflow-hidden bg-[#1e3a22]">
       {/* 共通背景グラデーション */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a22] via-[#1e3a22]/90 to-[#1e3a22]/35" />
@@ -345,16 +345,16 @@ function Hero() {
       </div>
 
       {/* テキストコンテンツ */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-16 w-full">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-10 lg:pb-16 w-full">
         <div className="max-w-xl">
           <div className="inline-flex items-center gap-2 bg-[#a8c08a]/15 border border-[#a8c08a]/30 text-[#b8d09a] text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
             実戦型マーケティングパートナー
           </div>
-          <h1 className="font-serif text-5xl md:text-7xl font-black text-white leading-[1.08] tracking-tight mb-6">
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-black text-white leading-[1.08] tracking-tight mb-6">
             売れる仕組みを、<br /><span className="text-[#a8c08a]">再設計する。</span>
           </h1>
           <p className="text-[#b0c8a0] text-base md:text-lg leading-relaxed mb-10">
-            机上の空論ではない、経営者視点の実戦型マーケティング支援。<br />
+            机上の空論ではない、経営者視点の実戦型マーケティング支援。<br className="hidden sm:block" />
             売上が積み上がる全体構造を、現場理解から組み直します。
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
