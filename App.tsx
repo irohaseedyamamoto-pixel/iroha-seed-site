@@ -409,7 +409,7 @@ function ProblemSection() {
           <div>
             <Label>課題 / PROBLEM</Label>
             <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1e2e1a] leading-snug mb-6">
-              なぜ、施策を増やしても<br />売上が伸びないのか？
+              なぜ、施策を増やしても<br className="hidden sm:block" />売上が伸びないのか？
             </h2>
             <p className="text-[#5a6e52] leading-relaxed text-[15px]">
               売上が伸びない原因は、広告だけ、LPだけ、営業だけの問題ではありません。
@@ -448,7 +448,7 @@ function SolutionSection() {
           <div>
             <Label light>解決策 / SOLUTION</Label>
             <h2 className="font-serif text-4xl md:text-5xl font-black text-white leading-snug">
-              部分的な改善ではなく、<br /><span className="text-[#a8c08a]">売れる構造</span>そのものを<br />組み直す。
+              部分的な改善ではなく、<br className="hidden sm:block" /><span className="text-[#a8c08a]">売れる構造</span>そのものを<br className="hidden sm:block" />組み直す。
             </h2>
           </div>
           <p className="text-[#9ab890] max-w-xs leading-relaxed text-sm md:text-right">
@@ -577,7 +577,7 @@ function AchievementsSection() {
           <div>
             <Label>実績 / RESULTS</Label>
             <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1e2e1a] leading-snug">
-              確かな実績に裏打ちされた、<br />実戦力
+              確かな実績に裏打ちされた、<br className="hidden sm:block" />実戦力
             </h2>
           </div>
           <p className="text-[#7a8e70] text-sm max-w-xs leading-relaxed md:text-right">
@@ -674,11 +674,11 @@ function CtaSection() {
       </div>
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 text-center">
         <Label light>お問い合わせ / CONTACT</Label>
-        <h2 className="font-serif text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
-          あなたのビジネスに、<br />新しい風を。
+        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+          あなたのビジネスに、<br className="hidden sm:block" />新しい風を。
         </h2>
         <p className="text-[#a0b890] leading-relaxed max-w-xl mx-auto mb-12 text-[15px]">
-          まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。<br />
+          まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。<br className="hidden sm:block" />
           福岡市内・近郊は対面可、オンラインは全国対応可能です。
         </p>
         <Link to="/contact"
