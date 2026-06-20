@@ -1,119 +1,202 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Menu, X, Target, Users, Handshake,
-  Zap, BarChart3, Instagram, Facebook, Globe, ArrowRight,
-  ArrowUpRight, CheckCircle,
-} from 'lucide-react';
+import { ArrowRight, Menu, X, Plus, Minus, Instagram, Facebook } from 'lucide-react';
 
-function Label({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
+// ─── Data ──────────────────────────────────────────────────────────────────────
+
+const SNS_LINKS = [
+  { href: 'https://www.instagram.com/irohaseed.yamamoto?igsh=Y2o2bGRlbXJrMjRy&utm_source=qr', Icon: Instagram, label: 'Instagram' },
+  { href: 'https://www.facebook.com/share/1JKihxjj6A/?mibextid=wwXIfr', Icon: Facebook, label: 'Facebook' },
+];
+
+const NAV_LINKS = [
+  { href: '#service',        label: 'サービス'  },
+  { href: '#process',        label: '支援の流れ' },
+  { href: '#achievements',   label: '実績'      },
+  { href: '#representative', label: '代表'      },
+  { href: '#faq',            label: 'FAQ'       },
+];
+
+const MARQUEE_ITEMS = [
+  '商品設計', '導線設計', 'ファネル構築', 'USP設計', '事業診断',
+  '売れる仕組み', '個別伴走サポート', '事業再設計', '集客設計', '顧客獲得',
+];
+
+const PROBLEMS = [
+  { num: '01', text: '発信・集客・自己投資を頑張っているのに、なぜ売れないのかがわからない' },
+  { num: '02', text: '商品設計・導線設計・ファネルのどこに問題があるか判断できない' },
+  { num: '03', text: '自信を持って自分の商品を提案・価格提示できない' },
+  { num: '04', text: '施策が点になっていて、つながった流れになっていない' },
+  { num: '05', text: 'SNSや広告を試したが手応えがなく、何が正解かわからない' },
+];
+
+const SERVICE_PILLARS = [
+  {
+    num: '01',
+    title: '事業診断',
+    desc: '商品・導線・ファネル全体を深くヒアリングし、売れない根本原因を特定します。表面的な分析ではなく、現場の実態から本質的な問題を見つけ出します。',
+  },
+  {
+    num: '02',
+    title: 'USP・商品設計',
+    desc: 'あなたにしか語れない強みを言語化し、誰に・何を・どう届けるかを明確にします。「自信を持って提案できる商品」の土台を一緒に組み立てます。',
+  },
+  {
+    num: '03',
+    title: '導線・ファネル設計',
+    desc: '集客から成約・継続までの流れを一気通貫で設計・構築します。分断されていた施策をつなぎ、成果が積み上がる構造をつくります。',
+  },
+  {
+    num: '04',
+    title: '実行支援・個別伴走',
+    desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。経営者の孤独な判断に、実務経験を持つパートナーとして寄り添い続けます。',
+  },
+];
+
+const PROCESS_STEPS = [
+  { num: '01', title: '診断',   desc: '現状の商品・導線・ファネルを深くヒアリングし、売れない原因を特定します。' },
+  { num: '02', title: '再設計', desc: 'USP・商品設計・ターゲットを整理し、選ばれるための土台を組み直します。'   },
+  { num: '03', title: '構築',   desc: '集客から成約までの導線・ファネルを一気通貫で設計・構築します。'           },
+  { num: '04', title: '実行',   desc: '施策の実行フェーズを共に歩みます。アドバイスで終わらず現場で伴走します。' },
+  { num: '05', title: '改善',   desc: '結果を検証し、仮説と改善を繰り返しながら精度を高めていきます。'           },
+  { num: '06', title: '自走',   desc: 'あなた自身が「売れる仕組み」を回せる状態へ。完全な自走を目指します。'     },
+];
+
+const ACHIEVEMENTS = [
+  {
+    value: '14', unit: '年',
+    title: '経営者としての実務経験',
+    desc: '30歳で法人化以来、建築・飲食・IT・製薬など複数業種で当事者として経営に携わってきました。',
+  },
+  {
+    value: '複数', unit: '業種',
+    title: '事業支援・立て直しの実績',
+    desc: '建築リフォーム・フランチャイズ飲食・製薬マーケティングにて、売上と組織の立て直しに直接関与しました。',
+  },
+  {
+    value: 'CMO', unit: '',
+    title: '最高マーケティング責任者として参画',
+    desc: '製薬会社のCMOとして、マーケティング戦略の立案・実行に携わった実務経験を持ちます。',
+  },
+];
+
+const FAQS = [
+  {
+    q: 'どのような方が相談に来ますか？',
+    a: '中小企業の経営者・スタートアップ・個人事業主・小規模事業者の方が中心です。「発信や集客を頑張っているのに売上につながらない」「何が問題なのかわからない」といったお悩みをお持ちの方がよくご相談にいらっしゃいます。',
+  },
+  {
+    q: '相談から開始までの流れを教えてください。',
+    a: 'まず無料診断（オンライン・30〜60分）にて現状をお聞きします。そのうえで課題と方向性をご提案し、ご納得いただけた場合にサポートを開始します。強引な勧誘は一切行っておりません。',
+  },
+  {
+    q: '料金はどのくらいかかりますか？',
+    a: 'お客様の状況や課題の深さによって異なります。まずは無料診断でお話をお聞きし、最適なプランをご提案いたします。',
+  },
+  {
+    q: 'SNS運用や広告の代行もお願いできますか？',
+    a: '個別施策の代行よりも、「なぜ売れていないか」の根本原因を特定し、売れる仕組みを設計することを専門としています。土台となる戦略が整っていない状態では、どんな施策も効果が出づらいためです。',
+  },
+  {
+    q: 'どれくらいで成果が出ますか？',
+    a: '事業の状況によって異なりますが、商品設計・導線の整理といった土台が整うことで、発信やセールスの迷いがなくなります。早い方では1〜2ヶ月以内に手応えを感じていただいています。',
+  },
+  {
+    q: 'オンラインでも対応していますか？',
+    a: 'はい、全国どこでもオンラインで対応しています。直接お会いしてのご相談をご希望の方も、ご対応可能ですのでお気軽にご相談ください。',
+  },
+  {
+    q: 'まだ相談できる段階かわからないのですが、問い合わせしても大丈夫ですか？',
+    a: 'もちろんです。「今すぐではないけれど気になっている」という段階でもお気軽にご連絡ください。まず現状をお聞きして、必要かどうかを一緒に判断しましょう。',
+  },
+];
+
+// ─── Shared ────────────────────────────────────────────────────────────────────
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex items-center gap-3 mb-6 ${light ? 'text-[#a8c08a]' : 'text-[#5a7d42]'}`}>
-      <span className={`w-10 h-[1.5px] ${light ? 'bg-[#a8c08a]' : 'bg-[#5a7d42]'}`} />
+    <div className="flex items-center gap-3 mb-6 text-[#c17f3c]">
+      <span className="w-8 h-[1.5px] bg-[#c17f3c]" />
       <span className="text-[10px] tracking-[0.4em] font-bold uppercase">{children}</span>
     </div>
   );
 }
 
-function SectionWave({ from, to, flip = false }: { from: string; to: string; flip?: boolean }) {
-  return (
-    <div style={{ background: to, lineHeight: 0, display: 'block' }}>
-      <svg
-        viewBox="0 0 1440 56"
-        preserveAspectRatio="none"
-        style={{ display: 'block', width: '100%', height: '56px', fill: from, transform: flip ? 'scale(-1,1)' : undefined }}
-      >
-        <path d="M0,0 L0,32 C480,56 960,0 1440,32 L1440,0 Z" />
-      </svg>
-    </div>
-  );
-}
-
-// ─── ナビゲーション ───────────────────────────────────────────────────────────
-
-const NAV_LINKS = [
-  { label: 'サービス', href: '#services' },
-  { label: '強み', href: '#strengths' },
-  { label: '実績', href: '#achievements' },
-  { label: '代表', href: '#representative' },
-];
-
-const SNS = [
-  { href: 'https://www.instagram.com/irohaseed.yamamoto?igsh=Y2o2bGRlbXJrMjRy&utm_source=qr', Icon: Instagram, label: 'Instagram' },
-  { href: 'https://www.facebook.com/share/1JKihxjj6A/?mibextid=wwXIfr', Icon: Facebook, label: 'Facebook' },
-];
+// ─── Navbar ────────────────────────────────────────────────────────────────────
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
-    setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#faf8f4]/96 backdrop-blur-md border-b border-[#d0cabb] shadow-sm' : 'bg-transparent'}`}>
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      scrolled ? 'bg-white/96 backdrop-blur-sm border-b border-[#d8d2c8]' : 'bg-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-colors ${scrolled ? 'bg-[#e8e4da]' : 'bg-white/15'}`}>
-            <img src="/logo.png" alt="iroha Seed" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+        <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <div className="w-7 h-7 rounded-md overflow-hidden bg-[#f8f5f0] flex items-center justify-center">
+            <img src="/logo.png" alt="iroha Seed" className="w-full h-full object-contain" />
           </div>
-          <div>
-            <div className={`font-bold text-base leading-none tracking-tight transition-colors ${scrolled ? 'text-[#1e2e1a]' : 'text-white'}`}>iroha Seed</div>
-            <div className={`text-[9px] tracking-[0.22em] font-medium mt-0.5 transition-colors ${scrolled ? 'text-[#7a8e70]' : 'text-white/50'}`}>BY HIROSO INC.</div>
-          </div>
-        </a>
+          <span className="font-black text-sm tracking-wide text-[#1c1c1e]">iroha Seed</span>
+        </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
-          {/* SNS icons */}
-          <div className="flex items-center gap-2 mr-2">
-            {SNS.map(({ href, Icon, label }) => (
+        <nav className="hidden lg:flex items-center gap-6">
+          <div className="flex items-center gap-2 border-r border-[#d8d2c8] pr-6">
+            {SNS_LINKS.map(({ href, Icon, label }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                className={`w-7 h-7 rounded-full flex items-center justify-center transition-all hover:scale-110 ${scrolled ? 'bg-[#e8e4da] hover:bg-[#5a7d42] hover:text-white text-[#5a7d42]' : 'bg-white/15 hover:bg-white/30 text-white'}`}
-                aria-label={label}>
-                <Icon size={14} />
+                className="w-7 h-7 rounded-full border border-[#d8d2c8] flex items-center justify-center text-[#8a8680] hover:border-[#c17f3c] hover:text-[#c17f3c] transition-colors">
+                <Icon size={13} />
               </a>
             ))}
           </div>
-
-          {NAV_LINKS.map((link) => (
-            <button key={link.href} onClick={() => handleNavClick(link.href)}
-              className={`text-[13px] font-medium tracking-wide transition-colors hover:text-[#a8c08a] ${scrolled ? 'text-[#4a5e42]' : 'text-white/80'}`}>
-              {link.label}
-            </button>
+          {NAV_LINKS.map(({ href, label }) => (
+            <a key={href} href={href}
+              className="text-[#5c5a56] hover:text-[#1c1c1e] text-sm font-medium transition-colors">
+              {label}
+            </a>
           ))}
-          <Link to="/company" className={`text-[13px] font-medium tracking-wide transition-colors hover:text-[#a8c08a] ${scrolled ? 'text-[#4a5e42]' : 'text-white/80'}`}>会社概要</Link>
-          <Link to="/contact" className={`flex items-center gap-1.5 text-[13px] font-bold px-5 py-2 rounded-full border-2 transition-all duration-200 ${scrolled ? 'border-[#4a6d32] text-[#2a4a2d] hover:bg-[#4a6d32] hover:text-white' : 'border-white text-white hover:bg-white hover:text-[#2a4a2d]'}`}>無料相談</Link>
+          <Link to="/company" className="text-[#5c5a56] hover:text-[#1c1c1e] text-sm font-medium transition-colors">
+            会社概要
+          </Link>
+          <Link to="/contact"
+            className="ml-1 bg-[#1c1c1e] hover:bg-[#c17f3c] text-white text-sm font-black px-5 py-2.5 rounded-full transition-colors duration-200">
+            無料診断を受ける
+          </Link>
         </nav>
 
-        <button className={`md:hidden p-1 ${scrolled ? 'text-[#2e3e28]' : 'text-white'}`} onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        <button onClick={() => setMenuOpen(!menuOpen)}
+          className="lg:hidden w-9 h-9 flex items-center justify-center text-[#1c1c1e]"
+          aria-label="メニュー">
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-[#faf8f4] border-t border-[#e0dbd0]">
-          <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
-              <button key={link.href} onClick={() => handleNavClick(link.href)} className="text-left text-[#2e3e28] font-medium py-3 border-b border-[#e0dbd0] text-sm">{link.label}</button>
+        <div className="lg:hidden bg-white border-t border-[#d8d2c8]">
+          <div className="px-6 py-2">
+            {[...NAV_LINKS, { href: '/company', label: '会社概要' }].map(({ href, label }) => (
+              href.startsWith('#')
+                ? <a key={href} href={href} onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between py-3.5 border-b border-[#f0ebe1] text-[#1c1c1e] font-medium text-sm last:border-0">
+                    {label}<ArrowRight size={14} className="text-[#c17f3c]" />
+                  </a>
+                : <Link key={href} to={href} onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between py-3.5 border-b border-[#f0ebe1] text-[#1c1c1e] font-medium text-sm last:border-0">
+                    {label}<ArrowRight size={14} className="text-[#c17f3c]" />
+                  </Link>
             ))}
-            <Link to="/company" className="text-[#2e3e28] font-medium py-3 border-b border-[#e0dbd0] text-sm block">会社概要</Link>
-            <div className="flex gap-3 py-3 border-b border-[#e0dbd0]">
-              {SNS.map(({ href, Icon, label }) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-[#e8e4da] flex items-center justify-center text-[#5a7d42]" aria-label={label}>
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
-            <Link to="/contact" className="mt-4 bg-[#4a6d32] text-white font-bold py-3.5 rounded-xl text-center text-sm">無料相談を予約する →</Link>
+          </div>
+          <div className="px-6 py-5">
+            <Link to="/contact" onClick={() => setMenuOpen(false)}
+              className="block bg-[#1c1c1e] text-white text-center font-black py-3.5 rounded-full text-sm">
+              無料診断を受ける
+            </Link>
           </div>
         </div>
       )}
@@ -121,252 +204,77 @@ function Navbar() {
   );
 }
 
-// ─── ヒーロー SVG（植物イラスト） ─────────────────────────────────────────────
-
-function svgStyles(p: string) {
-  return `
-    @keyframes ${p}-sway1{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-    @keyframes ${p}-sway2{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-7deg)}}
-    @keyframes ${p}-sway3{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(7deg)}}
-    @keyframes ${p}-swsm{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
-    @keyframes ${p}-ring{0%,100%{opacity:0.10;transform:scale(1)}50%{opacity:0.28;transform:scale(1.08)}}
-    @keyframes ${p}-hub{0%,100%{opacity:0.88}50%{opacity:1}}
-    @keyframes ${p}-flow{0%{stroke-dashoffset:300;opacity:0}18%{opacity:0.5}100%{stroke-dashoffset:0;opacity:0.42}}
-    @keyframes ${p}-glow{0%,100%{opacity:0.62}50%{opacity:1}}
-    @keyframes ${p}-bloom{0%,100%{transform:scale(1);opacity:0.78}50%{transform:scale(1.14);opacity:1}}
-    @keyframes ${p}-seed1{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(8deg)}}
-    @keyframes ${p}-seed2{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-4px) rotate(-7deg)}}
-    @keyframes ${p}-seed3{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-5px) rotate(6deg)}}
-    .${p}-l1{animation:${p}-sway1 6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
-    .${p}-l2{animation:${p}-sway2 7.2s ease-in-out 0.8s infinite;transform-box:fill-box;transform-origin:50% 100%}
-    .${p}-l3{animation:${p}-sway3 5.8s ease-in-out 1.6s infinite;transform-box:fill-box;transform-origin:50% 100%}
-    .${p}-sl1{animation:${p}-swsm 8s ease-in-out 2s infinite;transform-box:fill-box;transform-origin:50% 100%}
-    .${p}-sl2{animation:${p}-swsm 9.5s ease-in-out 3.5s infinite;transform-box:fill-box;transform-origin:50% 100%}
-    .${p}-sl3{animation:${p}-swsm 7s ease-in-out 1s infinite;transform-box:fill-box;transform-origin:50% 100%}
-    .${p}-ring{animation:${p}-ring 3.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-    .${p}-hub{animation:${p}-hub 2.8s ease-in-out infinite}
-    .${p}-p1{stroke-dasharray:300;animation:${p}-flow 5.5s ease-in-out 0s infinite}
-    .${p}-p2{stroke-dasharray:300;animation:${p}-flow 5.5s ease-in-out 1.2s infinite}
-    .${p}-p3{stroke-dasharray:300;animation:${p}-flow 5.5s ease-in-out 2.4s infinite}
-    .${p}-glow{animation:${p}-glow 2.5s ease-in-out infinite}
-    .${p}-bloom{animation:${p}-bloom 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-    .${p}-sd1{animation:${p}-seed1 4.5s ease-in-out infinite}
-    .${p}-sd2{animation:${p}-seed2 5.5s ease-in-out 1s infinite}
-    .${p}-sd3{animation:${p}-seed3 6.2s ease-in-out 2s infinite}
-  `;
-}
-
-function Leaf({ stroke = 0.35, fill = 0.65 }: { stroke?: number; fill?: number }) {
-  const s = `rgba(90,125,66,${stroke})`;
-  const f = `rgba(90,125,66,${fill})`;
-  return (
-    <>
-      <path d="M0,-24 C13,-15 15,-3 12,9 C9,20 2,25 0,22 C-2,25 -9,20 -12,9 C-15,-3 -13,-15 0,-24Z"
-        fill={f} stroke={s} strokeWidth="0.8" />
-      <line x1="0" y1="-24" x2="0" y2="22" stroke={`rgba(90,125,66,${stroke + 0.1})`} strokeWidth="0.9" strokeLinecap="round" />
-      <path d="M0,-13 C7,-9 11,-5 12,1" stroke={`rgba(90,125,66,${stroke - 0.05})`} strokeWidth="0.5" fill="none" />
-      <path d="M0,-13 C-7,-9 -11,-5 -12,1" stroke={`rgba(90,125,66,${stroke - 0.05})`} strokeWidth="0.5" fill="none" />
-      <path d="M0,2 C5,6 8,10 7,16" stroke={`rgba(90,125,66,${stroke - 0.08})`} strokeWidth="0.4" fill="none" />
-      <path d="M0,2 C-5,6 -8,10 -7,16" stroke={`rgba(90,125,66,${stroke - 0.08})`} strokeWidth="0.4" fill="none" />
-    </>
-  );
-}
-
-function SmallLeaf({ stroke = 0.25, fill = 0.20 }: { stroke?: number; fill?: number }) {
-  return (
-    <>
-      <path d="M0,-13 C7,-8 8,-1 6,5 C4,10 1,12 0,11 C-1,12 -4,10 -6,5 C-8,-1 -7,-8 0,-13Z"
-        fill={`rgba(90,125,66,${fill})`} stroke={`rgba(90,125,66,${stroke})`} strokeWidth="0.6" />
-      <line x1="0" y1="-13" x2="0" y2="11" stroke={`rgba(90,125,66,${stroke})`} strokeWidth="0.5" strokeLinecap="round" />
-    </>
-  );
-}
-
-function SvgInternals({ prefix: p }: { prefix: string }) {
-  return (
-    <>
-      <defs>
-        <radialGradient id={`${p}HubG`} cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#c8dab8" />
-          <stop offset="55%" stopColor="#8aab6a" />
-          <stop offset="100%" stopColor="#5a7d42" />
-        </radialGradient>
-        <radialGradient id={`${p}LeafG`} cx="50%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#8aab6a" stopOpacity="0.82" />
-          <stop offset="100%" stopColor="#4a6d32" stopOpacity="0.45" />
-        </radialGradient>
-        <radialGradient id={`${p}FlowerG`} cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#d8eac8" stopOpacity="0.95" />
-          <stop offset="100%" stopColor="#a8c08a" stopOpacity="0.72" />
-        </radialGradient>
-        <radialGradient id={`${p}GlowG`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#a8c08a" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="#a8c08a" stopOpacity="0" />
-        </radialGradient>
-        <pattern id={`${p}Dots`} x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="0.7" fill="rgba(90,125,66,0.11)" />
-        </pattern>
-      </defs>
-
-      <rect width="520" height="580" fill={`url(#${p}Dots)`} />
-      <ellipse cx="300" cy="285" rx="155" ry="155" fill={`url(#${p}GlowG)`} />
-
-      {/* 装飾リング */}
-      <circle cx="300" cy="285" r="192" stroke="rgba(90,125,66,0.05)" strokeWidth="1" fill="none" />
-      <circle cx="300" cy="285" r="142" stroke="rgba(90,125,66,0.08)" strokeWidth="1" fill="none" strokeDasharray="4 9" />
-      <circle cx="300" cy="285" r="94"  stroke="rgba(90,125,66,0.12)" strokeWidth="1" fill="none" strokeDasharray="2 6" />
-
-      {/* 茎ライン（ノード → ハブ） */}
-      <path d="M300,278 C262,238 184,178 88,118" stroke="rgba(90,125,66,0.40)" strokeWidth="2.2" fill="none" strokeLinecap="round" className={`${p}-p1`} />
-      <path d="M292,285 C222,285 138,285 52,285"  stroke="rgba(90,125,66,0.38)" strokeWidth="2.2" fill="none" strokeLinecap="round" className={`${p}-p2`} />
-      <path d="M300,292 C262,350 214,414 165,468" stroke="rgba(90,125,66,0.34)" strokeWidth="2"   fill="none" strokeLinecap="round" className={`${p}-p3`} />
-
-      {/* 茎上の小ノード */}
-      <circle cx="196" cy="200" r="3" fill="rgba(90,125,66,0.28)" />
-      <circle cx="148" cy="165" r="2" fill="rgba(90,125,66,0.22)" />
-      <circle cx="175" cy="285" r="3" fill="rgba(90,125,66,0.24)" />
-      <circle cx="232" cy="390" r="3" fill="rgba(90,125,66,0.22)" />
-
-      {/* 出力茎（ハブ → GROWTH花） */}
-      <path d="M308,278 C345,232 396,172 442,118" stroke="rgba(90,125,66,0.80)" strokeWidth="2.6" fill="none" strokeLinecap="round" className={`${p}-glow`} />
-      <circle cx="344" cy="238" r="5" fill="rgba(90,125,66,0.30)" stroke="rgba(90,125,66,0.55)" strokeWidth="1.2" />
-      <circle cx="390" cy="184" r="7" fill="rgba(90,125,66,0.36)" stroke="rgba(90,125,66,0.60)" strokeWidth="1.5" />
-
-      {/* 花ブルーム */}
-      <g transform="translate(450,110)">
-        <g className={`${p}-bloom`}>
-          <ellipse cx="0" cy="-12" rx="5" ry="10.5" fill={`url(#${p}FlowerG)`} />
-          <ellipse cx="0" cy="-12" rx="5" ry="10.5" fill={`url(#${p}FlowerG)`} transform="rotate(72)" />
-          <ellipse cx="0" cy="-12" rx="5" ry="10.5" fill={`url(#${p}FlowerG)`} transform="rotate(144)" />
-          <ellipse cx="0" cy="-12" rx="5" ry="10.5" fill={`url(#${p}FlowerG)`} transform="rotate(216)" />
-          <ellipse cx="0" cy="-12" rx="5" ry="10.5" fill={`url(#${p}FlowerG)`} transform="rotate(288)" />
-          <circle cx="0" cy="0" r="7" fill={`url(#${p}HubG)`} stroke="rgba(90,125,66,0.50)" strokeWidth="0.8" />
-        </g>
-      </g>
-      <text x="464" y="88" fill="rgba(90,125,66,0.62)" fontSize="9" fontFamily="monospace" letterSpacing="1.5">GROWTH</text>
-      <text x="344" y="224" fill="rgba(90,125,66,0.50)" fontSize="7.5" fontFamily="sans-serif" textAnchor="middle">成約</text>
-      <text x="390" y="170" fill="rgba(90,125,66,0.52)" fontSize="7.5" fontFamily="sans-serif" textAnchor="middle">継続</text>
-
-      {/* 葉ノードA：集客 */}
-      <g transform="translate(88,118) rotate(-38)">
-        <g className={`${p}-l1`}><Leaf fill={0.62} stroke={0.32} /></g>
-      </g>
-      <text x="108" y="128" fill="rgba(90,125,66,0.72)" fontSize="10" fontFamily="sans-serif" fontWeight="600">集客</text>
-
-      {/* 葉ノードB：訴求 */}
-      <g transform="translate(52,285) rotate(-92)">
-        <g className={`${p}-l2`}><Leaf fill={0.58} stroke={0.30} /></g>
-      </g>
-      <text x="72" y="304" fill="rgba(90,125,66,0.70)" fontSize="10" fontFamily="sans-serif" fontWeight="600">訴求</text>
-
-      {/* 葉ノードC：改善 */}
-      <g transform="translate(165,468) rotate(22)">
-        <g className={`${p}-l3`}><Leaf fill={0.55} stroke={0.28} /></g>
-      </g>
-      <text x="184" y="500" fill="rgba(90,125,66,0.65)" fontSize="10" fontFamily="sans-serif" fontWeight="600">改善</text>
-
-      {/* ハブ中心（種の有機的シェイプ） */}
-      {/* 若芽の茎 */}
-      <path d="M297,268 C295,257 291,247 287,239" stroke="rgba(90,125,66,0.40)" strokeWidth="1.3" fill="none" strokeLinecap="round" />
-      <path d="M303,268 C307,257 313,249 319,243" stroke="rgba(90,125,66,0.32)" strokeWidth="1.1" fill="none" strokeLinecap="round" />
-      {/* 若芽の小葉 */}
-      <g transform="translate(285,236) rotate(-20)">
-        <ellipse cx="0" cy="-6" rx="4" ry="7" fill="rgba(90,125,66,0.30)" stroke="rgba(90,125,66,0.42)" strokeWidth="0.7" />
-        <line x1="0" y1="-13" x2="0" y2="0" stroke="rgba(90,125,66,0.35)" strokeWidth="0.6" />
-      </g>
-      <g transform="translate(321,242) rotate(15)">
-        <ellipse cx="0" cy="-5" rx="3.5" ry="6" fill="rgba(90,125,66,0.25)" stroke="rgba(90,125,66,0.35)" strokeWidth="0.6" />
-        <line x1="0" y1="-11" x2="0" y2="0" stroke="rgba(90,125,66,0.30)" strokeWidth="0.5" />
-      </g>
-
-      {/* ハブリング */}
-      <circle cx="300" cy="285" r="46" stroke="rgba(90,125,66,0.10)" strokeWidth="1" fill="none" className={`${p}-ring`} />
-      <circle cx="300" cy="285" r="34" stroke="rgba(90,125,66,0.20)" strokeWidth="1.5" fill="none" />
-      {/* 種の有機シェイプ */}
-      <path d="M300,268 C316,262 328,272 326,285 C324,298 314,308 300,308 C286,308 276,298 274,285 C272,272 284,262 300,268Z"
-        fill={`url(#${p}HubG)`} stroke="rgba(90,125,66,0.50)" strokeWidth="1" className={`${p}-hub`} />
-      <line x1="293" y1="285" x2="307" y2="285" stroke="rgba(245,240,232,0.82)" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="300" y1="278" x2="300" y2="292" stroke="rgba(245,240,232,0.82)" strokeWidth="1.5" strokeLinecap="round" />
-
-      {/* 浮遊する種（雫形） */}
-      <g transform="translate(420,222)" className={`${p}-sd1`}>
-        <path d="M0,-9 C4,-4 4,2 0,5 C-4,2 -4,-4 0,-9Z" fill="rgba(90,125,66,0.24)" />
-      </g>
-      <g transform="translate(158,342)" className={`${p}-sd2`}>
-        <path d="M0,-7 C3,-3 3,2 0,4 C-3,2 -3,-3 0,-7Z" fill="rgba(90,125,66,0.19)" />
-      </g>
-      <g transform="translate(380,425)" className={`${p}-sd3`}>
-        <path d="M0,-8 C3.5,-3.5 3.5,2 0,5 C-3.5,2 -3.5,-3.5 0,-8Z" fill="rgba(90,125,66,0.17)" />
-      </g>
-
-      {/* 散りばめた小葉 */}
-      <g transform="translate(462,305) rotate(22)"><g className={`${p}-sl1`}><SmallLeaf fill={0.18} stroke={0.25} /></g></g>
-      <g transform="translate(237,158) rotate(-18)"><g className={`${p}-sl2`}><SmallLeaf fill={0.16} stroke={0.22} /></g></g>
-      <g transform="translate(116,380) rotate(10)"><g className={`${p}-sl3`}><SmallLeaf fill={0.14} stroke={0.20} /></g></g>
-
-      {/* コーナーフレーム + 小葉 */}
-      <path d="M20,20 L42,20 L42,42" stroke="rgba(90,125,66,0.20)" strokeWidth="1.5" fill="none" />
-      <g transform="translate(26,50) rotate(32)"><SmallLeaf fill={0.16} stroke={0.22} /></g>
-      <path d="M500,560 L478,560 L478,538" stroke="rgba(90,125,66,0.20)" strokeWidth="1.5" fill="none" />
-      <text x="20" y="15" fill="rgba(90,125,66,0.22)" fontSize="7" fontFamily="monospace" letterSpacing="1">IROHA SEED</text>
-    </>
-  );
-}
+// ─── Hero ──────────────────────────────────────────────────────────────────────
 
 function Hero() {
   return (
-    <section className="relative min-h-[80vh] lg:min-h-[88vh] flex flex-col justify-center overflow-hidden bg-[#1e3a22]">
-      {/* 共通背景グラデーション */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a22] via-[#1e3a22]/90 to-[#1e3a22]/35" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1e3a22]/50 via-transparent to-[#1e3a22]/50" />
-      </div>
+    <section className="relative min-h-screen bg-[#f8f5f0] flex flex-col justify-center overflow-hidden">
+      {/* Subtle dot texture */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'radial-gradient(circle, #c8c2b8 1px, transparent 1px)',
+        backgroundSize: '28px 28px',
+        opacity: 0.45,
+      }} />
+      {/* Large watermark */}
+      <span className="absolute right-0 bottom-0 font-serif font-black leading-none select-none pointer-events-none text-[#1c1c1e]"
+        style={{ fontSize: '22vw', opacity: 0.028 }}>iroha</span>
 
-      {/* PC用SVG（右半分に絶対配置・変更なし） */}
-      <div className="hidden lg:block absolute right-0 inset-y-0 w-[52%] pointer-events-none overflow-hidden">
-        <svg viewBox="0 0 520 580" fill="none" xmlns="http://www.w3.org/2000/svg"
-          className="absolute inset-0 w-full h-full opacity-90" preserveAspectRatio="xMidYMid meet">
-          <style>{svgStyles('d')}</style>
-          <SvgInternals prefix="d" />
-        </svg>
-      </div>
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-28 pb-20 w-full">
+        <div className="grid lg:grid-cols-[1fr_auto] gap-12 lg:gap-20 items-center">
 
-      {/* スマホ用SVG（全面背景として絶対配置） */}
-      <div className="lg:hidden absolute inset-0 pointer-events-none overflow-hidden">
-        <svg viewBox="0 0 520 580" fill="none" xmlns="http://www.w3.org/2000/svg"
-          className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="xMidYMid meet">
-          <style>{svgStyles('m')}</style>
-          <SvgInternals prefix="m" />
-        </svg>
-        {/* テキスト視認性のためのオーバーレイ：左〜中央を濃く */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a22]/85 via-[#1e3a22]/65 to-[#1e3a22]/30" />
-        {/* 上下もやや引き締め */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1e3a22]/55 via-transparent to-[#1e3a22]/55" />
-      </div>
-
-      {/* テキストコンテンツ */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-10 lg:pb-16 w-full">
-        <div className="max-w-xl">
-          <div className="inline-flex items-center gap-2 bg-[#a8c08a]/15 border border-[#a8c08a]/30 text-[#b8d09a] text-[10px] font-bold tracking-[0.3em] uppercase px-4 py-2 rounded-full mb-8">
-            実戦型マーケティングパートナー
+          {/* Text */}
+          <div>
+            <SectionLabel>Marketing Consultant</SectionLabel>
+            <h1 className="font-serif font-black text-[#1c1c1e] leading-[1.1] mb-8">
+              <span className="block text-4xl sm:text-5xl lg:text-6xl">「なぜ売れないか」を</span>
+              <span className="block text-5xl sm:text-6xl lg:text-7xl text-[#c17f3c] mt-1">見つけ出し、</span>
+              <span className="block text-4xl sm:text-5xl lg:text-6xl mt-1">事業を整える。</span>
+            </h1>
+            <p className="text-[#5c5a56] text-base md:text-lg leading-relaxed mb-10 max-w-lg">
+              商品・導線・ファネルを診断し、売れない原因を根本から特定。
+              USP設計から実行支援まで、一気通貫で伴走します。
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/contact"
+                className="inline-flex items-center justify-center gap-2 bg-[#1c1c1e] hover:bg-[#c17f3c] text-white font-black text-sm px-8 py-4 rounded-full transition-colors duration-200">
+                無料診断を受ける <ArrowRight size={16} />
+              </Link>
+              <a href="#service"
+                className="inline-flex items-center justify-center gap-2 border border-[#d8d2c8] hover:border-[#1c1c1e] text-[#5c5a56] hover:text-[#1c1c1e] text-sm font-medium px-8 py-4 rounded-full transition-colors">
+                サービスを見る <ArrowRight size={14} />
+              </a>
+            </div>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-black text-white leading-[1.08] tracking-tight mb-6">
-            売れる仕組みを、<br /><span className="text-[#a8c08a]">再設計する。</span>
-          </h1>
-          <p className="text-[#b0c8a0] text-base md:text-lg leading-relaxed mb-10">
-            机上の空論ではない、経営者視点の実戦型マーケティング支援。<br className="hidden sm:block" />
-            売上が積み上がる全体構造を、現場理解から組み直します。
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link to="/contact"
-              className="inline-flex items-center justify-center gap-2 bg-[#5a7d42] hover:bg-[#6a8d52] text-white font-black text-sm px-8 py-4 rounded-full transition-all duration-200"
-              style={{ boxShadow: '0 20px 50px rgba(90,125,66,0.38)' }}>
-              無料で相談する <ArrowRight size={16} />
-            </Link>
-            <button onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white/50 text-white/60 hover:text-white text-sm font-medium transition-all px-8 py-4 rounded-full">
-              サービスを見る <ArrowRight size={14} />
-            </button>
+
+          {/* Credential card — desktop only */}
+          <div className="hidden lg:block flex-shrink-0 w-60">
+            <div className="border border-[#d8d2c8] rounded-2xl overflow-hidden bg-white shadow-sm">
+              <div className="bg-[#1c1c1e] px-6 py-4">
+                <p className="text-[9px] tracking-[0.35em] text-[#5c5a56] uppercase">Profile</p>
+                <p className="text-white font-black text-sm mt-1">山本 剛史</p>
+              </div>
+              <div className="divide-y divide-[#f0ebe1]">
+                <div className="px-6 py-5">
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-serif font-black text-4xl text-[#c17f3c]">14</span>
+                    <span className="text-xs text-[#8a8680] font-bold">年</span>
+                  </div>
+                  <p className="text-xs text-[#5c5a56] mt-1 leading-snug">経営者としての実務経験</p>
+                </div>
+                <div className="px-6 py-5">
+                  <span className="font-serif font-black text-2xl text-[#1c1c1e]">CMO</span>
+                  <p className="text-xs text-[#5c5a56] mt-1 leading-snug">製薬会社の最高マーケティング責任者として参画</p>
+                </div>
+                <div className="px-6 py-5">
+                  <p className="text-[9px] tracking-[0.2em] text-[#8a8680] uppercase mb-2.5">Industries</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['建築', '飲食', 'IT', '製薬'].map(tag => (
+                      <span key={tag} className="text-[10px] bg-[#f8f5f0] border border-[#d8d2c8] px-2 py-0.5 rounded-full text-[#5c5a56]">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -374,17 +282,17 @@ function Hero() {
   );
 }
 
-// ─── マーキー ─────────────────────────────────────────────────────────────────
+// ─── Marquee ───────────────────────────────────────────────────────────────────
 
 function Marquee() {
-  const items = ['マーケティング戦略', 'セールスプロモーション', '販売導線設計', 'ビジネスマッチング', 'アライアンス調整', 'イベント企画・運営'];
-  const doubled = [...items, ...items];
+  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
   return (
-    <div className="bg-[#2a4a2d] py-3 overflow-hidden select-none">
+    <div className="bg-[#1c1c1e] py-4 overflow-hidden">
       <div className="animate-marquee">
-        {doubled.map((item, i) => (
-          <span key={i} className="mx-8 text-[#c8dab8] font-bold text-xs tracking-[0.22em] uppercase">
-            {item}<span className="ml-8 text-[#c8dab8]/30">◆</span>
+        {items.map((item, i) => (
+          <span key={i} className="inline-flex items-center gap-5 mx-5">
+            <span className="text-[#f8f5f0]/80 text-xs font-medium tracking-[0.2em] uppercase whitespace-nowrap">{item}</span>
+            <span className="w-1 h-1 rounded-full bg-[#c17f3c] flex-shrink-0" />
           </span>
         ))}
       </div>
@@ -392,37 +300,30 @@ function Marquee() {
   );
 }
 
-// ─── 課題セクション ───────────────────────────────────────────────────────────
-
-const PROBLEMS = [
-  '広告や集客施策を行っているのに、売上の伸びにつながっていない',
-  '問い合わせや見込み客はいるのに、成約や継続につながらない',
-  'LP・営業・導線・商品設計がバラバラで、全体最適になっていない',
-  '表面的なアドバイスではなく、現場まで踏み込んだ実務支援がほしい',
-];
+// ─── Problem ───────────────────────────────────────────────────────────────────
 
 function ProblemSection() {
   return (
-    <section className="py-24 bg-[#faf8f4]">
+    <section className="py-24 bg-[#f8f5f0]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-          <div>
-            <Label>課題 / PROBLEM</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1e2e1a] leading-snug mb-6">
-              なぜ、施策を増やしても<br className="hidden sm:block" />売上が伸びないのか？
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div className="lg:sticky lg:top-24">
+            <SectionLabel>こんな悩みはありませんか？</SectionLabel>
+            <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1c1c1e] leading-snug mb-6">
+              頑張っているのに、<br />なぜ売れないのか。
             </h2>
-            <p className="text-[#5a6e52] leading-relaxed text-[15px]">
-              売上が伸びない原因は、広告だけ、LPだけ、営業だけの問題ではありません。
-              集客・訴求・導線・提案・改善が分断されていると、施策を増やしても成果は安定しません。
+            <p className="text-[#5c5a56] text-[15px] leading-relaxed">
+              多くの経営者・個人事業主が、この壁に直面しています。
+              問題は「努力が足りない」のではなく、
+              「どこに問題があるか」が見えていないことです。
             </p>
           </div>
-          <div className="space-y-3 pt-2">
-            {PROBLEMS.map((text, i) => (
-              <div key={i} className="flex items-start gap-5 p-5 border border-[#d0cabb] rounded-xl hover:border-[#8aab68] hover:shadow-md transition-all group">
-                <span className="text-[#d0cabb] font-black text-3xl leading-none select-none group-hover:text-[#a8c08a] transition-colors">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <p className="text-[#2e3e28] font-medium leading-relaxed text-sm pt-1">{text}</p>
+          <div className="space-y-3">
+            {PROBLEMS.map(({ num, text }) => (
+              <div key={num}
+                className="flex items-start gap-5 bg-white border border-[#d8d2c8] rounded-xl p-5 hover:border-[#c17f3c]/60 hover:shadow-sm transition-all group">
+                <span className="font-serif font-black text-2xl text-[#d8d2c8] group-hover:text-[#c17f3c]/60 transition-colors leading-none pt-0.5 flex-shrink-0 select-none">{num}</span>
+                <p className="text-[#1c1c1e] text-sm font-medium leading-relaxed">{text}</p>
               </div>
             ))}
           </div>
@@ -432,127 +333,99 @@ function ProblemSection() {
   );
 }
 
-// ─── 解決策セクション ─────────────────────────────────────────────────────────
+// ─── Service ───────────────────────────────────────────────────────────────────
 
-const METHODS = [
-  { num: '01', icon: Target,    title: '現場起点',   desc: '経営・営業・現場の実態を深く理解することから始めます。表面的なヒアリングではなく、現場に入り込んだ解像度で課題を特定します。', img: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=75' },
-  { num: '02', icon: Globe,     title: '全体最適',   desc: '点ではなく線で捉え、売上につながる全体設計を見直します。集客から成約・継続まで、分断なく繋ぎ直します。',                     img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=75' },
-  { num: '03', icon: Handshake, title: '実戦型伴走', desc: 'アドバイスで終わらず、実行と改善まで共に歩みます。経営者の孤独な判断に、当事者として寄り添い続けます。',                         img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=75' },
-];
-
-function SolutionSection() {
+function ServiceSection() {
   return (
-    <section className="py-24 bg-[#1e3a22]">
+    <section id="service" className="py-24 bg-[#1c1c1e]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
           <div>
-            <Label light>解決策 / SOLUTION</Label>
+            <SectionLabel>サービス / SERVICE</SectionLabel>
             <h2 className="font-serif text-4xl md:text-5xl font-black text-white leading-snug">
-              部分的な改善ではなく、<br className="hidden sm:block" /><span className="text-[#a8c08a]">売れる構造</span>そのものを<br className="hidden sm:block" />組み直す。
+              個別伴走サポート
             </h2>
           </div>
-          <p className="text-[#9ab890] max-w-xs leading-relaxed text-sm md:text-right">
-            集客・訴求・導線・成約・改善を一気通貫で繋ぎ直す「売れる仕組みの再設計」が必要です。
-          </p>
+          <div className="max-w-sm">
+            <p className="text-[#8a8680] text-sm leading-relaxed">
+              商品・導線・ファネルを診断し、USP設計から実行支援まで一気通貫で整えます。
+            </p>
+            <Link to="/service" className="inline-flex items-center gap-1.5 text-[#c17f3c] text-sm font-bold mt-3 hover:underline">
+              詳しく見る <ArrowRight size={13} />
+            </Link>
+          </div>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {METHODS.map(({ num, icon: Icon, title, desc, img }) => (
-            <div key={num} className="group relative bg-[#2a4a2d] border border-[#3a5a3e] rounded-2xl overflow-hidden hover:border-[#a8c08a]/40 transition-all duration-300">
-              <div className="h-40 overflow-hidden">
-                <img src={img} alt={title} loading="lazy" className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-500" />
+
+        <div className="grid md:grid-cols-2 gap-4 mb-10">
+          {SERVICE_PILLARS.map(({ num, title, desc }) => (
+            <div key={num}
+              className="border border-[#2a2a2e] rounded-xl p-8 hover:border-[#c17f3c]/30 transition-colors group">
+              <div className="flex items-center gap-3 mb-5">
+                <span className="font-serif font-black text-[#c17f3c]/60 text-sm">{num}</span>
+                <span className="w-px h-4 bg-[#2a2a2e]" />
+                <h3 className="font-black text-white text-lg">{title}</h3>
               </div>
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <span className="text-[#a8c08a] font-black text-xs tracking-[0.3em]">{num}</span>
-                  <Icon size={18} className="text-[#4a6a4e] group-hover:text-[#a8c08a] transition-colors" />
-                </div>
-                <h3 className="text-white font-black text-xl mb-3">{title}</h3>
-                <p className="text-[#a0b890] text-sm leading-relaxed">{desc}</p>
-              </div>
+              <p className="text-[#8a8680] text-sm leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
 
-// ─── サービスセクション ───────────────────────────────────────────────────────
-
-const SERVICES = [
-  { num: '01', title: 'マーケティング戦略コンサルティング', desc: '集客から販売までの全体設計を整理し、売上につながる流れを現場レベルで整えます。',           icon: BarChart3  },
-  { num: '02', title: 'セールスプロモーションツール制作',   desc: 'HP・LP・チラシ等を、見た目ではなく成果につながる訴求設計で制作・改善します。',             icon: Zap        },
-  { num: '03', title: '販売導線・既存導線の見直し',         desc: '既存の販売戦略や導線の詰まりを見直し、成約につながる流れへ改善します。',                   icon: ArrowRight  },
-  { num: '04', title: 'ビジネスマッチング',                 desc: '新しい販路、提携先、売上機会を生み出す接点をつくります。',                                 icon: Users      },
-  { num: '05', title: 'アライアンス調整',                   desc: '提携先との接続や協業設計を通じて、事業拡大のきっかけをつくります。',                       icon: Handshake  },
-  { num: '06', title: 'イベント・セミナー企画運営',          desc: '信頼関係ベースの接点をつくり、商談や紹介につながる場を設計します。',                       icon: Globe      },
-];
-
-function ServicesSection() {
-  return (
-    <section id="services" className="py-24 bg-[#f0ebe1]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-          <div>
-            <Label>サービス / SERVICES</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1e2e1a] leading-snug">
-              売上を最大化させる、<br />6つの支援領域
-            </h2>
-          </div>
-          <Link to="/contact" className="inline-flex items-center gap-2 text-sm font-bold text-[#4a6d32] border-b-2 border-[#5a7d42] pb-0.5 hover:text-[#5a7d42] transition-colors self-start md:self-end">
-            無料相談はこちら <ArrowUpRight size={14} />
-          </Link>
-        </div>
-        <div className="divide-y divide-[#d0cabb]">
-          {SERVICES.map(({ num, title, desc, icon: Icon }) => (
-            <div key={num} className="group flex items-center gap-8 py-6 hover:bg-[#eef5e8]/60 px-4 -mx-4 rounded-xl transition-all cursor-default">
-              <span className="text-[#d0cabb] font-black text-4xl w-16 leading-none shrink-0 group-hover:text-[#a8c08a] transition-colors">{num}</span>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-[#1e2e1a] font-black text-lg mb-1 group-hover:text-[#2a4a2d] transition-colors">{title}</h3>
-                <p className="text-[#5a6e52] text-sm leading-relaxed">{desc}</p>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-[#faf8f4] border border-[#d0cabb] flex items-center justify-center shrink-0 group-hover:bg-[#5a7d42] group-hover:border-[#5a7d42] transition-all shadow-sm">
-                <Icon size={16} className="text-[#7a8e70] group-hover:text-white transition-colors" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── 強みセクション ───────────────────────────────────────────────────────────
-
-const STRENGTHS = [
-  '実業の現場で結果を求められてきた当事者として、経営者と同じ目線で課題を捉えられる',
-  '建設・リフォームの現場経験があり、机上ではなく現場理解を前提に提案できる',
-  '戦略提案だけで終わらず、制作・導線設計・実行・改善まで一気通貫で支援できる',
-  'デジタル施策だけでなく、人脈・紹介・リアル接点まで含めて売上導線を設計できる',
-  '経営者の孤独や判断の重さを理解したうえで、表面的ではない打ち手を提示できる',
-];
-
-function StrengthsSection() {
-  return (
-    <section id="strengths" className="relative py-24 bg-[#1e3a22] overflow-hidden">
-      <div className="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=80" alt="" loading="lazy" className="w-full h-full object-cover opacity-10" />
-      </div>
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="max-w-3xl mb-20">
-          <Label light>強み / STRENGTHS</Label>
-          <blockquote className="font-serif text-4xl md:text-6xl font-black text-white leading-tight mb-6">
-            "現場の解像度を上げ、<br /><span className="text-[#a8c08a]">経営の精度を高める。</span>"
+        <div className="border border-[#c17f3c]/20 rounded-xl p-8 bg-[#c17f3c]/5">
+          <p className="text-[9px] tracking-[0.35em] text-[#c17f3c] uppercase mb-5">Outcome</p>
+          <blockquote className="font-serif text-xl md:text-2xl font-black text-white leading-relaxed">
+            自分の商品に自信を持ち、誰に・何を・どう届ければ選ばれるのかが明確になる。
+            <span className="block text-[#c17f3c] mt-3 text-lg md:text-xl">
+              集客から販売までの流れが整った、"選ばれる事業"へ。
+            </span>
           </blockquote>
-          <p className="text-[#a0b890] leading-relaxed max-w-xl text-[15px]">
-            私たちは単なる制作会社やコンサルティング会社ではありません。「売れる仕組み」を共に創り上げるパートナーとして、現場の熱量を成果に変えるまで伴走します。
-          </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          {STRENGTHS.map((text, i) => (
-            <div key={i} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/[0.08] hover:border-[#a8c08a]/30 transition-all">
-              <CheckCircle size={18} className="text-[#a8c08a] flex-shrink-0 mt-0.5" />
-              <p className="text-[#b8ccaa] font-medium leading-relaxed text-sm">{text}</p>
+      </div>
+    </section>
+  );
+}
+
+// ─── Process ───────────────────────────────────────────────────────────────────
+
+function ProcessSection() {
+  return (
+    <section id="process" className="py-24 bg-[#ede8df]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="mb-16">
+          <SectionLabel>支援の流れ / PROCESS</SectionLabel>
+          <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1c1c1e] leading-snug">
+            診断から自走まで、<br className="hidden sm:block" />一気通貫で伴走します。
+          </h2>
+        </div>
+
+        {/* Mobile: vertical */}
+        <div className="md:hidden space-y-0">
+          {PROCESS_STEPS.map(({ num, title, desc }, i) => (
+            <div key={num} className="flex gap-5">
+              <div className="flex flex-col items-center">
+                <div className="w-10 h-10 rounded-full bg-white border-2 border-[#d8d2c8] flex items-center justify-center flex-shrink-0">
+                  <span className="font-serif font-black text-xs text-[#c17f3c]">{num}</span>
+                </div>
+                {i < PROCESS_STEPS.length - 1 && (
+                  <div className="w-px flex-1 bg-[#d8d2c8] my-2" />
+                )}
+              </div>
+              <div className="pb-8">
+                <h3 className="font-black text-[#1c1c1e] text-base mb-1.5 mt-2">{title}</h3>
+                <p className="text-[#8a8680] text-sm leading-relaxed">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: horizontal */}
+        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {PROCESS_STEPS.map(({ num, title, desc }) => (
+            <div key={num} className="text-center">
+              <div className="w-11 h-11 rounded-full bg-white border-2 border-[#d8d2c8] flex items-center justify-center mx-auto mb-4">
+                <span className="font-serif font-black text-xs text-[#c17f3c]">{num}</span>
+              </div>
+              <h3 className="font-black text-[#1c1c1e] text-sm mb-2">{title}</h3>
+              <p className="text-[#8a8680] text-xs leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
@@ -561,42 +434,31 @@ function StrengthsSection() {
   );
 }
 
-// ─── 実績セクション ───────────────────────────────────────────────────────────
-
-const ACHIEVEMENTS = [
-  { tag: '建設業',   title: 'V字回復支援',   highlight: '売上昨年対比166%達成',    desc: '事業承継時に参画し、組織改革と営業戦略を刷新。物件選定から採用、販促まで一貫して統括。',                             num: '+166%',  numUnit: '売上成長率'     },
-  { tag: 'FC店舗',   title: '垂直立ち上げ',   highlight: 'オープン初日 全国3位',    desc: '新規出店におけるマーケティング戦略を統括。圧倒的なスタートダッシュを実現。',                                         num: '全国3位', numUnit: 'オープン初日達成' },
-  { tag: '医療業界', title: '経営戦略参画',   highlight: '社外取締役 CMO就任',      desc: 'CEOから直接オファーを受け、最高マーケティング責任者として経営戦略の根幹から支援。',                                   num: 'CMO',    numUnit: '社外取締役就任'  },
-];
+// ─── Achievements ──────────────────────────────────────────────────────────────
 
 function AchievementsSection() {
   return (
-    <section id="achievements" className="py-24 bg-[#faf8f4]">
+    <section id="achievements" className="py-24 bg-[#1c1c1e]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
-          <div>
-            <Label>実績 / RESULTS</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1e2e1a] leading-snug">
-              確かな実績に裏打ちされた、<br className="hidden sm:block" />実戦力
-            </h2>
-          </div>
-          <p className="text-[#7a8e70] text-sm max-w-xs leading-relaxed md:text-right">
-            それぞれの業界で、数字と結果で証明し続けてきた支援実績です。
-          </p>
+        <div className="mb-16">
+          <SectionLabel>実績 / ACHIEVEMENTS</SectionLabel>
+          <h2 className="font-serif text-4xl md:text-5xl font-black text-white leading-snug">
+            確かな経験に裏打ちされた、<br className="hidden sm:block" />実戦力
+          </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {ACHIEVEMENTS.map(({ tag, title, highlight, desc, num, numUnit }) => (
-            <div key={title} className="border border-[#d0cabb] rounded-2xl overflow-hidden hover:border-[#8aab68] hover:shadow-lg transition-all group">
-              <div className="bg-[#1e3a22] p-8 relative overflow-hidden">
-                <div className="absolute -right-4 -top-2 text-8xl font-black text-white/5 leading-none select-none">{num}</div>
-                <div className="text-[#a8c08a] text-[10px] font-bold tracking-[0.3em] uppercase mb-3">{tag}</div>
-                <div className="text-white font-black text-4xl md:text-5xl leading-none">{num}</div>
-                <div className="text-[#7a9870] text-xs mt-2 tracking-wide">{numUnit}</div>
+
+        <div className="grid md:grid-cols-3 gap-5">
+          {ACHIEVEMENTS.map(({ value, unit, title, desc }) => (
+            <div key={title} className="border border-[#2a2a2e] rounded-xl overflow-hidden">
+              <div className="p-8 border-b border-[#2a2a2e]">
+                <div className="flex items-baseline gap-1 mb-4">
+                  <span className="font-serif font-black text-5xl md:text-6xl text-[#c17f3c]">{value}</span>
+                  {unit && <span className="text-[#8a8680] text-lg font-bold">{unit}</span>}
+                </div>
+                <h3 className="font-black text-white text-base leading-snug">{title}</h3>
               </div>
-              <div className="p-6">
-                <h3 className="text-[#1e2e1a] font-black text-xl mb-1">{title}</h3>
-                <div className="text-[#5a7d42] font-bold text-xs mb-4 tracking-wide">{highlight}</div>
-                <p className="text-[#5a6e52] text-sm leading-relaxed">{desc}</p>
+              <div className="p-8">
+                <p className="text-[#8a8680] text-sm leading-relaxed">{desc}</p>
               </div>
             </div>
           ))}
@@ -606,55 +468,73 @@ function AchievementsSection() {
   );
 }
 
-// ─── 代表メッセージ ───────────────────────────────────────────────────────────
+// ─── Representative ────────────────────────────────────────────────────────────
 
 function RepresentativeSection() {
   return (
-    <section id="representative" className="py-24 bg-[#f0ebe1]">
+    <section id="representative" className="py-24 bg-[#f8f5f0]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid md:grid-cols-5 gap-12 md:gap-20 items-center">
+        <div className="grid md:grid-cols-5 gap-12 md:gap-16 items-start">
+
+          {/* Photo */}
           <div className="md:col-span-2 flex justify-center md:justify-start">
             <div className="relative">
-              {/* 有機的な装飾 */}
-              <div className="absolute -top-5 -left-5 w-24 h-24 border-2 border-[#a8c08a] opacity-45"
-                style={{ borderRadius: '55% 45% 50% 50% / 45% 55% 45% 55%' }} />
-              {/* 有機的シェイプの写真 */}
-              <div className="relative w-64 md:w-72 overflow-hidden"
-                style={{ borderRadius: '62% 38% 46% 54% / 60% 44% 56% 40%', boxShadow: '0 25px 60px rgba(30,58,34,0.22)' }}>
-                <img src="/profile.png" alt="山本 剛史" className="w-full h-auto block"
+              <div className="w-60 md:w-72 aspect-[3/4] overflow-hidden bg-[#ede8df]"
+                style={{ borderRadius: '16px 16px 48px 16px' }}>
+                <img src="/profile.png" alt="山本 剛史"
+                  className="w-full h-full object-cover"
                   onError={(e) => {
                     const el = e.currentTarget as HTMLImageElement;
                     el.style.display = 'none';
-                    const parent = el.parentElement;
-                    if (parent) {
-                      parent.style.height = '320px';
-                      parent.style.display = 'flex';
-                      parent.style.alignItems = 'center';
-                      parent.style.justifyContent = 'center';
-                      parent.style.backgroundColor = '#e8e4da';
-                      parent.innerHTML = '<span style="color:#1e3a22;font-size:3.5rem;font-weight:900;font-family:serif">TY</span>';
+                    const p = el.parentElement;
+                    if (p) {
+                      p.style.display = 'flex';
+                      p.style.alignItems = 'center';
+                      p.style.justifyContent = 'center';
+                      p.innerHTML = '<span style="color:#c17f3c;font-size:3rem;font-weight:900;font-family:serif">TY</span>';
                     }
                   }}
                 />
               </div>
-              <div className="absolute -bottom-5 -right-5 bg-[#2a4a2d] text-white rounded-xl px-4 py-2.5 shadow-lg">
+              <div className="absolute -bottom-4 -right-3 bg-[#1c1c1e] text-white rounded-xl px-4 py-3 shadow-lg">
                 <div className="font-black text-xs leading-tight">代表取締役社長</div>
-                <div className="text-[#a8c08a] text-[10px] mt-0.5">株式会社廣創</div>
+                <div className="text-[#c17f3c] text-[10px] mt-0.5 tracking-wide">株式会社廣創</div>
               </div>
             </div>
           </div>
 
+          {/* Text */}
           <div className="md:col-span-3">
-            <Label>代表メッセージ / MESSAGE</Label>
-            <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1e2e1a] mb-1">山本 剛史</h2>
-            <div className="text-[#7a8e70] text-sm tracking-[0.2em] mb-8">TSUYOSHI YAMAMOTO</div>
-            <blockquote className="font-serif text-2xl md:text-3xl font-black text-[#1e2e1a] leading-tight mb-8 border-l-[3px] border-[#5a7d42] pl-6">
-              "マーケティングは、<br />机の上ではなく<br />現場で起きている"
+            <SectionLabel>代表メッセージ / MESSAGE</SectionLabel>
+            <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1c1c1e] mb-1">山本 剛史</h2>
+            <p className="text-[#8a8680] text-sm tracking-[0.2em] mb-8">TSUYOSHI YAMAMOTO</p>
+
+            <blockquote className="font-serif text-xl md:text-2xl font-black text-[#1c1c1e] leading-snug mb-8 border-l-[3px] border-[#c17f3c] pl-6">
+              "勇気を持って独立した方々の<br className="hidden sm:block" />成功を、少しでも手助けしたい"
             </blockquote>
-            <div className="space-y-4 text-[#5a6e52] leading-relaxed text-[15px]">
-              <p>世の中に"アドバイスだけ"で終わる支援が多い中、私は自ら事業の立ち上げから組織再生までを当事者として経験してきました。</p>
-              <p>だからこそ、表面的なノウハウではなく、経営者が本当に必要としている打ち手を、実務目線で一緒に組み立てたいと考えています。</p>
-              <p>あなたの事業の「種」を共に育て、確かな売上へと繋げていく。それがiroha Seedの使命です。</p>
+
+            <div className="space-y-4 text-[#5c5a56] leading-relaxed text-[15px]">
+              <p>30歳で法人を設立し、建築・飲食・IT・製薬など複数の業界で当事者として経営に携わってきました。その中でコロナ禍などの影響もあり、周囲で独立した仲間が志半ばで諦めたり、倒産に追い込まれる姿を目の当たりにしました。</p>
+              <p>「自分が関わることで、もしかしたら救えたのかもしれない」——そう感じたとき、終身雇用という絶対的な安定がない今の時代に、勇気を持って踏み出した方々を支えたいと強く思うようになりました。</p>
+              <p>私の強みは、SNS運用や広告といった施策の前に「なぜ売れていないか」を見抜くことです。その人の話を深く聞きながら、商品設計・導線設計・ファネルまで含めて、売れる流れを一から整えます。</p>
+              <p>あなたの事業の「種」を共に育て、確かな売上へとつなげること。それが私の使命です。</p>
+            </div>
+
+            <div className="mt-10 pt-8 border-t border-[#d8d2c8]">
+              <p className="text-[9px] tracking-[0.35em] text-[#8a8680] uppercase mb-5">Career</p>
+              <div className="space-y-3">
+                {[
+                  { year: '20代',  text: 'マッサージ師・職人として現場経験を積む' },
+                  { year: '30歳',  text: '法人設立。建築リフォーム・太陽光発電事業を展開' },
+                  { year: '30代',  text: 'フランチャイズ飲食事業エリアマネージャー兼任' },
+                  { year: '〜現在', text: 'IT企業サービス構築・営業、製薬会社CMO参画' },
+                ].map(({ year, text }) => (
+                  <div key={year} className="flex gap-4 text-sm">
+                    <span className="text-[#c17f3c] font-bold w-14 flex-shrink-0">{year}</span>
+                    <span className="text-[#5c5a56]">{text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -663,115 +543,124 @@ function RepresentativeSection() {
   );
 }
 
-// ─── CTAセクション ────────────────────────────────────────────────────────────
+// ─── FAQ ───────────────────────────────────────────────────────────────────────
 
-function CtaSection() {
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   return (
-    <section className="relative py-32 bg-[#1e3a22] overflow-hidden">
-      <div className="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80" alt="" loading="lazy" className="w-full h-full object-cover opacity-12" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a22] via-[#1e3a22]/90 to-[#2a4a2d]/80" />
-      </div>
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 text-center">
-        <Label light>お問い合わせ / CONTACT</Label>
-        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-          あなたのビジネスに、<br className="hidden sm:block" />新しい風を。
-        </h2>
-        <p className="text-[#a0b890] leading-relaxed max-w-xl mx-auto mb-12 text-[15px]">
-          まずは、現状の売上導線や集客の詰まりを整理するところからご相談ください。<br className="hidden sm:block" />
-          福岡市内・近郊は対面可、オンラインは全国対応可能です。
-        </p>
-        <Link to="/contact"
-          className="inline-flex items-center gap-3 bg-[#5a7d42] hover:bg-[#6a8d52] text-white font-black text-base px-12 py-5 rounded-full transition-all duration-200"
-          style={{ boxShadow: '0 20px 60px rgba(90,125,66,0.38)' }}>
-          無料相談を予約する <ArrowRight size={18} />
-        </Link>
-        <p className="text-[#6a8a62] text-xs mt-6 tracking-wide">相談無料・オンライン対応可・強引な営業は一切ありません</p>
+    <section id="faq" className="py-24 bg-[#ede8df]">
+      <div className="max-w-3xl mx-auto px-6 lg:px-10">
+        <div className="mb-14">
+          <SectionLabel>よくある質問 / FAQ</SectionLabel>
+          <h2 className="font-serif text-4xl md:text-5xl font-black text-[#1c1c1e]">よくある質問</h2>
+        </div>
+
+        <div className="space-y-2">
+          {FAQS.map(({ q, a }, i) => (
+            <div key={i} className={`rounded-xl overflow-hidden border transition-colors ${
+              openIndex === i ? 'border-[#c17f3c]/40 bg-white' : 'border-[#d8d2c8] bg-white'
+            }`}>
+              <button
+                className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-[#f8f5f0] transition-colors"
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}>
+                <span className="font-bold text-sm md:text-base text-[#1c1c1e] leading-snug">{q}</span>
+                <span className={`flex-shrink-0 w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${
+                  openIndex === i ? 'border-[#c17f3c] bg-[#c17f3c] text-white' : 'border-[#d8d2c8] text-[#8a8680]'
+                }`}>
+                  {openIndex === i ? <Minus size={10} /> : <Plus size={10} />}
+                </span>
+              </button>
+              {openIndex === i && (
+                <div className="px-6 pb-6">
+                  <div className="w-full h-px bg-[#f0ebe1] mb-4" />
+                  <p className="text-[#5c5a56] text-sm leading-relaxed">{a}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// ─── フッター ─────────────────────────────────────────────────────────────────
+// ─── CTA ───────────────────────────────────────────────────────────────────────
+
+function CTASection() {
+  return (
+    <section className="py-28 bg-[#1c1c1e]">
+      <div className="max-w-3xl mx-auto px-6 lg:px-10 text-center">
+        <SectionLabel>お問い合わせ / CONTACT</SectionLabel>
+        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+          まずは無料診断から。
+        </h2>
+        <p className="text-[#8a8680] leading-relaxed max-w-lg mx-auto mb-10 text-[15px]">
+          「今すぐではないけれど気になっている」という段階でも大丈夫です。
+          現状をお聞きして、必要かどうかを一緒に判断しましょう。
+        </p>
+        <Link to="/contact"
+          className="inline-flex items-center gap-3 bg-[#c17f3c] hover:bg-[#a0662c] text-white font-black text-base px-12 py-5 rounded-full transition-colors duration-200">
+          無料診断を申し込む <ArrowRight size={18} />
+        </Link>
+        <p className="text-[#5c5a56] text-xs mt-6 tracking-wide">診断無料・オンライン対応可・強引な営業は一切ありません</p>
+      </div>
+    </section>
+  );
+}
+
+// ─── Footer ────────────────────────────────────────────────────────────────────
 
 function Footer() {
   return (
-    <footer className="bg-[#1e3a22] border-t border-[#2a4a2d]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
-          <div>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg overflow-hidden bg-white/10 flex items-center justify-center">
-                <img src="/logo.png" alt="iroha Seed" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-              </div>
-              <div>
-                <div className="text-white font-bold text-sm">iroha Seed</div>
-                <div className="text-[#4a5e42] text-[9px] tracking-[0.2em]">BY HIROSO INC.</div>
-              </div>
+    <footer className="bg-[#1c1c1e] border-t border-[#2a2a2e]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-md overflow-hidden bg-[#f8f5f0] flex items-center justify-center">
+              <img src="/logo.png" alt="iroha Seed" className="w-full h-full object-contain" />
             </div>
-            <p className="text-[#6a7e60] text-sm leading-relaxed mb-6">売上につながる全体構造を、現場理解から組み直す実戦型マーケティング支援。</p>
-            <div className="flex gap-3">
-              {SNS.map(({ href, Icon, label }) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#5a7d42] flex items-center justify-center transition-colors border border-white/10" aria-label={label}>
-                  <Icon size={15} className="text-white" />
-                </a>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="text-white text-[10px] font-bold tracking-[0.25em] uppercase mb-5">Navigation</h4>
-            <div className="space-y-3">
-              {NAV_LINKS.map((l) => (
-                <a key={l.href} href={l.href} onClick={(e) => { e.preventDefault(); document.querySelector(l.href)?.scrollIntoView({ behavior: 'smooth' }); }}
-                  className="block text-[#6a7e60] hover:text-white text-sm transition-colors">{l.label}</a>
-              ))}
-              <Link to="/company" className="block text-[#6a7e60] hover:text-white text-sm transition-colors">会社概要</Link>
-              <Link to="/contact" className="block text-[#6a7e60] hover:text-white text-sm transition-colors">お問い合わせ</Link>
-            </div>
-          </div>
-          <div>
-            <h4 className="text-white text-[10px] font-bold tracking-[0.25em] uppercase mb-5">Contact</h4>
-            <p className="text-[#6a7e60] text-sm leading-relaxed mb-6">福岡市内・近郊は対面でのご相談に対応。<br />オンラインにて全国どこでもご対応可能です。</p>
-            <Link to="/contact" className="inline-flex items-center gap-2 bg-[#5a7d42] hover:bg-[#6a8d52] text-white font-black text-sm px-6 py-3 rounded-full transition-all">
-              無料相談を予約する <ArrowRight size={14} />
-            </Link>
+            <span className="font-black text-white text-sm">iroha Seed</span>
+          </Link>
+          <nav className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#5c5a56]">
+            {NAV_LINKS.map(({ href, label }) => (
+              <a key={href} href={href} className="hover:text-[#f8f5f0] transition-colors">{label}</a>
+            ))}
+            <Link to="/company" className="hover:text-[#f8f5f0] transition-colors">会社概要</Link>
+            <Link to="/contact" className="hover:text-[#f8f5f0] transition-colors">お問い合わせ</Link>
+          </nav>
+          <div className="flex items-center gap-2">
+            {SNS_LINKS.map(({ href, Icon, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                className="w-7 h-7 rounded-full border border-[#2a2a2e] flex items-center justify-center text-[#5c5a56] hover:border-[#c17f3c] hover:text-[#c17f3c] transition-colors">
+                <Icon size={13} />
+              </a>
+            ))}
           </div>
         </div>
-        <div className="border-t border-[#2a4a2d] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#4a5e42]">
-          <div>© 2026 Hiroso Inc. All rights reserved.</div>
-          <div className="flex gap-6">
-            <Link to="/contact" className="hover:text-[#7a8e70] transition-colors">プライバシーポリシー</Link>
-            <Link to="/company" className="hover:text-[#7a8e70] transition-colors">会社概要</Link>
-          </div>
+        <div className="border-t border-[#2a2a2e] mt-8 pt-6 text-center text-[#5c5a56] text-xs">
+          © 2026 Hiroso Inc. All rights reserved.
         </div>
       </div>
     </footer>
   );
 }
 
-// ─── メインアプリ ─────────────────────────────────────────────────────────────
+// ─── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
   return (
-    <div className="font-sans antialiased">
+    <div className="font-sans antialiased bg-[#f8f5f0]">
       <Navbar />
       <Hero />
       <Marquee />
-      <SectionWave from="#2a4a2d" to="#faf8f4" />
       <ProblemSection />
-      <SectionWave from="#faf8f4" to="#1e3a22" flip />
-      <SolutionSection />
-      <SectionWave from="#1e3a22" to="#f0ebe1" />
-      <ServicesSection />
-      <SectionWave from="#f0ebe1" to="#1e3a22" flip />
-      <StrengthsSection />
-      <SectionWave from="#1e3a22" to="#faf8f4" />
+      <ServiceSection />
+      <ProcessSection />
       <AchievementsSection />
-      <SectionWave from="#faf8f4" to="#f0ebe1" flip />
       <RepresentativeSection />
-      <SectionWave from="#f0ebe1" to="#1e3a22" flip />
-      <CtaSection />
+      <FAQSection />
+      <CTASection />
       <Footer />
     </div>
   );
