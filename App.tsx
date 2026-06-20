@@ -481,7 +481,7 @@ function RepresentativeSection() {
             <div className="relative">
               <div className="w-60 md:w-72 aspect-[3/4] overflow-hidden bg-[#ede8df]"
                 style={{ borderRadius: '16px 16px 48px 16px' }}>
-                <img src="/profile.png" alt="山本 剛史"
+                <img src="/profile.jpg" alt="山本 剛史"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const el = e.currentTarget as HTMLImageElement;
