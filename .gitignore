@@ -1,0 +1,11 @@
+# 依存ライブラリ（npm install で再取得できるため追跡しない）
+node_modules/
+
+# ビルド成果物
+dist/
+
+# macOS が自動生成するファイル
+.DS_Store
+
+# Vercel のローカル設定
+.vercel
