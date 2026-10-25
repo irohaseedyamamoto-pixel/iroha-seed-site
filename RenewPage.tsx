@@ -1,5 +1,84 @@
 import RenewHero from './RenewHero.tsx';
 
+/**
+ * ② あいさつ
+ * 課題の話から始めると企業サイトに見えるため、まず「人」を置く。
+ * 売り込まないと先に宣言して、読み手の警戒を解く。
+ */
+function GreetingSection() {
+  return (
+    <section className="bg-[#faf8f4] px-6 py-24 md:px-12 md:py-32">
+      <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-[1fr_20rem] md:items-start md:gap-16">
+        <div>
+          <h2 className="font-serif text-[clamp(1.7rem,6vw,3rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
+            はじめまして、
+            <br className="md:hidden" />
+            山本剛史です。
+          </h2>
+
+          <div className="mt-8 space-y-6 text-[15px] leading-[2.1] text-[#1c1c1e]/80 md:text-base md:leading-[2.2]">
+            <p>
+              このサイトを見てくださって、ありがとうございます。iroha Seed の山本剛史と申します。福岡を拠点に、売れない原因を見つけて、売れる形に組み直す仕事をしています。
+            </p>
+            <p>
+              ここには、僕がどんな道を歩いてきて、何を考えていて、どんな仕事をしているのかを書きました。会社の案内というより、人を知ってもらうためのページだと思ってください。
+            </p>
+            <p>
+              最後まで読んでみて「ちょっと話してみたいかも」と思っていただけたなら、たぶん合うと思います。そのときは声をかけてください。合わないと思ったら、それはそれでいいんです。
+            </p>
+          </div>
+        </div>
+
+        <figure className="md:pt-4">
+          <img
+            src="/portrait.jpg"
+            alt="山本 剛史"
+            className="aspect-[4/5] w-full rounded-sm object-cover object-[58%_18%]"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
+  );
+}
+
+/** ③ プロフィール：人となりを項目で見せる。事実が確認できたものだけ並べる */
+const PROFILE = [
+  { label: '名前', value: '山本 剛史（やまもと つよし）' },
+  { label: '年齢', value: '44歳' },
+  { label: '出身', value: '山口県' },
+  { label: '拠点', value: '福岡（全国オンライン対応）' },
+  { label: 'いまの仕事', value: '売れる仕組みの再設計 ／ iroha Seed' },
+  { label: 'これまで', value: '建築・飲食・IT・製薬' },
+];
+
+function ProfileSection() {
+  return (
+    <section className="bg-white px-6 py-20 md:px-12 md:py-28">
+      <div className="mx-auto max-w-3xl">
+        <p className="font-serif text-sm font-black tracking-[0.2em] text-[#1c1c1e]/40">
+          PROFILE
+        </p>
+        <dl className="mt-8 border-t border-[#1c1c1e]/15">
+          {PROFILE.map(({ label, value }) => (
+            <div
+              key={label}
+              className="flex flex-col gap-1 border-b border-[#1c1c1e]/15 py-5 md:flex-row md:gap-8 md:py-6"
+            >
+              <dt className="font-serif text-sm font-black text-[#1c1c1e]/45 md:w-40 md:shrink-0 md:text-base">
+                {label}
+              </dt>
+              <dd className="text-[15px] leading-relaxed text-[#1c1c1e] md:text-base">
+                {value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 /** ② こんな悩みはありませんか：読み手の状況を言語化して、自分ごとにしてもらう */
 const TROUBLES = [
   '発信も広告も頑張っているのに、なぜ売れないのかがわからない',
@@ -19,7 +98,7 @@ function TroubleSection() {
           売れない。
         </h2>
         <p className="mt-5 text-base leading-relaxed text-[#1c1c1e]/70 md:text-lg">
-          こういう方、本当に多いと思います。
+          相談に来られる方は、だいたいこんな状態です。
         </p>
 
         <ul className="mt-12 space-y-0 border-t border-[#1c1c1e]/15">
@@ -146,7 +225,7 @@ function WorkSection() {
           やっていること
         </h2>
         <p className="mt-5 text-base leading-relaxed text-[#1c1c1e]/70 md:text-lg">
-          やることは、3つだけです。
+          この考え方を仕事にすると、やることは3つだけになります。
         </p>
 
         <div className="mt-14 space-y-12 md:mt-20 md:space-y-16">
@@ -243,7 +322,9 @@ function PathSection() {
           歩いてきた道
         </h2>
         <p className="mt-5 text-base leading-relaxed text-[#1c1c1e]/70 md:text-lg">
-          まっすぐな道ではありませんでした。
+          なぜこういう考え方になったのか。
+          <br className="hidden md:block" />
+          たぶん、歩いてきた道と関係しています。まっすぐな道ではありませんでした。
         </p>
 
         <ol className="mt-14 md:mt-20">
@@ -298,7 +379,7 @@ const PROOFS = [
   },
   {
     label: '著書を出版',
-    body: '2026年、『なぜ、あの会社は高くても選ばれるのか？』を出版。Amazon Kindleランキング6部門で1位になりました。',
+    body: '2026年、『なぜ、あの会社は高くても選ばれるのか？ 比べられない会社には、理由がある。』を出版。Amazon Kindleランキング6部門で1位になりました。',
   },
 ];
 
@@ -329,14 +410,25 @@ function ProofSection() {
             ))}
           </ul>
 
-          <figure className="md:w-[21rem] md:shrink-0">
-            <img
-              src="/profile.jpg"
-              alt="山本 剛史"
-              className="w-full rounded-sm object-cover"
-              loading="lazy"
-            />
-          </figure>
+          {/* 書影は文字より残る。記者クラブの写真と並べて裏付けの面を作る */}
+          <div className="space-y-6 md:w-[19rem] md:shrink-0">
+            <figure>
+              <img
+                src="/book-cover.jpg"
+                alt="著書『なぜ、あの会社は高くても選ばれるのか？』の表紙"
+                className="w-full rounded-sm shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
+                src="/profile.jpg"
+                alt="山本 剛史"
+                className="aspect-[4/3] w-full rounded-sm object-cover"
+                loading="lazy"
+              />
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -473,6 +565,8 @@ export default function RenewPage() {
   return (
     <>
       <RenewHero />
+      <GreetingSection />
+      <ProfileSection />
       <TroubleSection />
       <ThinkingSection />
       <WorkSection />
