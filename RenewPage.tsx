@@ -279,9 +279,33 @@ function WorkSection() {
 }
 
 /**
- * マーケティング顧問制度「Top SEED」
+ * マーケティング支援プラン「Top SEED」
  * 料金は本人判断により非掲載。内容の説明のみ置く。
+ * SEED の4文字は、支援の4ステップの頭文字（サービス名を決めたときの定義）。
  */
+const SEED_STEPS = [
+  {
+    letter: 'S',
+    title: 'Strength ／ 強み',
+    body: '売れない原因を探り、本当の強みを見つけます。',
+  },
+  {
+    letter: 'E',
+    title: 'Edge ／ 選ばれる理由',
+    body: '見つけた強みを、選ばれる理由に磨きます。',
+  },
+  {
+    letter: 'E',
+    title: 'Entry ／ 入口',
+    body: 'お客様が買うまでの道すじを整えます。',
+  },
+  {
+    letter: 'D',
+    title: 'Drive ／ 実行',
+    body: '売れるまで、実行を一緒に回します。',
+  },
+];
+
 function TopSeedSection() {
   return (
     <section className="bg-[#12161f] px-6 py-20 md:px-12 md:py-28">
@@ -307,7 +331,35 @@ function TopSeedSection() {
             iroha Seed のマーケティング支援プランで、顧問として継続して関わる形になります。単発で何かを作って終わり、ではありません。
           </p>
           <p>
-            診断して、設計して、動かして、数字を見て、また直す。この繰り返しを、月ごとに一緒に回していきます。やってみないと分からないことのほうが多いので、腰を据えて付き合う形にしています。
+            やることは、SEED の4文字にそのまま入っています。
+          </p>
+        </div>
+
+        {/* S・E・E・D はサービス名の由来であり、支援の4ステップそのもの */}
+        <ol className="mt-12 border-t border-white/15 md:mt-14">
+          {SEED_STEPS.map(({ letter, title, body }) => (
+            <li
+              key={letter + title}
+              className="flex gap-5 border-b border-white/15 py-7 md:gap-8 md:py-8"
+            >
+              <span className="w-7 shrink-0 font-serif text-3xl font-black leading-none text-seed md:w-10 md:text-4xl">
+                {letter}
+              </span>
+              <div>
+                <p className="font-serif text-lg font-black tracking-tight text-white md:text-xl">
+                  {title}
+                </p>
+                <p className="mt-2 text-[15px] leading-[1.9] text-white/75 md:text-base">
+                  {body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-10 space-y-6 text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
+          <p>
+            この4つを、月ごとに一緒に回していきます。やってみないと分からないことのほうが多いので、腰を据えて付き合う形にしています。
           </p>
           <p className="text-white/60">
             料金はサイトに載せていません。状況によって関わり方が変わるため、ご相談のなかでお伝えしています。
