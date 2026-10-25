@@ -4,6 +4,17 @@
 @theme {
   --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Noto Serif JP", serif;
+
+  /* ブランドカラー。iroha Seed のロゴの双葉から取った黄緑 */
+  --color-seed: #9ac554;
+  /* 暗い面で使うときに沈まないよう、少し明るくしたもの */
+  --color-seed-bright: #b2d977;
+
+  /* 基本の面と文字 */
+  --color-ink: #1c1c1e;
+  --color-night: #12161f;
+  --color-paper: #f4f1ea;
+  --color-paper-soft: #faf8f4;
 }
 
 @layer base {

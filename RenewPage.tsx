@@ -48,7 +48,9 @@ const PROFILE = [
   { label: '年齢', value: '44歳' },
   { label: '出身', value: '山口県' },
   { label: '拠点', value: '福岡（全国オンライン対応）' },
-  { label: 'いまの仕事', value: '売れる仕組みの再設計 ／ iroha Seed' },
+  { label: 'いまの仕事', value: '売れる仕組みの再設計' },
+  { label: '会社', value: '株式会社廣創　代表取締役社長' },
+  { label: '屋号', value: 'iroha Seed（廣創のマーケティング事業部）' },
   { label: 'これまで', value: '建築・飲食・IT・製薬' },
 ];
 
@@ -56,7 +58,7 @@ function ProfileSection() {
   return (
     <section className="bg-white px-6 py-20 md:px-12 md:py-28">
       <div className="mx-auto max-w-3xl">
-        <p className="font-serif text-sm font-black tracking-[0.2em] text-[#1c1c1e]/40">
+        <p className="font-serif text-sm font-black tracking-[0.2em] text-seed">
           PROFILE
         </p>
         <dl className="mt-8 border-t border-[#1c1c1e]/15">
@@ -107,7 +109,7 @@ function TroubleSection() {
               key={text}
               className="flex items-start gap-5 border-b border-[#1c1c1e]/15 py-6 md:gap-8 md:py-7"
             >
-              <span className="mt-1 shrink-0 font-serif text-sm font-black text-[#1c1c1e]/35 md:text-base">
+              <span className="mt-1 shrink-0 font-serif text-sm font-black text-seed md:text-base">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <span className="text-base leading-relaxed text-[#1c1c1e] md:text-xl">
@@ -235,7 +237,7 @@ function WorkSection() {
               className="border-t border-[#1c1c1e]/15 pt-8 md:flex md:gap-12 md:pt-10"
             >
               <div className="flex items-baseline gap-4 md:w-56 md:shrink-0 md:flex-col md:gap-3">
-                <span className="font-serif text-sm font-black text-[#1c1c1e]/35">
+                <span className="font-serif text-sm font-black text-seed">
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <h3 className="font-serif text-3xl font-black tracking-tight text-[#1c1c1e] md:text-4xl">
@@ -270,6 +272,46 @@ function WorkSection() {
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * マーケティング顧問制度「Top SEED」
+ * 料金は本人判断により非掲載。内容の説明のみ置く。
+ */
+function TopSeedSection() {
+  return (
+    <section className="bg-[#12161f] px-6 py-20 md:px-12 md:py-28">
+      <div className="mx-auto max-w-3xl">
+        {/* サービスのロゴをそのまま使う（暗い面なので白の透過版） */}
+        <img
+          src="/topseed-logo.png"
+          alt="Top SEED"
+          className="h-auto w-[13rem] md:w-[17rem]"
+          loading="lazy"
+        />
+        <h2 className="mt-7 font-serif text-[clamp(1.6rem,5.5vw,2.75rem)] font-black leading-tight tracking-tight text-white">
+          価格ではなく、
+          <br />
+          一番に選ばれる会社へ
+        </h2>
+
+        <div className="mt-8 space-y-6 text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
+          <p>
+            トップシードというのは、スポーツでいう「第1シード」のことです。優勝候補として、一番に選ばれる存在。そこを目指すための支援プランとして、この名前にしました。
+          </p>
+          <p>
+            iroha Seed のマーケティング支援プランで、顧問として継続して関わる形になります。単発で何かを作って終わり、ではありません。
+          </p>
+          <p>
+            診断して、設計して、動かして、数字を見て、また直す。この繰り返しを、月ごとに一緒に回していきます。やってみないと分からないことのほうが多いので、腰を据えて付き合う形にしています。
+          </p>
+          <p className="text-white/60">
+            料金はサイトに載せていません。状況によって関わり方が変わるため、ご相談のなかでお伝えしています。
+          </p>
         </div>
       </div>
     </section>
@@ -334,7 +376,7 @@ function PathSection() {
               className="relative border-l border-[#1c1c1e]/15 pb-12 pl-8 last:pb-0 md:pl-14"
             >
               {/* 章の始まりを示す点 */}
-              <span className="absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full bg-[#1c1c1e]" />
+              <span className="absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full bg-seed" />
               <p className="font-serif text-xs font-black tracking-wider text-[#1c1c1e]/45 md:text-sm">
                 {String(i + 1).padStart(2, '0')}
                 <span className="mx-2 text-[#1c1c1e]/25">/</span>
@@ -524,7 +566,7 @@ function ContactSection() {
         <div className="mt-12">
           <a
             href="/contact"
-            className="inline-flex items-center gap-3 rounded-full bg-white px-9 py-4 text-base font-bold text-[#12161f] transition hover:bg-white/85 md:text-lg"
+            className="inline-flex items-center gap-3 rounded-full bg-seed px-9 py-4 text-base font-bold text-[#12161f] transition hover:bg-seed-bright md:text-lg"
           >
             無料で相談してみる
           </a>
@@ -542,7 +584,7 @@ function ContactSection() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base font-bold text-white underline underline-offset-4 transition hover:text-white/70"
+                  className="text-base font-bold text-white underline decoration-seed decoration-2 underline-offset-4 transition hover:text-seed-bright"
                 >
                   {label}
                 </a>
@@ -552,7 +594,9 @@ function ContactSection() {
         </div>
 
         <p className="mt-16 text-xs leading-relaxed text-white/40">
-          iroha Seed ／ 株式会社廣創　代表取締役　山本 剛史
+          株式会社廣創　代表取締役社長　山本 剛史
+          <br />
+          iroha Seed（廣創のマーケティング事業部）
           <br />
           福岡県福岡市城南区七隈3-2-29-101
         </p>
@@ -570,6 +614,7 @@ export default function RenewPage() {
       <TroubleSection />
       <ThinkingSection />
       <WorkSection />
+      <TopSeedSection />
       <PathSection />
       <ProofSection />
       <FaqSection />
