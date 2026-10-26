@@ -8,7 +8,8 @@ import RenewHero from './RenewHero.tsx';
 function GreetingSection() {
   return (
     <section className="bg-[#faf8f4] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-[1fr_20rem] md:items-start md:gap-16">
+      {/* 写真はファーストビューで見せているので、ここでは重ねない */}
+      <div className="mx-auto max-w-3xl">
         <div>
           <h2 className="font-serif text-[clamp(1.7rem,6vw,3rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
             はじめまして、
@@ -28,15 +29,6 @@ function GreetingSection() {
             </p>
           </div>
         </div>
-
-        <figure className="md:pt-4">
-          <img
-            src="/portrait.jpg"
-            alt="山本 剛史"
-            className="aspect-[4/5] w-full rounded-sm object-cover object-[58%_18%]"
-            loading="lazy"
-          />
-        </figure>
       </div>
     </section>
   );
@@ -47,10 +39,13 @@ const PROFILE = [
   { label: '名前', value: '山本 剛史（やまもと つよし）' },
   { label: '年齢', value: '44歳' },
   { label: '出身', value: '山口県' },
-  { label: '拠点', value: '福岡（全国オンライン対応）' },
-  { label: 'いまの仕事', value: '売れる仕組みの再設計' },
+  { label: '対応エリア', value: '全国（オンライン・訪問どちらも）' },
+  {
+    label: 'いまの仕事',
+    value: '売れない原因の診断と、集客から成約までの設計',
+  },
   { label: '会社', value: '株式会社廣創　代表取締役社長' },
-  { label: '屋号', value: 'iroha Seed（廣創のマーケティング事業部）' },
+  { label: 'マーケティング事業部', value: 'iroha Seed（イロハシード）' },
   { label: 'これまで', value: '建築・飲食・IT・製薬' },
 ];
 
@@ -670,12 +665,12 @@ export default function RenewPage() {
     <>
       <RenewHero />
       <GreetingSection />
-      <ProfileSection />
       <TroubleSection />
       <ThinkingSection />
       <WorkSection />
       <TopSeedSection />
       <PathSection />
+      <ProfileSection />
       <ProofSection />
       <FaqSection />
       <ContactSection />
