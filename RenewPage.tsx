@@ -200,7 +200,7 @@ function ThinkingSection() {
           <p className="font-serif text-[clamp(1.35rem,5.5vw,2.25rem)] font-black leading-[1.6] tracking-tight text-white">
             集客ができないから安くする。
             <br />
-            ここだけは、俺の中で譲れないところです。
+            ここだけは、どうしても譲れません。
           </p>
         </blockquote>
       </div>
