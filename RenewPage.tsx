@@ -19,7 +19,7 @@ function GreetingSection() {
 
           <div className="mt-8 space-y-6 text-[15px] leading-[2.1] text-[#1c1c1e]/80 md:text-base md:leading-[2.2]">
             <p>
-              このサイトを見てくださって、ありがとうございます。iroha Seed の山本剛史と申します。福岡を拠点に、売れない原因を見つけて、売れる形に組み直す仕事をしています。
+              このサイトを見てくださって、ありがとうございます。iroha Seed の山本剛史と申します。売れない原因を見つけて、売れる形に組み直す仕事をしています。
             </p>
             <p>
               ここには、僕がどんな道を歩いてきて、何を考えていて、どんな仕事をしているのかを書きました。会社の案内というより、人を知ってもらうためのページだと思ってください。
@@ -41,6 +41,40 @@ function GreetingSection() {
           />
         </figure>
       </div>
+    </section>
+  );
+}
+
+/**
+ * 数字の帯
+ * 本文に埋もれている数字を取り出して特大で置く。
+ * 文字が続く流れを一度断ち切る役割も兼ねる。
+ */
+const NUMBERS = [
+  { value: '2', unit: '年連続', label: '高校野球でのセンバツ出場' },
+  { value: '3,138', unit: '個', label: 'メロンパン店・初日の販売数' },
+  { value: '100', unit: '棟超', label: '災害復旧で修復に携わった家屋' },
+  { value: '14', unit: '年', label: '経営者としての実務' },
+];
+
+function NumbersSection() {
+  return (
+    <section className="bg-[#12161f] px-6 py-20 md:px-12 md:py-24">
+      <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4 md:gap-x-10">
+        {NUMBERS.map(({ value, unit, label }) => (
+          <li key={label}>
+            <p className="font-serif font-black leading-none tracking-tight text-white">
+              <span className="text-[clamp(2.5rem,9vw,4.25rem)]">{value}</span>
+              <span className="ml-1 text-[clamp(0.9rem,3vw,1.25rem)] text-seed">
+                {unit}
+              </span>
+            </p>
+            <p className="mt-4 text-[13px] leading-relaxed text-white/60 md:text-sm">
+              {label}
+            </p>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
@@ -157,7 +191,6 @@ const QUESTIONS = [
     a: [
       '安くすれば売れる。そう思っている方、多いと思います。でも、そもそも値段を下げて買った人は、次も値段で選びます。そして一度下げた値段は、もう戻せません。',
       '選ばれる理由さえ作れれば、価格は後からついてきます。本当に、本当にここが分かれ目なんです。',
-      '集客ができないから安くする。ここだけは、俺の中で譲れないところです。',
     ],
   },
 ];
@@ -195,6 +228,15 @@ function ThinkingSection() {
             </div>
           ))}
         </div>
+
+        {/* 一番言いたい一文は、本文に埋めずに抜き出して大きく置く */}
+        <blockquote className="mt-16 border-l-2 border-seed pl-6 md:mt-20 md:pl-10">
+          <p className="font-serif text-[clamp(1.35rem,5.5vw,2.25rem)] font-black leading-[1.6] tracking-tight text-white">
+            集客ができないから安くする。
+            <br />
+            ここだけは、俺の中で譲れないところです。
+          </p>
+        </blockquote>
       </div>
     </section>
   );
@@ -716,6 +758,7 @@ export default function RenewPage() {
       <WorkSection />
       <TopSeedSection />
       <PathSection />
+      <NumbersSection />
       <ProfileSection />
       <ProofSection />
       <FaqSection />
