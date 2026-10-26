@@ -26,7 +26,7 @@ export default function RenewHero() {
         </span>
         <a
           href="/contact"
-          className="rounded-full border border-white/40 px-5 py-2 text-xs font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-black md:text-sm"
+          className="inline-flex min-h-11 items-center rounded-full border border-white/40 px-5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-black"
         >
           無料相談
         </a>

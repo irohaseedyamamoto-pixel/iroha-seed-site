@@ -1,4 +1,89 @@
+import type { ReactNode } from 'react';
 import RenewHero from './RenewHero.tsx';
+
+/**
+ * ページ全体の見た目のルール
+ * - 地の色は3つだけ：明るい地／ベージュの地／紺の地。同じ色を続けて並べない
+ * - 囲み（カード）は、同じ重さの悩みが並ぶ③だけに使う。ほかは線で区切る
+ * - 単調さは囲みではなく、セクションごとの配置の変化（左右分割・写真の左右）で崩す
+ * - 緑は、明るい面では濃い緑（白地で読める濃さ）、紺の面ではブランドの黄緑を使う
+ */
+const GROUND = {
+  light: 'bg-[#faf8f4]',
+  beige: 'bg-[#e6dfcf]',
+  dark: 'bg-[#12161f]',
+} as const;
+
+type Tone = 'light' | 'dark';
+
+const CARD = 'rounded-md border border-[#1c1c1e]/12 bg-white';
+
+// 明るい面の緑は、ベージュの地でも小さい文字が読める濃さ（比4.5以上）にする
+const GREEN = { light: 'text-[#426b19]', dark: 'text-seed' } as const;
+
+/** 項目の番号は、どのセクションでも同じ明朝体の大きな数字で見せる */
+const NUMBER = 'font-serif text-3xl font-black leading-none md:text-4xl';
+
+function Section({
+  ground,
+  children,
+}: {
+  ground: keyof typeof GROUND;
+  children: ReactNode;
+}) {
+  return (
+    <section className={`${GROUND[ground]} px-6 py-24 md:px-12 md:py-32`}>
+      <div className="mx-auto max-w-5xl">{children}</div>
+    </section>
+  );
+}
+
+/** PCでは見出しを左に固定し、右側の内容だけを流す。スマホでは縦に積む */
+function Split({ heading, children }: { heading: ReactNode; children: ReactNode }) {
+  return (
+    <div className="md:grid md:grid-cols-[21rem_1fr] md:gap-14">
+      <div className="md:sticky md:top-24 md:self-start">{heading}</div>
+      <div className="mt-10 md:mt-2">{children}</div>
+    </div>
+  );
+}
+
+/** 見出しの上に小さなラベルを付け、どのセクションも同じ形で始める */
+function SectionHeading({
+  label,
+  tone,
+  lead,
+  children,
+}: {
+  label: string;
+  tone: Tone;
+  lead?: ReactNode;
+  children: ReactNode;
+}) {
+  const dark = tone === 'dark';
+  return (
+    <header>
+      <p
+        className={`flex items-center gap-3 text-xs font-bold tracking-[0.2em] md:text-sm ${GREEN[tone]}`}
+      >
+        <span aria-hidden="true" className="h-px w-8 bg-current" />
+        {label}
+      </p>
+      <h2
+        className={`mt-4 font-serif text-[clamp(1.9rem,6.5vw,2.5rem)] font-black leading-tight tracking-tight ${dark ? 'text-white' : 'text-[#1c1c1e]'}`}
+      >
+        {children}
+      </h2>
+      {lead && (
+        <p
+          className={`mt-5 text-base leading-relaxed md:text-lg ${dark ? 'text-white/65' : 'text-[#1c1c1e]/70'}`}
+        >
+          {lead}
+        </p>
+      )}
+    </header>
+  );
+}
 
 /**
  * ② あいさつ
@@ -7,15 +92,15 @@ import RenewHero from './RenewHero.tsx';
  */
 function GreetingSection() {
   return (
-    <section className="bg-[#faf8f4] px-6 py-24 md:px-12 md:py-32">
-      {/* ファーストビューとは別のカットを置く。同じ写真は繰り返さない */}
-      <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[1fr_18rem] md:items-start md:gap-14">
+    <Section ground="light">
+      {/* 左に語り、右に写真。ファーストビューとは別のカットを置き、同じ写真は繰り返さない */}
+      <div className="grid gap-10 md:grid-cols-[1fr_19rem] md:items-start md:gap-16">
         <div>
-          <h2 className="font-serif text-[clamp(1.7rem,6vw,3rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
+          <SectionHeading label="はじめに" tone="light">
             はじめまして、
             <br className="md:hidden" />
             山本剛史です。
-          </h2>
+          </SectionHeading>
 
           <div className="mt-8 space-y-6 text-[15px] leading-[2.1] text-[#1c1c1e]/80 md:text-base md:leading-[2.2]">
             <p>
@@ -30,7 +115,7 @@ function GreetingSection() {
           </div>
         </div>
 
-        <figure className="md:pt-3">
+        <figure className="md:pt-12">
           <img
             src="/profile.jpg"
             alt="山本 剛史"
@@ -41,7 +126,7 @@ function GreetingSection() {
           />
         </figure>
       </div>
-    </section>
+    </Section>
   );
 }
 
@@ -62,18 +147,21 @@ const PROFILE = [
 
 function ProfileSection() {
   return (
-    <section className="bg-white px-6 py-20 md:px-12 md:py-28">
-      <div className="mx-auto max-w-3xl">
-        <h2 className="font-serif text-sm font-black tracking-[0.2em] text-seed">
-          PROFILE
-        </h2>
-        <dl className="mt-8 border-t border-[#1c1c1e]/15">
+    <Section ground="beige">
+      <Split
+        heading={
+          <SectionHeading label="プロフィール" tone="light">
+            山本 剛史について
+          </SectionHeading>
+        }
+      >
+        <dl className="border-t border-[#1c1c1e]/20">
           {PROFILE.map(({ label, value }) => (
             <div
               key={label}
-              className="flex flex-col gap-1 border-b border-[#1c1c1e]/15 py-5 md:flex-row md:gap-8 md:py-6"
+              className="flex flex-col gap-1 border-b border-[#1c1c1e]/20 py-5 md:flex-row md:gap-8 md:py-6"
             >
-              <dt className="font-serif text-sm font-black text-[#1c1c1e]/45 md:w-40 md:shrink-0 md:text-base">
+              <dt className="font-serif text-sm font-black text-[#1c1c1e]/65 md:w-44 md:shrink-0 md:text-base">
                 {label}
               </dt>
               <dd className="text-[15px] leading-relaxed text-[#1c1c1e] md:text-base">
@@ -82,8 +170,8 @@ function ProfileSection() {
             </div>
           ))}
         </dl>
-      </div>
-    </section>
+      </Split>
+    </Section>
   );
 }
 
@@ -98,40 +186,40 @@ const TROUBLES = [
 
 function TroubleSection() {
   return (
-    <section className="bg-[#f4f1ea] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="font-serif text-[clamp(1.9rem,6.5vw,3.5rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
-          頑張っているのに、
-          <br className="md:hidden" />
-          売れない。
-        </h2>
-        <p className="mt-5 text-base leading-relaxed text-[#1c1c1e]/70 md:text-lg">
-          相談に来られる方は、だいたいこんな状態です。
-        </p>
+    <Section ground="beige">
+      <SectionHeading
+        label="よくあるご相談"
+        tone="light"
+        lead="相談に来られる方は、だいたいこんな状態です。"
+      >
+        頑張っているのに、
+        <br className="md:hidden" />
+        売れない。
+      </SectionHeading>
 
-        <ul className="mt-12 space-y-0 border-t border-[#1c1c1e]/15">
-          {TROUBLES.map((text, i) => (
-            <li
-              key={text}
-              className="flex items-start gap-5 border-b border-[#1c1c1e]/15 py-6 md:gap-8 md:py-7"
-            >
-              <span className="mt-1 shrink-0 font-serif text-sm font-black text-seed md:text-base">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="text-base leading-relaxed text-[#1c1c1e] md:text-xl">
-                {text}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {/* 同じ重さの悩みが並ぶので、ここはカードにする。5つ目はPCで横幅いっぱいにする */}
+      <ul className="mt-10 grid gap-3 md:mt-12 md:grid-cols-2 md:gap-4">
+        {TROUBLES.map((text, i) => (
+          <li
+            key={text}
+            className={`${CARD} flex items-start gap-5 px-6 py-6 md:gap-6 md:px-8 md:py-8 md:last:col-span-2`}
+          >
+            <span className={`${NUMBER} ${GREEN.light} w-10 shrink-0 md:w-12`}>
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span className="pt-1 text-base font-medium leading-relaxed text-[#1c1c1e] md:text-lg">
+              {text}
+            </span>
+          </li>
+        ))}
+      </ul>
 
-        <p className="mt-12 text-lg font-bold leading-relaxed text-[#1c1c1e] md:text-2xl">
-          どれかひとつでも当てはまったなら、
-          <br className="hidden md:block" />
-          原因は努力の量じゃないと思います。
-        </p>
-      </div>
-    </section>
+      <p className="mt-12 text-lg font-bold leading-relaxed text-[#1c1c1e] md:mt-14 md:text-2xl">
+        どれかひとつでも当てはまったなら、
+        <br className="hidden md:block" />
+        原因は努力の量じゃないと思います。
+      </p>
+    </Section>
   );
 }
 
@@ -163,70 +251,61 @@ const QUESTIONS = [
 
 function ThinkingSection() {
   return (
-    <section className="bg-[#12161f] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="font-serif text-[clamp(1.9rem,6.5vw,3.5rem)] font-black leading-tight tracking-tight text-white">
-          なぜ、「売れない理由」
-          <br />
-          から入るのか
-        </h2>
-        <p className="mt-5 text-base leading-relaxed text-white/60 md:text-lg">
-          よく聞かれることを、3つだけ書いておきます。
-        </p>
-
-        <div className="mt-14 space-y-14 md:mt-20 md:space-y-20">
-          {QUESTIONS.map(({ q, a }) => (
-            <div key={q}>
+    <Section ground="dark">
+      <Split
+        heading={
+          <SectionHeading
+            label="考え方"
+            tone="dark"
+            lead="よく聞かれることを、3つだけ書いておきます。"
+          >
+            なぜ、
+            <br className="hidden md:block" />
+            「売れない理由」
+            <br />
+            から入るのか
+          </SectionHeading>
+        }
+      >
+        <div className="border-t border-white/15">
+          {QUESTIONS.map(({ q, a }, i) => (
+            <article key={q} className="border-b border-white/15 py-10 md:py-12">
               <h3 className="flex gap-4 text-lg font-bold leading-snug text-white md:text-2xl">
-                <span className="shrink-0 font-serif text-white/40">Q.</span>
+                <span className="shrink-0 font-serif text-seed">Q{i + 1}.</span>
                 <span>{q}</span>
               </h3>
-              <div className="mt-6 space-y-5 pl-0 md:pl-10">
+              <div className="mt-6 space-y-5">
                 {a.map((paragraph) => (
                   <p
                     key={paragraph}
-                    className="text-[15px] leading-[2] text-white/80 md:text-lg md:leading-[2.1]"
+                    className="text-[15px] leading-[2] text-white/80 md:text-base md:leading-[2.1]"
                   >
                     {paragraph}
                   </p>
                 ))}
               </div>
-            </div>
+            </article>
           ))}
         </div>
 
         {/* 一番言いたい一文は、本文に埋めずに抜き出して大きく置く */}
-        <blockquote className="mt-16 border-l-2 border-seed pl-6 md:mt-20 md:pl-10">
+        <blockquote className="mt-14 border-l-2 border-seed pl-6 md:mt-16 md:pl-10">
           <p className="font-serif text-[clamp(1.35rem,5.5vw,2.25rem)] font-black leading-[1.6] tracking-tight text-white">
             集客ができないから安くする。
             <br />
             それは、違うと思っています。
           </p>
         </blockquote>
-      </div>
-    </section>
+      </Split>
+    </Section>
   );
 }
 
-/** ④ やっていること：今のサイトの4サービス＋6ステップを、診断・設計・伴走の3つに畳む */
-const WORK = [
-  {
-    title: '診断',
-    lead: '売れない理由を、特定する。',
-    body: '商品、言葉、導線、広告まで、ひと通り見せてもらいます。そのうえで、どこで止まっているのかを特定します。ここを飛ばして作り始めることはしません。',
-  },
-  {
-    title: '設計',
-    lead: '選ばれる理由と、売れる流れを組み直す。',
-    body: '「なぜあなたから買うのか」を言葉にして、集客から成約までの流れをつなぎ直します。見た目を整える作業ではなく、順番を直す作業です。',
-  },
-  {
-    title: '伴走',
-    lead: '動かしながら、一緒に直していく。',
-    body: '作って終わりにはしません。出してみて、数字を見て、また直す。これを一緒に繰り返します。正直、ここが一番時間のかかるところです。',
-  },
-];
-
+/**
+ * ④ やっていること：⑥ Top SEED への入口
+ * 以前は診断・設計・伴走の3枚のカードを置いていたが、S・E・E・D と同じ内容の説明が2回続き
+ * 「サービスが2つある」ように読めたため削除した。何を頼めるかの答えは⑥の1か所にまとめる。
+ */
 const NOT_DOING = [
   '原因を見ないまま、広告だけ回すこと',
   '値下げで数字をつくること',
@@ -235,65 +314,46 @@ const NOT_DOING = [
 
 function WorkSection() {
   return (
-    <section className="bg-[#faf8f4] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="font-serif text-[clamp(1.9rem,6.5vw,3.5rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
-          やっていること
-        </h2>
-        <p className="mt-5 text-base leading-relaxed text-[#1c1c1e]/70 md:text-lg">
-          この考え方を仕事にすると、やることは3つだけになります。
+    <Section ground="beige">
+      <SectionHeading label="仕事の内容" tone="light">
+        やっていること
+      </SectionHeading>
+
+      {/* つなぎの一文。すぐ下の⑥へ読み進めてもらうため、本文より一段大きく置く */}
+      <p className="mt-8 font-serif text-xl font-black leading-[1.7] tracking-tight text-[#1c1c1e] md:mt-10 md:text-[1.75rem]">
+        この考え方を仕事にしたのが、
+        <br />
+        マーケティング顧問サービス
+        <br className="md:hidden" />
+        「Top SEED」です。
+      </p>
+
+      {/* 何をしないかを書くと、何をする人かがはっきりする */}
+      <div className="mt-14 border-t border-[#1c1c1e]/20 pt-10 md:mt-16 md:grid md:grid-cols-[19rem_1fr] md:gap-16">
+        <p className="font-serif text-xl font-black text-[#1c1c1e] md:text-2xl">
+          逆に、やらないこと
         </p>
-
-        <div className="mt-14 space-y-12 md:mt-20 md:space-y-16">
-          {WORK.map(({ title, lead, body }, i) => (
-            <div
-              key={title}
-              className="border-t border-[#1c1c1e]/15 pt-8 md:flex md:gap-12 md:pt-10"
+        <ul className="mt-6 space-y-3 md:mt-1">
+          {NOT_DOING.map((text) => (
+            <li
+              key={text}
+              className="flex gap-3 text-[15px] leading-relaxed text-[#1c1c1e]/85 md:text-base"
             >
-              <div className="flex items-baseline gap-4 md:w-56 md:shrink-0 md:flex-col md:gap-3">
-                <span className="font-serif text-sm font-black text-seed">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <h3 className="font-serif text-3xl font-black tracking-tight text-[#1c1c1e] md:text-4xl">
-                  {title}
-                </h3>
-              </div>
-              <div className="mt-5 md:mt-0">
-                <p className="text-lg font-bold leading-snug text-[#1c1c1e] md:text-xl">
-                  {lead}
-                </p>
-                <p className="mt-4 text-[15px] leading-[2] text-[#1c1c1e]/75 md:text-base md:leading-[2.1]">
-                  {body}
-                </p>
-              </div>
-            </div>
+              <span aria-hidden="true" className={`select-none ${GREEN.light}`}>
+                ×
+              </span>
+              <span>{text}</span>
+            </li>
           ))}
-        </div>
-
-        {/* 何をしないかを書くと、何をする人かがはっきりする */}
-        <div className="mt-20 rounded-sm bg-[#1c1c1e]/[0.04] p-8 md:mt-24 md:p-12">
-          <p className="font-serif text-xl font-black text-[#1c1c1e] md:text-2xl">
-            逆に、やらないこと
-          </p>
-          <ul className="mt-6 space-y-3">
-            {NOT_DOING.map((text) => (
-              <li
-                key={text}
-                className="flex gap-3 text-[15px] leading-relaxed text-[#1c1c1e]/80 md:text-base"
-              >
-                <span className="select-none text-[#1c1c1e]/35">—</span>
-                <span>{text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        </ul>
       </div>
-    </section>
+    </Section>
   );
 }
 
 /**
- * マーケティング支援プラン「Top SEED」
+ * マーケティング顧問サービス「Top SEED」
+ * 本人のサービス紹介の場所。何のサービスかを最初に言い切り、概要→4ステップ→由来→相談の順に置く。
  * 料金は本人判断により非掲載。内容の説明のみ置く。
  * SEED の4文字は、支援の4ステップの頭文字（サービス名を決めたときの定義）。
  */
@@ -320,69 +380,121 @@ const SEED_STEPS = [
   },
 ];
 
+/** サービス概要：今の本文にある内容を短く言い直したもの。新しい事実は足さない */
+const SEED_OVERVIEW = [
+  { label: '形式', value: '顧問として、継続して関わります。単発で作って終わり、ではありません。' },
+  { label: '進め方', value: '月ごとに、一緒に回していきます。' },
+  { label: '中身', value: 'S・E・E・D の4ステップ' },
+];
+
+/** サービス紹介の中の小見出し。左に短い線を置き、ブロックの区切りを示す */
+function SubHeading({ children }: { children: ReactNode }) {
+  return (
+    <p className="flex items-center gap-3 font-serif text-base font-black text-white md:text-lg">
+      <span aria-hidden="true" className="h-px w-6 bg-seed" />
+      {children}
+    </p>
+  );
+}
+
 function TopSeedSection() {
   return (
-    <section className="bg-[#12161f] px-6 py-20 md:px-12 md:py-28">
-      <div className="mx-auto max-w-3xl">
-        {/* サービスのロゴをそのまま使う（暗い面なので白の透過版） */}
+    <Section ground="dark">
+      {/* サービス名に見えるよう、ロゴを見出しにして、その下に小さく種類を添える */}
+      <p
+        className={`flex items-center gap-3 text-xs font-bold tracking-[0.2em] md:text-sm ${GREEN.dark}`}
+      >
+        <span aria-hidden="true" className="h-px w-8 bg-current" />
+        サービス
+      </p>
+      <h2 className="mt-6 md:mt-8">
         <img
           src="/topseed-logo.png"
           alt="Top SEED"
           width="1000"
           height="257"
-          className="h-auto w-[13rem] md:w-[17rem]"
+          className="h-auto w-[17rem] md:w-[28rem]"
           loading="lazy"
         />
-        <h2 className="mt-7 font-serif text-[clamp(1.6rem,5.5vw,2.75rem)] font-black leading-tight tracking-tight text-white">
-          価格ではなく、
-          <br />
-          一番に選ばれる会社へ
-        </h2>
+      </h2>
+      <p className="mt-4 text-base font-bold tracking-[0.15em] text-white/75 md:mt-5 md:text-lg">
+        マーケティング顧問サービス
+      </p>
+      {/* 何のサービスかを一文で分かるようにする。役職を名乗らず、関わり方のたとえとして「社外CMO」を使う */}
+      <p className="mt-3 max-w-2xl text-[15px] leading-[1.9] text-white/70 md:text-base">
+        社外CMO（マーケティングの責任者）のような立場で、あなたの会社のマーケティングに継続して関わります。
+      </p>
+      <p className="mt-8 font-serif text-xl font-black leading-snug tracking-tight text-white/90 md:mt-10 md:text-3xl">
+        価格ではなく、
+        <br className="md:hidden" />
+        一番に選ばれる会社へ
+      </p>
 
-        <div className="mt-8 space-y-6 text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
-          <p>
-            トップシードというのは、スポーツでいう「第1シード」のことです。優勝候補として、一番に選ばれる存在。そこを目指すための支援プランとして、この名前にしました。
-          </p>
-          <p>
-            iroha Seed のマーケティング支援プランで、顧問として継続して関わる形になります。単発で何かを作って終わり、ではありません。
-          </p>
-          <p>
-            やることは、SEED の4文字にそのまま入っています。
-          </p>
-        </div>
-
-        {/* S・E・E・D はサービス名の由来であり、支援の4ステップそのもの */}
-        <ol className="mt-12 border-t border-white/15 md:mt-14">
-          {SEED_STEPS.map(({ letter, title, body }) => (
-            <li
-              key={letter + title}
-              className="flex gap-5 border-b border-white/15 py-7 md:gap-8 md:py-8"
+      <div className="mt-14 md:mt-16">
+        <SubHeading>どんなサービスか</SubHeading>
+        <dl className="mt-6 border-t border-white/15">
+          {SEED_OVERVIEW.map(({ label, value }) => (
+            <div
+              key={label}
+              className="flex flex-col gap-1 border-b border-white/15 py-5 md:flex-row md:gap-8"
             >
-              <span className="w-7 shrink-0 font-serif text-3xl font-black leading-none text-seed md:w-10 md:text-4xl">
-                {letter}
-              </span>
-              <div>
-                <p className="font-serif text-lg font-black tracking-tight text-white md:text-xl">
-                  {title}
-                </p>
-                <p className="mt-2 text-[15px] leading-[1.9] text-white/75 md:text-base">
-                  {body}
-                </p>
-              </div>
-            </li>
+              <dt className={`font-serif text-sm font-black md:w-32 md:shrink-0 md:text-base ${GREEN.dark}`}>
+                {label}
+              </dt>
+              <dd className="text-[15px] leading-relaxed text-white/85 md:text-base">{value}</dd>
+            </div>
           ))}
-        </ol>
-
-        <div className="mt-10 space-y-6 text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
-          <p>
-            この4つを、月ごとに一緒に回していきます。やってみないと分からないことのほうが多いので、腰を据えて付き合う形にしています。
-          </p>
-          <p className="text-white/60">
-            もう少し詳しく聞いてみたいと思っていただけたら、中身を具体的にお伝えします。まずは話すところからで大丈夫です。
-          </p>
-        </div>
+        </dl>
       </div>
-    </section>
+
+      <div className="mt-14 md:mt-16">
+        <SubHeading>S・E・E・D の4ステップ</SubHeading>
+      </div>
+
+      {/* S・E・E・D はサービス名の由来であり、支援の4ステップそのもの。横に4つ並べて線で区切る */}
+      <ol className="mt-6 grid border-t border-white/15 sm:grid-cols-2 md:grid-cols-4">
+        {SEED_STEPS.map(({ letter, title, body }) => (
+          <li
+            key={letter + title}
+            className="border-b border-white/15 py-8 sm:px-5 sm:first:pl-0 md:border-b-0 md:border-l md:px-6 md:first:border-l-0 md:first:pl-0"
+          >
+            <span className={`block font-serif text-5xl font-black leading-none ${GREEN.dark}`}>
+              {letter}
+            </span>
+            <p className="mt-5 font-serif text-lg font-black tracking-tight text-white">
+              {title}
+            </p>
+            <p className="mt-2 text-[15px] leading-[1.9] text-white/75">{body}</p>
+          </li>
+        ))}
+      </ol>
+
+      <p className="mt-8 max-w-3xl text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
+        この4つを、月ごとに一緒に回していきます。やってみないと分からないことのほうが多いので、腰を据えて付き合う形にしています。
+      </p>
+
+      {/* 名前の由来は補足なので、小さく最後に置く */}
+      <div className="mt-14 max-w-3xl md:mt-16">
+        <SubHeading>名前の由来</SubHeading>
+        <p className="mt-4 text-sm leading-[2.1] text-white/65 md:text-[15px]">
+          トップシードというのは、スポーツでいう「第1シード」のことです。優勝候補として、一番に選ばれる存在。そこを目指すための支援プランとして、この名前にしました。
+        </p>
+      </div>
+
+      {/* サービス紹介として完結させるため、相談フォームへの入口を置く */}
+      <div className="mt-14 border-t border-white/15 pt-10 md:mt-16">
+        <p className="max-w-3xl text-[15px] leading-[2] text-white/75 md:text-base">
+          もう少し詳しく聞いてみたいと思っていただけたら、中身を具体的にお伝えします。まずは話すところからで大丈夫です。
+        </p>
+        <a
+          href="/contact"
+          className="mt-6 inline-flex items-center gap-3 rounded-full bg-seed px-8 py-4 text-base font-bold text-[#12161f] transition hover:bg-seed-bright"
+        >
+          Top SEED について聞いてみる
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </Section>
   );
 }
 
@@ -390,69 +502,96 @@ function TopSeedSection() {
  * ⑤ 歩いてきた道
  * 年表の羅列にせず、章立てにして短い語りをつける。
  * 事実（年次・数値・肩書き）は確認済みのものだけを使い、勝手に足さない。
+ * 時期は「年号（年齢）」にそろえる。年齢は「2012年に30歳」から逆算し、本人確認済み。
+ * 最初の2章は本人の記憶ベースのため「ごろ」を付ける（専門学校は2年制として計算）。
  */
 const CHAPTERS = [
   {
-    period: '十代',
+    period: '1997〜2002年ごろ（15〜20歳）',
     title: '野球ばかりしていました',
     body: '高校では野球部で、2年続けてセンバツに出ました。専門学校では大阪代表として全国大会へ。この頃は、野球のことしか考えていませんでした。',
   },
   {
-    period: '二十代',
+    period: '2002〜2004年ごろ（20〜22歳）',
     title: '整骨院から、父の現場へ',
     body: '整骨院に就職して、マッサージ師として働きました。その後、父が経営していた建設会社に入り、職人として現場に立ちました。どちらも、体を動かす仕事でした。',
   },
   {
-    period: '2012年・30歳',
+    period: '2012年（30歳）',
     title: '職人から、経営者になる',
     body: '職人として働いていた父の会社を継ぎ、法人化して代表になりました。建築リフォームと太陽光発電。現場に立っていた人間が、経営する側に回った年です。',
   },
   {
-    period: '2017年',
+    period: '2017年（35歳）',
     title: 'メロンパンが売れた日',
     body: 'フランチャイズのメロンパン店で、エリアマネージャーを任されました。最終的に2店舗を出しています。\n1店舗目の初日は、来客が500人、販売数は3,138個。全国3位でした。オープンから3か月の売上は2,500万円。\nここで分かったのは、売れるかどうかは商品の良し悪しだけでは決まらない、ということでした。',
   },
   {
-    period: '2019年〜2023年',
+    period: '2019〜2023年（37〜41歳）',
     title: '壊れた家を直し続けた4年',
     body: '千葉を大きな台風が襲ったニュースを見て、自分にできることがあるんじゃないかと思い、現地へ向かいました。\n知り合いは一人もいませんでした。館山で地元の方とのご縁をいただき、すぐに工事の依頼を受けて復旧にあたりました。\n営業に行ったわけではありません。目の前の一軒を直していたら、次の一軒を頼まれる。その繰り返しでした。気づけば4年、修復に携わった家屋は100棟を超えていました。',
   },
   {
-    period: '2023年',
+    period: '2023年（41歳）',
     title: '福岡のIT企業へ',
     body: '福岡のIT企業で、営業部のGMに就任しました。扱っていたのは、コールセンター向けの電話自動応答の仕組みです。売って終わりではなく、お客様ごとに中身を組み立てて、導入するところまで関わっていました。',
   },
   {
-    period: '2024年',
+    period: '2024年（42歳）',
     title: 'そして、iroha Seed',
     body: '自分の会社のマーケティング事業部として、iroha Seed を立ち上げました。\nきっかけは、周りで独立した仲間が志半ばで諦めたり、倒産に追い込まれる姿を見てきたことです。自分が関わっていれば、救えたかもしれない。そう思ったのが始まりでした。',
   },
 ];
 
+/**
+ * 経歴の中の実績の数字は、その話をしている文章の中でだけ大きくする。
+ * 数字を集めて並べる見せ方は使わない（文脈のない数字はAIっぽく見えるため）。
+ */
+const FIGURES = ['500人', '3,138個', '全国3位', '2,500万円', '100棟'];
+const FIGURE_PATTERN = new RegExp(`(${FIGURES.join('|')})`);
+
+function EmphasizeFigures({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(FIGURE_PATTERN).map((part, i) =>
+        FIGURES.includes(part) ? (
+          <strong
+            key={i}
+            className={`mx-0.5 whitespace-nowrap font-serif text-[1.6em] font-black leading-none ${GREEN.light}`}
+          >
+            {part}
+          </strong>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
 function PathSection() {
   return (
-    <section className="bg-white px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="font-serif text-[clamp(1.9rem,6.5vw,3.5rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
-          歩いてきた道
-        </h2>
-        <p className="mt-5 text-base leading-relaxed text-[#1c1c1e]/70 md:text-lg">
-          なぜこういう考え方になったのか。
-          <br className="hidden md:block" />
-          たぶん、歩いてきた道と関係しています。まっすぐな道ではありませんでした。
-        </p>
-
-        <ol className="mt-14 md:mt-20">
-          {CHAPTERS.map(({ period, title, body }, i) => (
+    <Section ground="light">
+      <Split
+        heading={
+          <SectionHeading
+            label="経歴"
+            tone="light"
+            lead="なぜこういう考え方になったのか。たぶん、歩いてきた道と関係しています。まっすぐな道ではありませんでした。"
+          >
+            歩いてきた道
+          </SectionHeading>
+        }
+      >
+        <ol>
+          {CHAPTERS.map(({ period, title, body }) => (
             <li
               key={title}
-              className="relative border-l border-[#1c1c1e]/15 pb-12 pl-8 last:pb-0 md:pl-14"
+              className="relative border-l border-[#1c1c1e]/15 pb-12 pl-8 last:pb-0 md:pl-12"
             >
               {/* 章の始まりを示す点 */}
-              <span className="absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full bg-seed" />
-              <p className="font-serif text-xs font-black tracking-wider text-[#1c1c1e]/45 md:text-sm">
-                {String(i + 1).padStart(2, '0')}
-                <span className="mx-2 text-[#1c1c1e]/25">/</span>
+              <span className="absolute -left-[5px] top-1.5 h-[9px] w-[9px] rounded-full bg-[#426b19]" />
+              <p className={`text-sm font-bold tracking-wide ${GREEN.light}`}>
                 {period}
               </p>
               <h3 className="mt-2 font-serif text-2xl font-black leading-snug tracking-tight text-[#1c1c1e] md:text-3xl">
@@ -463,14 +602,14 @@ function PathSection() {
                   key={paragraph}
                   className="mt-4 text-[15px] leading-[2] text-[#1c1c1e]/75 md:text-base md:leading-[2.1]"
                 >
-                  {paragraph}
+                  <EmphasizeFigures text={paragraph} />
                 </p>
               ))}
             </li>
           ))}
         </ol>
-      </div>
-    </section>
+      </Split>
+    </Section>
   );
 }
 
@@ -515,68 +654,87 @@ const PROOFS = [
       alt: '著書『なぜ、あの会社は高くても選ばれるのか？』の表紙',
       width: 750,
       height: 1200,
-      className: 'w-full rounded-sm shadow-[0_18px_40px_rgba(0,0,0,0.45)]',
+      className:
+        'mx-auto w-[11rem] rounded-sm shadow-[0_18px_40px_rgba(0,0,0,0.45)] md:w-[13rem]',
     },
   },
 ];
 
-function ProofSection() {
+function ProofLink({ href, text }: { href: string; text: string }) {
   return (
-    <section className="bg-[#12161f] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-5xl">
-        <h2 className="font-serif text-[clamp(1.9rem,6.5vw,3.5rem)] font-black leading-tight tracking-tight text-white">
-          言っていることの、
-          <br className="md:hidden" />
-          裏付け
-        </h2>
-        <p className="mt-5 text-base leading-relaxed text-white/60 md:text-lg">
-          考え方だけなら、誰にでも言えますから。
-        </p>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-5 inline-flex items-center gap-2 rounded-full border border-seed/60 px-5 py-2 text-sm font-bold text-seed transition hover:bg-seed hover:text-[#12161f] md:text-[15px]"
+    >
+      {text}
+      <span aria-hidden="true">→</span>
+    </a>
+  );
+}
 
-        {/* 証拠は、対応するテキストの隣に置く。確かめられるものはリンクにする */}
-        <ul className="mt-14 space-y-12 md:mt-20 md:space-y-14">
-          {PROOFS.map(({ label, body, link, image }) => (
-            <li
-              key={label}
-              className="border-t border-white/15 pt-7 md:flex md:gap-12 md:pt-8"
-            >
-              <div className="md:flex-1">
-                <p className="font-serif text-xl font-black tracking-tight text-white md:text-2xl">
-                  {label}
-                </p>
-                <p className="mt-3 text-[15px] leading-[2] text-white/75 md:text-base">
-                  {body}
-                </p>
-                {link && (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 text-[15px] font-bold text-seed underline underline-offset-4 transition hover:text-seed-bright md:text-base"
-                  >
-                    {link.text}
-                    <span aria-hidden="true">→</span>
-                  </a>
-                )}
-              </div>
+function ProofSection() {
+  const textOnly = PROOFS.filter((p) => !p.image);
+  const withImage = PROOFS.filter((p) => p.image);
 
-              {image && (
-                <figure className="mt-6 md:mt-0 md:w-[17rem] md:shrink-0">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    width={image.width}
-                    height={image.height}
-                    className={image.className}
-                    loading="lazy"
-                  />
-                </figure>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+  return (
+    <Section ground="dark">
+      <SectionHeading
+        label="実績"
+        tone="dark"
+        lead="考え方だけなら、誰にでも言えますから。"
+      >
+        言っていることの、
+        <br className="md:hidden" />
+        裏付け
+      </SectionHeading>
+
+      {/* 写真のない2項目は横に並べ、線で区切る */}
+      <ul className="mt-12 grid border-t border-white/15 md:mt-14 md:grid-cols-2">
+        {textOnly.map(({ label, body }) => (
+          <li
+            key={label}
+            className="border-b border-white/15 py-8 md:border-b-0 md:pr-10 md:last:border-l md:last:pl-10 md:last:pr-0"
+          >
+            <p className="font-serif text-xl font-black tracking-tight text-white md:text-2xl">
+              {label}
+            </p>
+            <p className="mt-3 text-[15px] leading-[2] text-white/75 md:text-base">{body}</p>
+          </li>
+        ))}
+      </ul>
+
+      {/* 写真のある項目は、文章と写真を左右に置き、行ごとに左右を入れ替える */}
+      <ul className="border-white/15 md:border-t">
+        {withImage.map(({ label, body, link, image }, i) => (
+          <li
+            key={label}
+            className="border-b border-white/15 py-10 md:flex md:items-center md:gap-14 md:py-14"
+          >
+            <div className={`md:flex-1 ${i % 2 === 1 ? 'md:order-2' : ''}`}>
+              <p className="font-serif text-xl font-black tracking-tight text-white md:text-2xl">
+                {label}
+              </p>
+              <p className="mt-3 text-[15px] leading-[2] text-white/75 md:text-base">{body}</p>
+              {link && <ProofLink href={link.href} text={link.text} />}
+            </div>
+            {image && (
+              <figure className="mt-8 md:mt-0 md:w-[22rem] md:shrink-0">
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  className={image.className}
+                  loading="lazy"
+                />
+              </figure>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Section>
   );
 }
 
@@ -614,26 +772,28 @@ const FAQS = [
 
 function FaqSection() {
   return (
-    <section className="bg-[#f4f1ea] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-3xl">
-        <h2 className="font-serif text-[clamp(1.9rem,6.5vw,3.5rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
-          よくある質問
-        </h2>
-
-        <div className="mt-12 border-t border-[#1c1c1e]/15 md:mt-16">
+    <Section ground="light">
+      <Split
+        heading={
+          <SectionHeading label="ご質問" tone="light">
+            よくある質問
+          </SectionHeading>
+        }
+      >
+        <div className="border-t border-[#1c1c1e]/15">
           {FAQS.map(({ q, a }) => (
             <details key={q} className="group border-b border-[#1c1c1e]/15">
               <summary className="flex cursor-pointer list-none items-start gap-4 py-6 text-base font-bold leading-snug text-[#1c1c1e] md:text-lg">
                 <span
                   aria-hidden="true"
-                  className="mt-[2px] shrink-0 font-serif text-[#1c1c1e]/40"
+                  className={`mt-[2px] shrink-0 font-serif ${GREEN.light}`}
                 >
                   Q.
                 </span>
                 <span className="flex-1">{q}</span>
                 <span
                   aria-hidden="true"
-                  className="mt-1 shrink-0 text-xl leading-none text-[#1c1c1e]/40 transition group-open:rotate-45"
+                  className="mt-1 shrink-0 text-xl leading-none text-[#1c1c1e]/55 transition group-open:rotate-45"
                 >
                   ＋
                 </span>
@@ -644,8 +804,8 @@ function FaqSection() {
             </details>
           ))}
         </div>
-      </div>
-    </section>
+      </Split>
+    </Section>
   );
 }
 
@@ -658,13 +818,13 @@ const SOCIALS = [
 
 function ContactSection() {
   return (
-    <section className="bg-[#12161f] px-6 py-24 md:px-12 md:py-32">
-      <div className="mx-auto max-w-3xl">
-        <h2 className="font-serif text-[clamp(1.7rem,5.5vw,3rem)] font-black leading-tight tracking-tight text-white">
+    <Section ground="dark">
+      <div className="max-w-3xl">
+        <SectionHeading label="ご連絡" tone="dark">
           最後まで読んでいただき、
           <br />
           ありがとうございます。
-        </h2>
+        </SectionHeading>
 
         <p className="mt-8 text-[15px] leading-[2] text-white/80 md:text-lg md:leading-[2.1]">
           ここまで読んで「少し話してみたいかも」と思っていただけたなら、たぶん合うと思います。
@@ -686,14 +846,14 @@ function ContactSection() {
 
         <div className="mt-16 border-t border-white/15 pt-8">
           <p className="text-sm text-white/55">普段の発信はこちらです。</p>
-          <ul className="mt-4 flex flex-wrap gap-x-7 gap-y-3">
+          <ul className="mt-4 flex flex-wrap gap-3">
             {SOCIALS.map(({ label, href }) => (
               <li key={label}>
                 <a
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base font-bold text-white underline decoration-seed decoration-2 underline-offset-4 transition hover:text-seed-bright"
+                  className="inline-flex rounded-full border border-white/25 px-5 py-2 text-sm font-bold text-white transition hover:border-seed hover:text-seed md:text-[15px]"
                 >
                   {label}
                 </a>
@@ -702,7 +862,7 @@ function ContactSection() {
           </ul>
         </div>
 
-        <p className="mt-16 text-xs leading-relaxed text-white/40">
+        <p className="mt-16 text-xs leading-relaxed text-white/55">
           株式会社廣創　代表取締役社長　山本 剛史
           <br />
           iroha Seed（廣創のマーケティング事業部）
@@ -710,10 +870,11 @@ function ContactSection() {
           福岡県福岡市城南区七隈3-2-29-101
         </p>
       </div>
-    </section>
+    </Section>
   );
 }
 
+/** 地の色が同じものを続けない順番：明→ベ→紺→ベ→紺→明→ベ→紺→明→紺 */
 export default function RenewPage() {
   return (
     <main>
