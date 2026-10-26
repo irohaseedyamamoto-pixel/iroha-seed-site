@@ -8,8 +8,8 @@ import RenewHero from './RenewHero.tsx';
 function GreetingSection() {
   return (
     <section className="bg-[#faf8f4] px-6 py-24 md:px-12 md:py-32">
-      {/* 写真はファーストビューで見せているので、ここでは重ねない */}
-      <div className="mx-auto max-w-3xl">
+      {/* ファーストビューとは別のカットを置く。同じ写真は繰り返さない */}
+      <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[1fr_18rem] md:items-start md:gap-14">
         <div>
           <h2 className="font-serif text-[clamp(1.7rem,6vw,3rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
             はじめまして、
@@ -29,6 +29,17 @@ function GreetingSection() {
             </p>
           </div>
         </div>
+
+        <figure className="md:pt-3">
+          <img
+            src="/profile.jpg"
+            alt="山本 剛史"
+            width="2048"
+            height="1536"
+            className="aspect-[4/5] w-full rounded-sm object-cover object-[62%_32%]"
+            loading="lazy"
+          />
+        </figure>
       </div>
     </section>
   );
@@ -471,11 +482,33 @@ const PROOFS = [
   },
   {
     label: 'ラジオ出演',
-    body: '2025年、ビジネス系のFMラジオに出演しました。',
+    body: '2025年、ビジネス系FMラジオ『プレジデントステーション福岡』に出演しました。',
+    link: {
+      href: 'https://www.youtube.com/live/DDv-fCFCdmw?t=290s',
+      text: 'アーカイブを見る',
+    },
+    image: {
+      src: '/radio.jpg',
+      alt: 'ラジオ番組『プレジデントステーション福岡』に出演したときの様子',
+      width: 996,
+      height: 1100,
+      className: 'aspect-[4/3] w-full rounded-sm object-cover object-[50%_38%]',
+    },
   },
   {
     label: '著書を出版',
     body: '2026年、『なぜ、あの会社は高くても選ばれるのか？ 比べられない会社には、理由がある。』を出版。Amazon Kindleランキング6部門で1位になりました。',
+    link: {
+      href: 'https://www.amazon.co.jp/dp/B0H6KGYCX1',
+      text: 'Amazonで見る',
+    },
+    image: {
+      src: '/book-cover.jpg',
+      alt: '著書『なぜ、あの会社は高くても選ばれるのか？』の表紙',
+      width: 750,
+      height: 1200,
+      className: 'w-full rounded-sm shadow-[0_18px_40px_rgba(0,0,0,0.45)]',
+    },
   },
 ];
 
@@ -492,54 +525,48 @@ function ProofSection() {
           考え方だけなら、誰にでも言えますから。
         </p>
 
-        <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-[1fr_auto] md:items-start md:gap-16">
-          <ul className="space-y-8 md:space-y-10">
-            {PROOFS.map(({ label, body }) => (
-              <li key={label} className="border-t border-white/15 pt-6 md:pt-7">
+        {/* 証拠は、対応するテキストの隣に置く。確かめられるものはリンクにする */}
+        <ul className="mt-14 space-y-12 md:mt-20 md:space-y-14">
+          {PROOFS.map(({ label, body, link, image }) => (
+            <li
+              key={label}
+              className="border-t border-white/15 pt-7 md:flex md:gap-12 md:pt-8"
+            >
+              <div className="md:flex-1">
                 <p className="font-serif text-xl font-black tracking-tight text-white md:text-2xl">
                   {label}
                 </p>
                 <p className="mt-3 text-[15px] leading-[2] text-white/75 md:text-base">
                   {body}
                 </p>
-              </li>
-            ))}
-          </ul>
+                {link && (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 text-[15px] font-bold text-seed underline underline-offset-4 transition hover:text-seed-bright md:text-base"
+                  >
+                    {link.text}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                )}
+              </div>
 
-          {/* 書影を大きく、その下に写真を2枚並べて裏付けの面を作る */}
-          <div className="space-y-4 md:w-[19rem] md:shrink-0">
-            <figure>
-              <img
-                src="/book-cover.jpg"
-                alt="著書『なぜ、あの会社は高くても選ばれるのか？』の表紙"
-                width="750"
-                height="1200"
-                className="w-full rounded-sm shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
-                loading="lazy"
-              />
-            </figure>
-            <figure>
-              <img
-                src="/radio.jpg"
-                alt="ラジオ番組に出演したときの様子"
-                width="996"
-                height="1100"
-                className="aspect-[4/3] w-full rounded-sm object-cover object-[50%_38%]"
-                loading="lazy"
-              />
-            </figure>
-            <figure>
-              <img
-                src="/profile.jpg"
-                alt="山本 剛史"
-                width="2048"
-                height="1536"
-                className="aspect-[16/10] w-full rounded-sm object-cover"
-                loading="lazy"
-              />
-            </figure>
-          </div>
-        </div>
+              {image && (
+                <figure className="mt-6 md:mt-0 md:w-[17rem] md:shrink-0">
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    className={image.className}
+                    loading="lazy"
+                  />
+                </figure>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
