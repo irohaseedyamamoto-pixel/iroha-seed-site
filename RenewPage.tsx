@@ -494,11 +494,14 @@ const KINDLE_FOR = [
 
 function KindleService() {
   return (
-    <div className="mt-20 border-t border-white/15 pt-14 md:mt-24 md:pt-16">
-      <h3 className="font-serif text-2xl font-black tracking-tight text-white md:text-3xl">
-        Kindle出版プロデュース
+    <div className="mt-24 border-t border-white/15 pt-20 md:mt-28 md:pt-24">
+      {/* ロゴがない分、見出しの大きさで Top SEED のロゴと並ぶ「サービス名」として見せる */}
+      <h3 className="font-serif text-[clamp(2rem,8.5vw,3.5rem)] font-black leading-tight tracking-tight text-white">
+        Kindle出版
+        <br className="md:hidden" />
+        プロデュース
       </h3>
-      <p className="mt-5 font-serif text-lg font-black leading-snug text-white/90 md:text-xl">
+      <p className="mt-6 font-serif text-lg font-black leading-snug text-white/90 md:mt-8 md:text-2xl">
         あなたの経験や考えを、1冊の本にまとめるお手伝いをします。
       </p>
       <p className="mt-5 max-w-3xl text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
@@ -602,6 +605,12 @@ const CHAPTERS = [
     title: 'そして、iroha Seed',
     body: '自分の会社のマーケティング事業部として、iroha Seed を立ち上げました。\nきっかけは、周りで独立した仲間が志半ばで諦めたり、倒産に追い込まれる姿を見てきたことです。自分が関わっていれば、救えたかもしれない。そう思ったのが始まりでした。',
   },
+  {
+    // 以前は⑨の実績に置いていたが、経歴の流れの中で見せるほうが自然なため移した（本人確認済み）
+    period: '2025年（43歳）',
+    title: '製薬会社のCMOへ',
+    body: '製薬会社の最高マーケティング責任者（CMO）に就任しました。',
+  },
 ];
 
 /**
@@ -675,19 +684,12 @@ function PathSection() {
 }
 
 /**
- * ⑥ 裏付け
- * 考え方（③）と経歴（⑤）のあとに置き、「言っていることに根拠はあるのか」に答える。
- * 事実のみ。お客様の声は、実在の声が集まってからこの下に追加する。
+ * ⑨ メディア出演・出版
+ * 「実績」「裏付け」という言い方はやめ、出演と出版をまとめる場所にする（本人の判断）。
+ * 製薬会社のCMOは⑦経歴へ移し、「経営者として14年」は経歴・プロフィールと重なるため外した。
+ * 事実のみ。お客様の声は、実在の声が集まってから別の場所に追加する。
  */
-const PROOFS = [
-  {
-    label: '経営者として14年',
-    body: '2012年の法人設立から、建築・飲食・IT・製薬と、複数の業種で当事者として経営に関わってきました。',
-  },
-  {
-    label: '製薬会社の CMO',
-    body: '2025年、製薬会社の最高マーケティング責任者に就任しました。',
-  },
+const MEDIA = [
   {
     label: 'ラジオ出演',
     body: '2025年、ビジネス系FMラジオ『プレジデントステーション福岡』に出演しました。',
@@ -736,37 +738,15 @@ function ProofLink({ href, text }: { href: string; text: string }) {
 }
 
 function ProofSection() {
-  const textOnly = PROOFS.filter((p) => !p.image);
-  const withImage = PROOFS.filter((p) => p.image);
-
   return (
     <Section ground="dark">
-      <SectionHeading
-        label="実績"
-        tone="dark"
-        lead="考え方だけなら、誰にでも言えますから。"
-      >
-        言っていることの、裏付け
+      <SectionHeading label="メディア・出版" tone="dark">
+        メディア出演・出版
       </SectionHeading>
 
-      {/* 写真のない2項目は横に並べ、線で区切る */}
-      <ul className="mt-12 grid border-t border-white/15 md:mt-14 md:grid-cols-2">
-        {textOnly.map(({ label, body }) => (
-          <li
-            key={label}
-            className="border-b border-white/15 py-8 md:border-b-0 md:pr-10 md:last:border-l md:last:pl-10 md:last:pr-0"
-          >
-            <p className="font-serif text-xl font-black tracking-tight text-white md:text-2xl">
-              {label}
-            </p>
-            <p className="mt-3 text-[15px] leading-[2] text-white/75 md:text-base">{body}</p>
-          </li>
-        ))}
-      </ul>
-
-      {/* 写真のある項目は、文章と写真を左右に置き、行ごとに左右を入れ替える */}
-      <ul className="border-white/15 md:border-t">
-        {withImage.map(({ label, body, link, image }, i) => (
+      {/* 文章と写真を左右に置き、行ごとに左右を入れ替える */}
+      <ul className="mt-12 border-t border-white/15 md:mt-14">
+        {MEDIA.map(({ label, body, link, image }, i) => (
           <li
             key={label}
             className="border-b border-white/15 py-10 md:flex md:items-center md:gap-14 md:py-14"
