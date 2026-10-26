@@ -5,11 +5,13 @@
  */
 export default function RenewHero() {
   return (
-    <main className="relative min-h-[100svh] w-full overflow-hidden bg-[#0f1115]">
+    <section className="relative min-h-[100svh] w-full overflow-hidden bg-[#0f1115]">
       {/* 人物写真：顔の位置を基準に寄せる（スマホは横が大きく切れるため x を調整） */}
       <img
         src="/portrait.jpg"
         alt="iroha Seed 山本剛史"
+        width="2000"
+        height="1414"
         className="absolute inset-0 h-full w-full object-cover object-[53%_20%]"
         fetchPriority="high"
       />
@@ -52,6 +54,6 @@ export default function RenewHero() {
       <div className="absolute inset-x-0 bottom-5 z-10 flex justify-center md:bottom-8">
         <span className="h-10 w-px bg-gradient-to-b from-white/0 to-white/60 md:h-14" />
       </div>
-    </main>
+    </section>
   );
 }

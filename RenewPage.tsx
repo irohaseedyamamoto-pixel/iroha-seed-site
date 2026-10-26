@@ -53,9 +53,9 @@ function ProfileSection() {
   return (
     <section className="bg-white px-6 py-20 md:px-12 md:py-28">
       <div className="mx-auto max-w-3xl">
-        <p className="font-serif text-sm font-black tracking-[0.2em] text-seed">
+        <h2 className="font-serif text-sm font-black tracking-[0.2em] text-seed">
           PROFILE
-        </p>
+        </h2>
         <dl className="mt-8 border-t border-[#1c1c1e]/15">
           {PROFILE.map(({ label, value }) => (
             <div
@@ -309,6 +309,8 @@ function TopSeedSection() {
         <img
           src="/topseed-logo.png"
           alt="Top SEED"
+          width="1000"
+          height="257"
           className="h-auto w-[13rem] md:w-[17rem]"
           loading="lazy"
         />
@@ -505,6 +507,8 @@ function ProofSection() {
               <img
                 src="/book-cover.jpg"
                 alt="著書『なぜ、あの会社は高くても選ばれるのか？』の表紙"
+                width="750"
+                height="1200"
                 className="w-full rounded-sm shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
                 loading="lazy"
               />
@@ -513,6 +517,8 @@ function ProofSection() {
               <img
                 src="/radio.jpg"
                 alt="ラジオ番組に出演したときの様子"
+                width="996"
+                height="1100"
                 className="aspect-[4/3] w-full rounded-sm object-cover object-[50%_38%]"
                 loading="lazy"
               />
@@ -521,6 +527,8 @@ function ProofSection() {
               <img
                 src="/profile.jpg"
                 alt="山本 剛史"
+                width="2048"
+                height="1536"
                 className="aspect-[16/10] w-full rounded-sm object-cover"
                 loading="lazy"
               />
@@ -576,11 +584,17 @@ function FaqSection() {
           {FAQS.map(({ q, a }) => (
             <details key={q} className="group border-b border-[#1c1c1e]/15">
               <summary className="flex cursor-pointer list-none items-start gap-4 py-6 text-base font-bold leading-snug text-[#1c1c1e] md:text-lg">
-                <span className="mt-[2px] shrink-0 font-serif text-[#1c1c1e]/40">
+                <span
+                  aria-hidden="true"
+                  className="mt-[2px] shrink-0 font-serif text-[#1c1c1e]/40"
+                >
                   Q.
                 </span>
                 <span className="flex-1">{q}</span>
-                <span className="mt-1 shrink-0 text-xl leading-none text-[#1c1c1e]/40 transition group-open:rotate-45">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 shrink-0 text-xl leading-none text-[#1c1c1e]/40 transition group-open:rotate-45"
+                >
                   ＋
                 </span>
               </summary>
@@ -662,7 +676,7 @@ function ContactSection() {
 
 export default function RenewPage() {
   return (
-    <>
+    <main>
       <RenewHero />
       <GreetingSection />
       <TroubleSection />
@@ -674,6 +688,6 @@ export default function RenewPage() {
       <ProofSection />
       <FaqSection />
       <ContactSection />
-    </>
+    </main>
   );
 }
