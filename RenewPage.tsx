@@ -133,7 +133,6 @@ function GreetingSection() {
 /** ③ プロフィール：人となりを項目で見せる。事実が確認できたものだけ並べる */
 const PROFILE = [
   { label: '名前', value: '山本 剛史（やまもと つよし）' },
-  { label: '年齢', value: '44歳' },
   { label: '出身', value: '山口県' },
   { label: '対応エリア', value: '全国（オンライン・訪問どちらも）' },
   {
@@ -215,9 +214,7 @@ function TroubleSection() {
       </ul>
 
       <p className="mt-12 text-lg font-bold leading-relaxed text-[#1c1c1e] md:mt-14 md:text-2xl">
-        どれかひとつでも当てはまったなら、
-        <br className="hidden md:block" />
-        原因は努力の量じゃないと思います。
+        どれかひとつでも当てはまったなら、原因は努力の量じゃないと思います。
       </p>
     </Section>
   );
@@ -249,14 +246,15 @@ const QUESTIONS = [
   },
 ];
 
+/** 次の⑥ Top SEED が紺の地のため、同じ色が続かないよう明るい地にする */
 function ThinkingSection() {
   return (
-    <Section ground="dark">
+    <Section ground="light">
       <Split
         heading={
           <SectionHeading
             label="考え方"
-            tone="dark"
+            tone="light"
             lead="よく聞かれることを、3つだけ書いておきます。"
           >
             なぜ、
@@ -267,18 +265,18 @@ function ThinkingSection() {
           </SectionHeading>
         }
       >
-        <div className="border-t border-white/15">
+        <div className="border-t border-[#1c1c1e]/15">
           {QUESTIONS.map(({ q, a }, i) => (
-            <article key={q} className="border-b border-white/15 py-10 md:py-12">
-              <h3 className="flex gap-4 text-lg font-bold leading-snug text-white md:text-2xl">
-                <span className="shrink-0 font-serif text-seed">Q{i + 1}.</span>
+            <article key={q} className="border-b border-[#1c1c1e]/15 py-10 md:py-12">
+              <h3 className="flex gap-4 text-lg font-bold leading-snug text-[#1c1c1e] md:text-2xl">
+                <span className={`shrink-0 font-serif ${GREEN.light}`}>Q{i + 1}.</span>
                 <span>{q}</span>
               </h3>
               <div className="mt-6 space-y-5">
                 {a.map((paragraph) => (
                   <p
                     key={paragraph}
-                    className="text-[15px] leading-[2] text-white/80 md:text-base md:leading-[2.1]"
+                    className="text-[15px] leading-[2] text-[#1c1c1e]/75 md:text-base md:leading-[2.1]"
                   >
                     {paragraph}
                   </p>
@@ -289,8 +287,8 @@ function ThinkingSection() {
         </div>
 
         {/* 一番言いたい一文は、本文に埋めずに抜き出して大きく置く */}
-        <blockquote className="mt-14 border-l-2 border-seed pl-6 md:mt-16 md:pl-10">
-          <p className="font-serif text-[clamp(1.35rem,5.5vw,2.25rem)] font-black leading-[1.6] tracking-tight text-white">
+        <blockquote className="mt-14 border-l-2 border-[#426b19] pl-6 md:mt-16 md:pl-10">
+          <p className="font-serif text-[clamp(1.35rem,5.5vw,2.25rem)] font-black leading-[1.6] tracking-tight text-[#1c1c1e]">
             集客ができないから安くする。
             <br />
             それは、違うと思っています。
@@ -302,58 +300,10 @@ function ThinkingSection() {
 }
 
 /**
- * ④ やっていること：⑥ Top SEED への入口
- * 以前は診断・設計・伴走の3枚のカードを置いていたが、S・E・E・D と同じ内容の説明が2回続き
- * 「サービスが2つある」ように読めたため削除した。何を頼めるかの答えは⑥の1か所にまとめる。
- */
-const NOT_DOING = [
-  '原因を見ないまま、広告だけ回すこと',
-  '値下げで数字をつくること',
-  '作って、納品して、終わりにすること',
-];
-
-function WorkSection() {
-  return (
-    <Section ground="beige">
-      <SectionHeading label="仕事の内容" tone="light">
-        やっていること
-      </SectionHeading>
-
-      {/* つなぎの一文。すぐ下の⑥へ読み進めてもらうため、本文より一段大きく置く */}
-      <p className="mt-8 font-serif text-xl font-black leading-[1.7] tracking-tight text-[#1c1c1e] md:mt-10 md:text-[1.75rem]">
-        この考え方を仕事にしたのが、
-        <br />
-        マーケティング顧問サービス
-        <br className="md:hidden" />
-        「Top SEED」です。
-      </p>
-
-      {/* 何をしないかを書くと、何をする人かがはっきりする */}
-      <div className="mt-14 border-t border-[#1c1c1e]/20 pt-10 md:mt-16 md:grid md:grid-cols-[19rem_1fr] md:gap-16">
-        <p className="font-serif text-xl font-black text-[#1c1c1e] md:text-2xl">
-          逆に、やらないこと
-        </p>
-        <ul className="mt-6 space-y-3 md:mt-1">
-          {NOT_DOING.map((text) => (
-            <li
-              key={text}
-              className="flex gap-3 text-[15px] leading-relaxed text-[#1c1c1e]/85 md:text-base"
-            >
-              <span aria-hidden="true" className={`select-none ${GREEN.light}`}>
-                ×
-              </span>
-              <span>{text}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Section>
-  );
-}
-
-/**
  * マーケティング顧問サービス「Top SEED」
- * 本人のサービス紹介の場所。何のサービスかを最初に言い切り、概要→4ステップ→由来→相談の順に置く。
+ * 本人のサービス紹介の場所。何のサービスかを最初に言い切り、概要→4ステップ→やらないこと→由来→相談の順に置く。
+ * 以前は手前に「やっていること」（診断・設計・伴走）のセクションがあったが、S・E・E・D と内容が重なり
+ * 「サービスが2つある」ように読めたため削除し、「やらないこと」だけをここに移した。
  * 料金は本人判断により非掲載。内容の説明のみ置く。
  * SEED の4文字は、支援の4ステップの頭文字（サービス名を決めたときの定義）。
  */
@@ -378,6 +328,13 @@ const SEED_STEPS = [
     title: 'Drive ／ 実行',
     body: '売れるまで、実行を一緒に回します。',
   },
+];
+
+/** 何をしないかを書くと、何をする人かがはっきりする */
+const NOT_DOING = [
+  '原因を見ないまま、広告だけ回すこと',
+  '値下げで数字をつくること',
+  '作って、納品して、終わりにすること',
 ];
 
 /** サービス概要：今の本文にある内容を短く言い直したもの。新しい事実は足さない */
@@ -473,6 +430,23 @@ function TopSeedSection() {
         この4つを、月ごとに一緒に回していきます。やってみないと分からないことのほうが多いので、腰を据えて付き合う形にしています。
       </p>
 
+      <div className="mt-14 md:mt-16">
+        <SubHeading>逆に、やらないこと</SubHeading>
+        <ul className="mt-6 space-y-3">
+          {NOT_DOING.map((text) => (
+            <li
+              key={text}
+              className="flex gap-3 text-[15px] leading-relaxed text-white/85 md:text-base"
+            >
+              <span aria-hidden="true" className={`select-none ${GREEN.dark}`}>
+                ×
+              </span>
+              <span>{text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* 名前の由来は補足なので、小さく最後に置く */}
       <div className="mt-14 max-w-3xl md:mt-16">
         <SubHeading>名前の由来</SubHeading>
@@ -481,20 +455,107 @@ function TopSeedSection() {
         </p>
       </div>
 
-      {/* サービス紹介として完結させるため、相談フォームへの入口を置く */}
+      {/* サービス紹介として完結させるため、相談フォームへの入口を置く。ページ最後の黄緑のボタンと区別するため白にする */}
       <div className="mt-14 border-t border-white/15 pt-10 md:mt-16">
         <p className="max-w-3xl text-[15px] leading-[2] text-white/75 md:text-base">
           もう少し詳しく聞いてみたいと思っていただけたら、中身を具体的にお伝えします。まずは話すところからで大丈夫です。
         </p>
         <a
           href="/contact"
-          className="mt-6 inline-flex items-center gap-3 rounded-full bg-seed px-8 py-4 text-base font-bold text-[#12161f] transition hover:bg-seed-bright"
+          className="mt-6 inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-base font-bold text-[#12161f] transition hover:bg-white/85"
         >
           Top SEED について聞いてみる
           <span aria-hidden="true">→</span>
         </a>
       </div>
+
+      <KindleService />
     </Section>
+  );
+}
+
+/**
+ * もうひとつのサービス：Kindle出版プロデュース
+ * サービス名・ロゴはないため、文字の見出しで Top SEED より一段控えめに見せる。
+ * 実績はまだないため、本人の著書（確認済み）を根拠に置き、他の方の本は「進行中」とだけ書く。
+ * 表紙づくり・出版手続きは「仕上げ」に含めない（本人確認済み）。
+ */
+const KINDLE_STEPS = [
+  { label: 'お話を聞く', value: 'これまでの経験や考えを、インタビューで聞かせてもらいます' },
+  { label: '本の設計', value: '誰に向けて何を伝える本にするか、テーマと章立てを決めます' },
+  { label: '原稿づくり', value: 'いただいた言葉をもとに、原稿に仕上げます' },
+  { label: '仕上げ', value: '読み直して整え、ご本人の確認を経て完成させます' },
+];
+
+const KINDLE_FOR = [
+  '出版を通して、自分の専門性や考えを伝え、ブランディングにつなげたい方',
+  '本を入口にして、相談や問い合わせにつながる流れをつくりたい方',
+];
+
+function KindleService() {
+  return (
+    <div className="mt-20 border-t border-white/15 pt-14 md:mt-24 md:pt-16">
+      <h3 className="font-serif text-2xl font-black tracking-tight text-white md:text-3xl">
+        Kindle出版プロデュース
+      </h3>
+      <p className="mt-5 font-serif text-lg font-black leading-snug text-white/90 md:text-xl">
+        あなたの経験や考えを、1冊の本にまとめるお手伝いをします。
+      </p>
+      <p className="mt-5 max-w-3xl text-[15px] leading-[2.1] text-white/80 md:text-base md:leading-[2.2]">
+        「話すのは得意だけど、書くのは苦手」という方でも大丈夫です。お話を聞かせてもらい、その言葉を素材にして、読み手に届く原稿に仕上げていきます。
+      </p>
+
+      <div className="mt-12">
+        <SubHeading>進め方</SubHeading>
+        <dl className="mt-6 border-t border-white/15">
+          {KINDLE_STEPS.map(({ label, value }) => (
+            <div
+              key={label}
+              className="flex flex-col gap-1 border-b border-white/15 py-5 md:flex-row md:gap-8"
+            >
+              <dt className={`font-serif text-sm font-black md:w-32 md:shrink-0 md:text-base ${GREEN.dark}`}>
+                {label}
+              </dt>
+              <dd className="text-[15px] leading-relaxed text-white/85 md:text-base">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div className="mt-12">
+        <SubHeading>こんな方に</SubHeading>
+        {/* 本を残したい人ではなく、出版をブランディングや集客の入口に使いたい人に向けて書く */}
+        <ul className="mt-6 space-y-3">
+          {KINDLE_FOR.map((text) => (
+            <li
+              key={text}
+              className="flex gap-3 text-[15px] leading-relaxed text-white/85 md:text-base"
+            >
+              <span aria-hidden="true" className={`select-none ${GREEN.dark}`}>
+                ・
+              </span>
+              <span>{text}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 max-w-3xl text-[15px] leading-[2] text-white/75 md:text-base">
+          経営者・専門家・講師・士業の方など、「この人に頼みたい」と思われることが仕事につながる方に向いています。
+        </p>
+      </div>
+
+      <p className="mt-12 max-w-3xl text-[15px] leading-[2.1] text-white/75 md:text-base md:leading-[2.2]">
+        私自身も2026年に著書を出版し、Amazon Kindleランキング6部門で1位になりました。いまは、ほかの方の本づくりもプロデュースしています。
+      </p>
+
+      {/* 申し込みは問い合わせフォームに一本化。Top SEED のボタンより控えめな枠線のボタンにする */}
+      <a
+        href="/contact"
+        className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/40 px-8 py-4 text-base font-bold text-white transition hover:border-white hover:bg-white/10"
+      >
+        出版について聞いてみる
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
   );
 }
 
@@ -557,7 +618,7 @@ function EmphasizeFigures({ text }: { text: string }) {
         FIGURES.includes(part) ? (
           <strong
             key={i}
-            className={`mx-0.5 whitespace-nowrap font-serif text-[1.6em] font-black leading-none ${GREEN.light}`}
+            className="mx-0.5 whitespace-nowrap font-serif text-[1.6em] font-black leading-none text-[#1c1c1e]"
           >
             {part}
           </strong>
@@ -685,9 +746,7 @@ function ProofSection() {
         tone="dark"
         lead="考え方だけなら、誰にでも言えますから。"
       >
-        言っていることの、
-        <br className="md:hidden" />
-        裏付け
+        言っていることの、裏付け
       </SectionHeading>
 
       {/* 写真のない2項目は横に並べ、線で区切る */}
@@ -754,7 +813,7 @@ const FAQS = [
   },
   {
     q: 'SNS運用や広告の代行もお願いできますか？',
-    a: '代行よりも、「なぜ売れていないのか」を見つけて、売れる仕組みを設計するほうが専門です。土台が整っていない状態だと、どんな施策も効きにくいので。',
+    a: 'いちばんの専門は、「なぜ売れていないのか」を見つけて、売れる形に組み直すことです。土台が整っていない状態だと、どんな施策も効きにくいので、まずはそこを一緒に見させてください。そのうえで、SNS運用や広告の代行もお受けできます。',
   },
   {
     q: 'どれくらいで成果が出ますか？',
@@ -827,9 +886,7 @@ function ContactSection() {
         </SectionHeading>
 
         <p className="mt-8 text-[15px] leading-[2] text-white/80 md:text-lg md:leading-[2.1]">
-          ここまで読んで「少し話してみたいかも」と思っていただけたなら、たぶん合うと思います。
-          <br />
-          売り込むことはしません。まずは現状をお聞かせください。
+          ここまで読んで「少し話してみたいかも」と思っていただけたなら、たぶん合うと思います。売り込むことはしません。まずは現状をお聞かせください。
         </p>
 
         <div className="mt-12">
@@ -874,7 +931,7 @@ function ContactSection() {
   );
 }
 
-/** 地の色が同じものを続けない順番：明→ベ→紺→ベ→紺→明→ベ→紺→明→紺 */
+/** 地の色が同じものを続けない順番：明→ベ→明→紺→明→ベ→紺→明→紺 */
 export default function RenewPage() {
   return (
     <main>
@@ -882,7 +939,6 @@ export default function RenewPage() {
       <GreetingSection />
       <TroubleSection />
       <ThinkingSection />
-      <WorkSection />
       <TopSeedSection />
       <PathSection />
       <ProfileSection />
