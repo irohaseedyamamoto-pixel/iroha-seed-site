@@ -45,40 +45,6 @@ function GreetingSection() {
   );
 }
 
-/**
- * 数字の帯
- * 本文に埋もれている数字を取り出して特大で置く。
- * 文字が続く流れを一度断ち切る役割も兼ねる。
- */
-const NUMBERS = [
-  { value: '2', unit: '年連続', label: '高校野球でのセンバツ出場' },
-  { value: '3,138', unit: '個', label: 'メロンパン店・初日の販売数' },
-  { value: '100', unit: '棟超', label: '災害復旧で修復に携わった家屋' },
-  { value: '14', unit: '年', label: '経営者としての実務' },
-];
-
-function NumbersSection() {
-  return (
-    <section className="bg-[#12161f] px-6 py-20 md:px-12 md:py-24">
-      <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4 md:gap-x-10">
-        {NUMBERS.map(({ value, unit, label }) => (
-          <li key={label}>
-            <p className="font-serif font-black leading-none tracking-tight text-white">
-              <span className="text-[clamp(2.5rem,9vw,4.25rem)]">{value}</span>
-              <span className="ml-1 text-[clamp(0.9rem,3vw,1.25rem)] text-seed">
-                {unit}
-              </span>
-            </p>
-            <p className="mt-4 text-[13px] leading-relaxed text-white/60 md:text-sm">
-              {label}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 /** ③ プロフィール：人となりを項目で見せる。事実が確認できたものだけ並べる */
 const PROFILE = [
   { label: '名前', value: '山本 剛史（やまもと つよし）' },
@@ -758,7 +724,6 @@ export default function RenewPage() {
       <WorkSection />
       <TopSeedSection />
       <PathSection />
-      <NumbersSection />
       <ProfileSection />
       <ProofSection />
       <FaqSection />
