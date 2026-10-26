@@ -504,8 +504,8 @@ function ProofSection() {
             ))}
           </ul>
 
-          {/* 書影は文字より残る。記者クラブの写真と並べて裏付けの面を作る */}
-          <div className="space-y-6 md:w-[19rem] md:shrink-0">
+          {/* 書影を大きく、その下に写真を2枚並べて裏付けの面を作る */}
+          <div className="space-y-4 md:w-[19rem] md:shrink-0">
             <figure>
               <img
                 src="/book-cover.jpg"
@@ -516,9 +516,17 @@ function ProofSection() {
             </figure>
             <figure>
               <img
+                src="/radio.jpg"
+                alt="ラジオ番組に出演したときの様子"
+                className="aspect-[4/3] w-full rounded-sm object-cover object-[50%_38%]"
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
                 src="/profile.jpg"
                 alt="山本 剛史"
-                className="aspect-[4/3] w-full rounded-sm object-cover"
+                className="aspect-[16/10] w-full rounded-sm object-cover"
                 loading="lazy"
               />
             </figure>
