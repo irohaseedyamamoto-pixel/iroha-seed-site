@@ -24,16 +24,45 @@ const GREEN = { light: 'text-[#426b19]', dark: 'text-seed' } as const;
 /** 項目の番号は、どのセクションでも同じ明朝体の大きな数字で見せる */
 const NUMBER = 'font-serif text-3xl font-black leading-none md:text-4xl';
 
+/**
+ * セクションの外枠。
+ * texture：紙の質感と、中身の幅に合わせた細い縦線を背景に敷く（明るい地向け）
+ * watermark：セクションの一文字を、右下に大きく薄く透かして置く
+ * glow：紺の地に、ごく弱い緑と青の光のにじみを重ねて奥行きを出す（紺の地向け）
+ */
 function Section({
   ground,
+  texture = false,
+  watermark,
+  glow = false,
   children,
 }: {
   ground: keyof typeof GROUND;
+  texture?: boolean;
+  watermark?: string;
+  glow?: boolean;
   children: ReactNode;
 }) {
   return (
-    <section className={`${GROUND[ground]} px-6 py-24 md:px-12 md:py-32`}>
-      <div className="mx-auto max-w-5xl">{children}</div>
+    <section
+      // 透かし文字のはみ出しを切る。hidden だと見出しの左固定（sticky）が効かなくなるため clip を使う
+      className={`relative overflow-clip ${GROUND[ground]} ${texture ? 'paper-texture' : ''} ${glow ? 'night-glow' : ''} px-6 py-24 md:px-12 md:py-32`}
+    >
+      {texture && (
+        <div
+          aria-hidden="true"
+          className="column-lines pointer-events-none absolute inset-y-0 left-6 right-6 mx-auto max-w-5xl md:left-12 md:right-12"
+        />
+      )}
+      {watermark && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-[0.18em] right-[-0.05em] select-none font-serif text-[clamp(14rem,48vw,34rem)] font-black leading-none text-[#1c1c1e]/[0.04]"
+        >
+          {watermark}
+        </span>
+      )}
+      <div className="relative mx-auto max-w-5xl">{children}</div>
     </section>
   );
 }
@@ -92,7 +121,7 @@ function SectionHeading({
  */
 function GreetingSection() {
   return (
-    <Section ground="light">
+    <Section ground="light" texture>
       {/* 左に語り、右に写真。ファーストビューとは別のカットを置き、同じ写真は繰り返さない */}
       <div className="grid gap-10 md:grid-cols-[1fr_19rem] md:items-start md:gap-16">
         <div>
@@ -249,7 +278,8 @@ const QUESTIONS = [
 /** 次の⑥ Top SEED が紺の地のため、同じ色が続かないよう明るい地にする */
 function ThinkingSection() {
   return (
-    <Section ground="light">
+    // 見出し「考え方」から一文字を透かしに使う
+    <Section ground="light" texture watermark="考">
       <Split
         heading={
           <SectionHeading
@@ -355,7 +385,8 @@ function SubHeading({ children }: { children: ReactNode }) {
 
 function TopSeedSection() {
   return (
-    <Section ground="dark">
+    // 光のにじみは、サービスの紺の地だけに入れる（本人判断。ほかの紺の地はベタのまま）
+    <Section ground="dark" glow>
       {/* サービス名に見えるよう、ロゴを見出しにして、その下に小さく種類を添える */}
       <p
         className={`flex items-center gap-3 text-xs font-bold tracking-[0.2em] md:text-sm ${GREEN.dark}`}
@@ -641,7 +672,8 @@ function EmphasizeFigures({ text }: { text: string }) {
 
 function PathSection() {
   return (
-    <Section ground="light">
+    // 見出し「歩いてきた道」から一文字を透かしに使う
+    <Section ground="light" texture watermark="道">
       <Split
         heading={
           <SectionHeading
@@ -811,7 +843,7 @@ const FAQS = [
 
 function FaqSection() {
   return (
-    <Section ground="light">
+    <Section ground="light" texture>
       <Split
         heading={
           <SectionHeading label="ご質問" tone="light">
