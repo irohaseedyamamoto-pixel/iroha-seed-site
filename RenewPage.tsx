@@ -593,6 +593,7 @@ function TopSeedSection() {
       </div>
 
       <KindleService />
+      <OtherServices />
     </Section>
   );
 }
@@ -679,6 +680,52 @@ function KindleService() {
         className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/40 px-8 py-4 text-base font-bold text-white transition hover:border-white hover:bg-white/10"
       >
         出版について聞いてみる
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  );
+}
+
+/**
+ * そのほかのご依頼：Top SEED・Kindle 以外に受けている仕事を、控えめに並べる。
+ * 見出しは Kindle より一段小さく、囲みは使わず線で区切る。
+ * マーケティングコンサルティング（BtoB）は顧問と比べづらいため、本人判断でここには載せない（プロフィールには残す）。
+ */
+const OTHER_SERVICES = [
+  {
+    title: 'クリエイティブ制作',
+    body: 'ホームページ・LP・名刺・チラシなど。単発の制作だけでも、お受けします。見た目だけでなく、「誰に・何を・どの順番で伝えるか」から考えて作ります。',
+  },
+  {
+    title: 'AI活用サポート',
+    body: 'マーケティングへの活かし方から、日々の業務の効率化、社内向けのAI研修まで。AIを仕事に取り入れるお手伝いをします。',
+  },
+];
+
+function OtherServices() {
+  return (
+    <div className="mt-20 border-t border-white/15 pt-14 md:mt-24 md:pt-16">
+      <h3 className="font-serif text-xl font-black tracking-tight text-white md:text-2xl">
+        そのほかのご依頼
+      </h3>
+      <dl className="mt-8 border-t border-white/15">
+        {OTHER_SERVICES.map(({ title, body }) => (
+          <div
+            key={title}
+            className="flex flex-col gap-2 border-b border-white/15 py-6 md:flex-row md:gap-8"
+          >
+            <dt className={`font-serif text-base font-black md:w-48 md:shrink-0 md:text-lg ${GREEN.dark}`}>
+              {title}
+            </dt>
+            <dd className="max-w-2xl text-[15px] leading-[2] text-white/80 md:text-base">{body}</dd>
+          </div>
+        ))}
+      </dl>
+      <a
+        href="/contact"
+        className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/40 px-8 py-4 text-base font-bold text-white transition hover:border-white hover:bg-white/10"
+      >
+        ご依頼について聞いてみる
         <span aria-hidden="true">→</span>
       </a>
     </div>
