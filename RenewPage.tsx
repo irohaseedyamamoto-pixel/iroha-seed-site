@@ -1147,13 +1147,8 @@ function ContactSection() {
           </ul>
         </div>
 
-        <p className="mt-16 text-xs leading-relaxed text-white/55">
-          株式会社廣創　代表取締役社長　山本 剛史
-          <br />
-          iroha Seed（廣創のマーケティング事業部）
-          <br />
-          福岡県福岡市城南区七隈3-2-29-101
-        </p>
+        {/* 最後は iroha Seed だけのクレジットにする。会社名・住所は本人判断で外した（会社名はプロフィールに残る） */}
+        <p className="mt-16 text-xs tracking-wide text-white/55">© 2026 iroha Seed</p>
       </div>
     </Section>
   );
