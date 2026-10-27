@@ -247,16 +247,18 @@ function ProfileSection() {
               山本 剛史について
             </SectionHeading>
             {/*
-              やわらかい表情の写真。元の白い背景を透明に抜いてあるので、ベージュの地にそのままなじむ。
-              切り抜きが宙に浮いて見えないよう、足もとに細い線を引き、その上に立たせる
+              やわらかい表情の写真（元の白い背景を透明に抜いたもの）。
+              両肩の端が縦にまっすぐ切れているため、上が半円のアーチ形の枠に入れ、
+              写真を枠より少し大きく置いて、肩の切り口を枠の外に逃がす
             */}
-            <div className="mt-8 max-w-[15rem] border-b border-[#1c1c1e]/25 md:mt-10 md:max-w-[17rem]">
+            <div className="relative mt-8 aspect-[4/5] w-56 overflow-hidden rounded-t-full bg-[#d6ccb6] md:mt-10 md:w-64">
               <img
                 src="/profile-smile.png"
                 alt="笑顔の山本剛史"
                 width={629}
                 height={630}
-                className="block w-full"
+                // 背景を抜いたときの境目のぼかしが下端に残るため、枠の下へ少しはみ出させて隠す
+                className="absolute -bottom-[4%] left-1/2 w-[122%] max-w-none -translate-x-1/2"
                 loading="lazy"
               />
             </div>
@@ -445,14 +447,15 @@ function ThinkingSection() {
  */
 function PhotoBand() {
   return (
-    <figure className="relative h-[clamp(17rem,52vw,36rem)] overflow-hidden bg-[#12161f]">
+    <figure className="relative h-[clamp(17rem,52vw,40rem)] overflow-hidden bg-[#12161f]">
       <img
         src="/band-mono.jpg"
         alt="屋外のテーブルで手を組み、遠くを見つめる山本剛史"
         width={2000}
-        height={1304}
-        // PCは帯が横長になり上下が切れるため、頭が収まるよう上寄りに表示する
-        className="h-full w-full object-cover object-[52%_22%]"
+        height={1370}
+        // プロの切り方：関節（手首）では切らず、組んだ手と時計まで入れる。
+        // 横長のPCで両方は入りきらないため、頭の上は髪の途中で切る（頭の上は切っても自然に見える）
+        className="h-full w-full object-cover object-[52%_44%]"
         loading="lazy"
       />
     </figure>
@@ -809,7 +812,8 @@ const CHAPTERS = [
       alt: 'メロンパン店の店頭で、ショーケースの前に立つ山本剛史',
       width: 675,
       height: 840,
-      position: 'object-[50%_42%]',
+      // 手首で切らないよう、カウンターに置いた両手まで入る位置にする
+      position: 'object-[50%_52%]',
     },
   },
   {
