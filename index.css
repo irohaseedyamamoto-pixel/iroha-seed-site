@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@600;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -24,6 +24,24 @@
   body {
     @apply font-sans;
   }
+}
+
+/*
+ * 新サイト（/renew）だけの文字の仕上げ。旧サイトには効かないよう .renew の中に限定する。
+ * - 明朝の見出しを、AIのサイトでよく見る Noto Serif JP から、品のあるしっぽり明朝に替える
+ * - palt で「、」「」」などの後ろの余計なすき間を詰め、組まれた文字に見せる
+ * - auto-phrase で言葉の切れ目で改行しやすくする（対応していないブラウザでは今までどおり）
+ */
+.renew .font-serif {
+  font-family: "Shippori Mincho", "Noto Serif JP", serif;
+}
+.renew :is(h1, h2, h3, blockquote, .font-serif) {
+  font-feature-settings: "palt";
+  word-break: auto-phrase;
+}
+/* 1〜2文字だけが次の行に落ちないようにする（段落・カード・表の中の文章） */
+.renew :is(p, li, dd, summary) {
+  text-wrap: pretty;
 }
 
 @layer utilities {

@@ -33,6 +33,7 @@ const NUMBER = 'font-serif text-3xl font-black leading-none md:text-4xl';
  * blendFrom：上の境目を、ひとつ前のセクションの色からゆっくり移り変わらせる（近い色どうし向け）
  * fadeBottom：下の境目で紙の質感をゆっくり消し、無地の地色で次のセクションへ渡す（blendFrom と対で使う）
  * overlapNext：中身を次のセクションへはみ出させる（写真を境目にまたがせるとき）
+ * backdrop：写真を背景に暗く敷く（紺の地向け。文字が読める濃さの暗幕を重ねる）
  */
 const GROUND_FROM = {
   light: 'from-[#faf8f4]',
@@ -54,6 +55,7 @@ function Section({
   blendFrom,
   fadeBottom = false,
   overlapNext = false,
+  backdrop,
   children,
 }: {
   ground: keyof typeof GROUND;
@@ -63,6 +65,7 @@ function Section({
   blendFrom?: keyof typeof GROUND;
   fadeBottom?: boolean;
   overlapNext?: boolean;
+  backdrop?: { src: string; position: string };
   children: ReactNode;
 }) {
   return (
@@ -71,6 +74,22 @@ function Section({
       // 次へはみ出させるときは切らずに、次のセクションより手前に重ねる
       className={`relative ${overlapNext ? 'z-10' : 'overflow-clip'} ${GROUND[ground]} ${texture ? 'paper-texture' : ''} ${glow ? 'night-glow' : ''} px-6 py-24 md:px-12 md:py-32`}
     >
+      {backdrop && (
+        <>
+          <img
+            src={backdrop.src}
+            alt=""
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${backdrop.position}`}
+            loading="lazy"
+          />
+          {/* 暗幕：文字側（スマホは全体、PCは左）を濃くし、写真は右側にうっすら見せる */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[#12161f]/[0.88] md:bg-transparent md:bg-gradient-to-r md:from-[#12161f] md:from-35% md:via-[#12161f]/[0.88] md:to-[#12161f]/[0.55]"
+          />
+        </>
+      )}
       {/* 紙の質感は覆うが、透かし文字は消さないよう透かしより下の層に置く */}
       {fadeBottom && (
         <div
@@ -350,16 +369,21 @@ function ThinkingSection() {
             </article>
           ))}
         </div>
-
-        {/* 一番言いたい一文は、本文に埋めずに抜き出して大きく置く */}
-        <blockquote className="mt-14 border-l-2 border-[#426b19] pl-6 md:mt-16 md:pl-10">
-          <p className="font-serif text-[clamp(1.35rem,5.5vw,2.25rem)] font-black leading-[1.6] tracking-tight text-[#1c1c1e]">
-            集客ができないから安くする。
-            <br />
-            それは、違うと思っています。
-          </p>
-        </blockquote>
       </Split>
+
+      {/*
+        見せ場：一番言いたい一文を、本文の列から外に出して画面幅いっぱいの大きな文字で置く。
+        ファーストビュー以外にも「手を止める場所」をつくるため（文言は変えていない）
+      */}
+      <blockquote className="mt-24 md:mt-40">
+        <span aria-hidden="true" className="block h-px w-16 bg-[#426b19]" />
+        {/* PCでは1文がちょうど1行に収まる大きさを上限にする（中身の幅1024pxに14文字） */}
+        <p className="mt-10 font-serif text-[clamp(2rem,7.2vw,4.25rem)] font-black leading-[1.35] tracking-tight text-[#1c1c1e] md:mt-14">
+          集客ができないから安くする。
+          <br />
+          それは、違うと思っています。
+        </p>
+      </blockquote>
     </Section>
   );
 }
@@ -925,7 +949,8 @@ const SOCIALS = [
 
 function ContactSection() {
   return (
-    <Section ground="dark">
+    // ファーストビューと同じ人物写真を暗く敷き、「写真で始まり、写真で終わる」形にする
+    <Section ground="dark" backdrop={{ src: '/portrait.jpg', position: 'object-[70%_20%]' }}>
       <div className="max-w-3xl">
         <SectionHeading label="ご連絡" tone="dark">
           最後まで読んでいただき、
@@ -982,7 +1007,8 @@ function ContactSection() {
 /** 地の色が同じものを続けない順番：明→ベ→明→紺→明→ベ→紺→明→紺 */
 export default function RenewPage() {
   return (
-    <main>
+    // renew：新サイトだけの文字の仕上げ（index.css）を効かせる目印
+    <main className="renew">
       <RenewHero />
       <GreetingSection />
       <TroubleSection />
