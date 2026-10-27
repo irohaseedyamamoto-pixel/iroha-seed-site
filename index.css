@@ -45,17 +45,6 @@
       radial-gradient(ellipse 60% 45% at 88% 8%, rgb(154 197 84 / 0.11), transparent 70%),
       radial-gradient(ellipse 70% 50% at 5% 95%, rgb(52 84 150 / 0.22), transparent 70%);
   }
-
-  /* 新サイト用：中身の幅を4等分する細い縦線。設計図のような秩序を背景に置く */
-  .column-lines {
-    background-image: linear-gradient(to right, rgb(28 28 30 / 0.07) 1px, transparent 1px);
-    /* スマホは本文の上を横切る線が多いとうるさいため2等分にする */
-    background-size: 50% 100%;
-    border-right: 1px solid rgb(28 28 30 / 0.07);
-    @media (width >= 48rem) {
-      background-size: 25% 100%;
-    }
-  }
 }
 
 @keyframes marquee {

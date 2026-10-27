@@ -26,41 +26,73 @@ const NUMBER = 'font-serif text-3xl font-black leading-none md:text-4xl';
 
 /**
  * セクションの外枠。
- * texture：紙の質感と、中身の幅に合わせた細い縦線を背景に敷く（明るい地向け）
+ * texture：紙の質感を背景に敷く（明るい地向け）
+ *   ※背景の縦線は「見づらい」との本人判断で外した。線の模様は入れない
  * watermark：セクションの一文字を、右下に大きく薄く透かして置く
  * glow：紺の地に、ごく弱い緑と青の光のにじみを重ねて奥行きを出す（紺の地向け）
+ * blendFrom：上の境目を、ひとつ前のセクションの色からゆっくり移り変わらせる（近い色どうし向け）
+ * fadeBottom：下の境目で紙の質感をゆっくり消し、無地の地色で次のセクションへ渡す（blendFrom と対で使う）
+ * overlapNext：中身を次のセクションへはみ出させる（写真を境目にまたがせるとき）
  */
+const GROUND_FROM = {
+  light: 'from-[#faf8f4]',
+  beige: 'from-[#e6dfcf]',
+  dark: 'from-[#12161f]',
+} as const;
+
+const GROUND_TO = {
+  light: 'to-[#faf8f4]',
+  beige: 'to-[#e6dfcf]',
+  dark: 'to-[#12161f]',
+} as const;
+
 function Section({
   ground,
   texture = false,
   watermark,
   glow = false,
+  blendFrom,
+  fadeBottom = false,
+  overlapNext = false,
   children,
 }: {
   ground: keyof typeof GROUND;
   texture?: boolean;
   watermark?: string;
   glow?: boolean;
+  blendFrom?: keyof typeof GROUND;
+  fadeBottom?: boolean;
+  overlapNext?: boolean;
   children: ReactNode;
 }) {
   return (
     <section
-      // 透かし文字のはみ出しを切る。hidden だと見出しの左固定（sticky）が効かなくなるため clip を使う
-      className={`relative overflow-clip ${GROUND[ground]} ${texture ? 'paper-texture' : ''} ${glow ? 'night-glow' : ''} px-6 py-24 md:px-12 md:py-32`}
+      // 透かし文字のはみ出しは切る（hidden だと見出しの左固定 sticky が効かなくなるため clip）。
+      // 次へはみ出させるときは切らずに、次のセクションより手前に重ねる
+      className={`relative ${overlapNext ? 'z-10' : 'overflow-clip'} ${GROUND[ground]} ${texture ? 'paper-texture' : ''} ${glow ? 'night-glow' : ''} px-6 py-24 md:px-12 md:py-32`}
     >
-      {texture && (
+      {/* 紙の質感は覆うが、透かし文字は消さないよう透かしより下の層に置く */}
+      {fadeBottom && (
         <div
           aria-hidden="true"
-          className="column-lines pointer-events-none absolute inset-y-0 left-6 right-6 mx-auto max-w-5xl md:left-12 md:right-12"
+          className={`pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent ${GROUND_TO[ground]} md:h-64`}
         />
       )}
       {watermark && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-[0.18em] right-[-0.05em] select-none font-serif text-[clamp(14rem,48vw,34rem)] font-black leading-none text-[#1c1c1e]/[0.04]"
+          // 下の境目をなめらかにするセクションでは、透かしが境目でまっすぐ切れて線に見えないよう上げる
+          className={`pointer-events-none absolute ${fadeBottom ? 'bottom-24 md:bottom-32' : '-bottom-[0.18em]'} right-[-0.05em] select-none font-serif text-[clamp(14rem,48vw,34rem)] font-black leading-none text-[#1c1c1e]/[0.04]`}
         >
           {watermark}
         </span>
+      )}
+      {/* 紙の質感より手前に重ね、質感も境目からゆっくり現れるようにする */}
+      {blendFrom && (
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b ${GROUND_FROM[blendFrom]} to-transparent md:h-64`}
+        />
       )}
       <div className="relative mx-auto max-w-5xl">{children}</div>
     </section>
@@ -121,7 +153,8 @@ function SectionHeading({
  */
 function GreetingSection() {
   return (
-    <Section ground="light" texture>
+    // 写真を③との境目にまたがせて、箱が積み重なっただけに見えないようにする
+    <Section ground="light" texture overlapNext>
       {/* 左に語り、右に写真。ファーストビューとは別のカットを置き、同じ写真は繰り返さない */}
       <div className="grid gap-10 md:grid-cols-[1fr_19rem] md:items-start md:gap-16">
         <div>
@@ -144,13 +177,14 @@ function GreetingSection() {
           </div>
         </div>
 
-        <figure className="md:pt-12">
+        {/* 下側にマイナスの余白を付け、セクションの下の余白を越えて③へ垂らす（スマホ約3rem・PC約5rem食い込む） */}
+        <figure className="-mb-36 md:-mb-52 md:self-end">
           <img
             src="/profile.jpg"
             alt="山本 剛史"
             width="2048"
             height="1536"
-            className="aspect-[4/5] w-full rounded-sm object-cover object-[62%_32%]"
+            className="aspect-[4/5] w-full rounded-sm object-cover object-[62%_32%] shadow-[0_24px_48px_-16px_rgba(28,28,30,0.35)]"
             loading="lazy"
           />
         </figure>
@@ -175,7 +209,8 @@ const PROFILE = [
 
 function ProfileSection() {
   return (
-    <Section ground="beige">
+    // 上の境目は⑥経歴の明るい地から色をにじませてつなぐ
+    <Section ground="beige" blendFrom="light">
       <Split
         heading={
           <SectionHeading label="プロフィール" tone="light">
@@ -278,8 +313,8 @@ const QUESTIONS = [
 /** 次の⑥ Top SEED が紺の地のため、同じ色が続かないよう明るい地にする */
 function ThinkingSection() {
   return (
-    // 見出し「考え方」から一文字を透かしに使う
-    <Section ground="light" texture watermark="考">
+    // 見出し「考え方」から一文字を透かしに使う。上の境目は③のベージュから色をにじませてつなぐ
+    <Section ground="light" texture watermark="考" blendFrom="beige">
       <Split
         heading={
           <SectionHeading
@@ -673,7 +708,8 @@ function EmphasizeFigures({ text }: { text: string }) {
 function PathSection() {
   return (
     // 見出し「歩いてきた道」から一文字を透かしに使う
-    <Section ground="light" texture watermark="道">
+    // 下の境目で紙の質感を消し、⑦プロフィールのベージュへ色をにじませてつなぐ
+    <Section ground="light" texture watermark="道" fadeBottom>
       <Split
         heading={
           <SectionHeading
