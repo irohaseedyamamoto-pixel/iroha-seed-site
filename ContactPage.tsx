@@ -1,129 +1,175 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+/*
+ * 問い合わせページ（/contact）。2026-10-27 に新サイト（RenewPage）の見た目のルールへそろえた。
+ * - 地の色は 明るい地 #faf8f4 ／ 紺 #12161f。模様は入れない
+ * - 緑は 明るい面で濃い緑 #426b19、紺の面でブランドの黄緑（seed）
+ * - ラベルは日本語だけ（英語のラベルは使わない）。呼び名は「無料相談」にそろえる
+ * - 外側を .renew で包み、しっぽり明朝・字詰めなど新サイトの文字の仕上げを効かせる
+ */
+
+const GREEN = { light: 'text-[#426b19]', dark: 'text-seed' } as const;
+
+/** 見出しの上の小さなラベル。新サイトの SectionHeading と同じ形 */
+function Label({ tone, children }: { tone: 'light' | 'dark'; children: ReactNode }) {
   return (
-    <div className="flex items-center gap-3 mb-6 text-[#c17f3c]">
-      <span className="w-8 h-[1.5px] bg-[#c17f3c]" />
-      <span className="text-[10px] tracking-[0.4em] font-bold uppercase">{children}</span>
-    </div>
+    <p className={`flex items-center gap-3 text-xs font-bold tracking-[0.2em] md:text-sm ${GREEN[tone]}`}>
+      <span aria-hidden="true" className="h-px w-8 bg-current" />
+      {children}
+    </p>
   );
 }
 
+/** 相談の流れ：よくある質問の答え（無料相談・30〜60分・納得いただけた場合だけ始める）を並べ直したもの。新しい事実は足さない */
+const FLOW: { title: string; body?: string }[] = [
+  { title: 'フォームから送る' },
+  { title: 'オンラインで30〜60分、お話を聞く', body: '全国どこでも対応します。直接お会いしてのご相談も可能です。' },
+  {
+    title: '課題と方向性をお伝えし、納得いただけた場合だけ始める',
+    body: '強引な勧誘はしません。',
+  },
+];
+
 function PrivacyPolicy() {
   return (
-    <section className="pt-20 mt-20 border-t border-[#d8d2c8]">
-      <SectionLabel>プライバシーポリシー / PRIVACY POLICY</SectionLabel>
-      <h2 className="font-serif text-3xl font-black text-[#1c1c1e] mb-10">プライバシーポリシー</h2>
+    <section className="mt-24 border-t border-[#1c1c1e]/15 pt-16 md:mt-32 md:pt-20">
+      <Label tone="light">個人情報の取り扱い</Label>
+      <h2 className="mt-4 font-serif text-[clamp(1.6rem,5vw,2.25rem)] font-black leading-tight tracking-tight text-[#1c1c1e]">
+        プライバシーポリシー
+      </h2>
 
-      <div className="space-y-8 text-[#5c5a56] leading-relaxed text-sm">
+      {/* 本文は変えていない。会社名・住所は、個人情報を扱う事業者として示しておく必要があるため残す */}
+      <div className="mt-10 space-y-8 text-sm leading-relaxed text-[#1c1c1e]/75">
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">1. 個人情報の取得について</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">1. 個人情報の取得について</h3>
           <p>株式会社廣創（以下「当社」）は、お問い合わせフォームを通じてお名前・会社名・メールアドレス・お問い合わせ内容等の個人情報を取得します。個人情報は適切な方法で取得し、不正な取得は行いません。</p>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">2. 個人情報の利用目的</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">2. 個人情報の利用目的</h3>
           <p>取得した個人情報は、以下の目的のみに利用します。</p>
-          <ul className="list-disc list-inside mt-3 space-y-1 text-[#8a8680] pl-2">
+          <ul className="mt-3 list-inside list-disc space-y-1 pl-2">
             <li>お問い合わせへの回答・ご連絡</li>
             <li>サービスに関する情報のご提供</li>
             <li>当社サービス改善のための統計分析（個人を特定しない形式）</li>
           </ul>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">3. 個人情報の第三者提供</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">3. 個人情報の第三者提供</h3>
           <p>当社は、法令に基づく場合を除き、ご本人の同意なく第三者に個人情報を提供・開示・譲渡することはありません。</p>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">4. 個人情報の管理</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">4. 個人情報の管理</h3>
           <p>個人情報への不正アクセス・紛失・破損・改ざん・漏洩等を防止するため、適切なセキュリティ対策を講じます。個人情報の保存期間は、利用目的達成後または法令に定める保存期間の終了時までとします。</p>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">5. 個人情報の開示・訂正・削除</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">5. 個人情報の開示・訂正・削除</h3>
           <p>ご本人から個人情報の開示・訂正・削除・利用停止を求められた場合は、合理的な範囲で速やかに対応します。お申し出は下記お問い合わせ先までご連絡ください。</p>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">6. Cookieの使用について</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">6. Cookieの使用について</h3>
           <p>当サイトでは、サービスの改善を目的としてCookieを使用する場合があります。ブラウザの設定によりCookieの使用を拒否することができますが、その場合一部機能が利用できなくなる場合があります。</p>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">7. プライバシーポリシーの変更</h3>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">7. プライバシーポリシーの変更</h3>
           <p>当社は、法令の変更や運営上の必要に応じて、本ポリシーを予告なく変更することがあります。変更後のポリシーは本ページに掲載した時点から効力を生じます。</p>
         </div>
         <div>
-          <h3 className="font-bold text-[#1c1c1e] text-base mb-3">8. お問い合わせ先</h3>
-          <div className="border border-[#d8d2c8] rounded-xl p-6 mt-2 bg-[#f8f5f0]">
-            <p className="font-bold text-[#1c1c1e] mb-1">株式会社廣創（iroha Seed）</p>
+          <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">8. お問い合わせ先</h3>
+          <div className="mt-2 border-t border-[#1c1c1e]/15 pt-4">
+            <p className="mb-1 font-bold text-[#1c1c1e]">株式会社廣創（iroha Seed）</p>
             <p>福岡県福岡市城南区七隈3-2-29-101</p>
             <p className="mt-1">メール：iroha.seed.yamamoto@gmail.com</p>
           </div>
         </div>
-        <p className="text-right text-[#8a8680] text-xs pt-4">制定日：2026年5月18日</p>
+        <p className="pt-4 text-right text-xs text-[#1c1c1e]/55">制定日：2026年5月18日</p>
       </div>
     </section>
   );
 }
 
 export default function ContactPage() {
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // フォームを送ると Googleフォームの中身が読み込み直される。
+  // 最初の読み込みでは何もせず、2回目以降（送信後）はフォームの位置へ戻して「送信しました」を見せる
+  const formRef = useRef<HTMLElement>(null);
+  const loadCount = useRef(0);
+  const handleFormLoad = () => {
+    loadCount.current += 1;
+    if (loadCount.current > 1) {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
-    <div className="font-sans antialiased min-h-screen bg-[#f8f5f0]">
-
-      {/* Header */}
-      <header className="bg-[#f8f5f0] border-b border-[#d8d2c8] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-14 flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 text-[#8a8680] hover:text-[#1c1c1e] transition-colors text-sm font-medium">
-            <ArrowLeft size={15} />
+    <div className="renew min-h-screen bg-[#faf8f4] font-sans antialiased">
+      <header className="sticky top-0 z-50 border-b border-[#1c1c1e]/10 bg-[#faf8f4]/95 backdrop-blur-sm">
+        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6 md:px-12">
+          <Link to="/" className="font-serif text-lg font-black tracking-wide text-[#1c1c1e]">
+            iroha&nbsp;Seed
+          </Link>
+          <Link
+            to="/"
+            className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-[#1c1c1e]/65 transition hover:text-[#1c1c1e]"
+          >
+            <ArrowLeft size={15} aria-hidden="true" />
             トップへ戻る
           </Link>
-          <span className="text-[#d8d2c8]">|</span>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md overflow-hidden bg-[#ede8df] flex items-center justify-center">
-              <img src="/logo.png" alt="iroha Seed" className="w-full h-full object-contain" />
-            </div>
-            <span className="font-black text-[#1c1c1e] text-sm">iroha Seed</span>
-          </div>
         </div>
       </header>
 
-      {/* Page title */}
-      <div className="bg-[#1c1c1e] relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'radial-gradient(circle, #2a2a2e 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-        }} />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-20">
-          <SectionLabel>無料診断 / FREE DIAGNOSIS</SectionLabel>
-          <h1 className="font-serif text-4xl md:text-5xl font-black text-white leading-tight">
-            無料診断・お問い合わせ
+      {/* 紺の面：見出しと、相談しやすくするひと言 */}
+      <div className="bg-[#12161f] px-6 py-20 md:px-12 md:py-28">
+        <div className="mx-auto max-w-5xl">
+          <Label tone="dark">ご相談</Label>
+          <h1 className="mt-4 font-serif text-[clamp(1.9rem,6.5vw,2.5rem)] font-black leading-tight tracking-tight text-white">
+            無料相談・お問い合わせ
           </h1>
+          <p className="mt-6 max-w-2xl text-[15px] leading-[2] text-white/75 md:text-base">
+            「今すぐではないけれど気になっている」という段階でも大丈夫です。まず現状をお聞きして、必要かどうかを一緒に判断しましょう。
+          </p>
         </div>
       </div>
 
-      {/* Main */}
-      <main className="max-w-4xl mx-auto px-6 lg:px-10 py-20">
-
+      <main className="mx-auto max-w-5xl px-6 py-20 md:px-12 md:py-28">
         <section>
-          <SectionLabel>フォーム / FORM</SectionLabel>
-          <h2 className="font-serif text-3xl font-black text-[#1c1c1e] mb-4">お問い合わせフォーム</h2>
-          <p className="text-[#5c5a56] text-sm leading-relaxed mb-8">
-            「今すぐではないけれど気になっている」という段階でも大丈夫です。
-            まず現状をお聞きして、必要かどうかを一緒に判断しましょう。
-          </p>
-          <div className="border border-[#d8d2c8] rounded-2xl overflow-hidden shadow-sm bg-white">
+          <Label tone="light">相談の流れ</Label>
+          <ol className="mt-8 border-t border-[#1c1c1e]/15">
+            {FLOW.map(({ title, body }, i) => (
+              <li
+                key={title}
+                className="flex gap-5 border-b border-[#1c1c1e]/15 py-6 md:gap-8 md:py-7"
+              >
+                <span
+                  className={`w-8 shrink-0 font-serif text-3xl font-black leading-none md:w-10 md:text-4xl ${GREEN.light}`}
+                >
+                  {i + 1}
+                </span>
+                <div>
+                  <p className="font-serif text-lg font-black leading-snug text-[#1c1c1e] md:text-xl">
+                    {title}
+                  </p>
+                  {body && <p className="mt-2 text-[15px] leading-[1.9] text-[#1c1c1e]/75">{body}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section ref={formRef} className="mt-20 scroll-mt-20 md:mt-28">
+          <Label tone="light">お問い合わせフォーム</Label>
+          <div className="mt-8 overflow-hidden rounded-md border border-[#1c1c1e]/12 bg-white">
+            {/* スマホはフォームが縦に長くなるため高くして、フォームの中で二重にスクロールしないようにする */}
             <iframe
               src="https://docs.google.com/forms/d/e/1FAIpQLSf97oAUOKluVJKb4TRWIQJ--tlJwfiTVF29SUAo3J74mehHRA/viewform?embedded=true"
-              width="100%"
-              height="820"
-              frameBorder="0"
-              marginHeight={0}
-              marginWidth={0}
               title="お問い合わせフォーム"
-              className="block"
-              tabIndex={-1}
-              onLoad={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
+              className="block h-[1150px] w-full md:h-[900px]"
+              onLoad={handleFormLoad}
             >
               読み込んでいます…
             </iframe>
@@ -133,9 +179,8 @@ export default function ContactPage() {
         <PrivacyPolicy />
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#1c1c1e] border-t border-[#2a2a2e] py-8 text-center text-[#5c5a56] text-xs">
-        © 2026 Hiroso Inc. All rights reserved.
+      <footer className="bg-[#12161f] px-6 py-8 text-center text-xs tracking-wide text-white/55">
+        © 2026 iroha Seed
       </footer>
     </div>
   );
