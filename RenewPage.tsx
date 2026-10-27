@@ -242,9 +242,25 @@ function ProfileSection() {
     <Section ground="beige" blendFrom="light">
       <Split
         heading={
-          <SectionHeading label="プロフィール" tone="light">
-            山本 剛史について
-          </SectionHeading>
+          <>
+            <SectionHeading label="プロフィール" tone="light">
+              山本 剛史について
+            </SectionHeading>
+            {/*
+              やわらかい表情の写真。元の白い背景を透明に抜いてあるので、ベージュの地にそのままなじむ。
+              切り抜きが宙に浮いて見えないよう、足もとに細い線を引き、その上に立たせる
+            */}
+            <div className="mt-8 max-w-[15rem] border-b border-[#1c1c1e]/25 md:mt-10 md:max-w-[17rem]">
+              <img
+                src="/profile-smile.png"
+                alt="笑顔の山本剛史"
+                width={629}
+                height={630}
+                className="block w-full"
+                loading="lazy"
+              />
+            </div>
+          </>
         }
       >
         <dl className="border-t border-[#1c1c1e]/20">
@@ -419,6 +435,27 @@ function ThinkingSection() {
         </p>
       </blockquote>
     </Section>
+  );
+}
+
+/**
+ * 写真の帯：④考え方と⑤サービスの間に、画面いっぱいの写真を1枚挟む。
+ * 箱が積み重なっただけに見えないよう、文字の続くページに「写真で区切る」場所をつくる。
+ * 白黒の落ち着いた写真が、考え方の締めからサービスへの切り替えになる
+ */
+function PhotoBand() {
+  return (
+    <figure className="relative h-[clamp(17rem,52vw,36rem)] overflow-hidden bg-[#12161f]">
+      <img
+        src="/band-mono.jpg"
+        alt="屋外のテーブルで手を組み、遠くを見つめる山本剛史"
+        width={2000}
+        height={1304}
+        // PCは帯が横長になり上下が切れるため、頭が収まるよう上寄りに表示する
+        className="h-full w-full object-cover object-[52%_22%]"
+        loading="lazy"
+      />
+    </figure>
   );
 }
 
@@ -744,6 +781,13 @@ const CHAPTERS = [
     period: '1997〜2002年ごろ（15〜20歳）',
     title: '野球ばかりしていました',
     body: '高校では野球部で、2年続けてセンバツに出ました。専門学校では大阪代表として全国大会へ。この頃は、野球のことしか考えていませんでした。',
+    image: {
+      src: '/history-baseball.jpg',
+      alt: '野球のユニフォーム姿で守備につく、学生時代の山本剛史',
+      width: 1000,
+      height: 750,
+      position: 'object-[50%_30%]',
+    },
   },
   {
     period: '2002〜2004年ごろ（20〜22歳）',
@@ -759,6 +803,14 @@ const CHAPTERS = [
     period: '2017年（35歳）',
     title: 'メロンパンが売れた日',
     body: 'フランチャイズのメロンパン店で、エリアマネージャーを任されました。最終的に2店舗を出しています。\n1店舗目の初日は、来客が500人、販売数は3,138個。全国3位でした。オープンから3か月の売上は2,500万円。\nここで分かったのは、売れるかどうかは商品の良し悪しだけでは決まらない、ということでした。',
+    // 後ろに写っている店員の方の顔はぼかし済み
+    image: {
+      src: '/history-melonpan.jpg',
+      alt: 'メロンパン店の店頭で、ショーケースの前に立つ山本剛史',
+      width: 675,
+      height: 840,
+      position: 'object-[50%_42%]',
+    },
   },
   {
     period: '2019〜2023年（37〜41歳）',
@@ -827,7 +879,7 @@ function PathSection() {
         }
       >
         <ol>
-          {CHAPTERS.map(({ period, title, body }) => (
+          {CHAPTERS.map(({ period, title, body, image }) => (
             <li
               key={title}
               className="relative border-l border-[#1c1c1e]/15 pb-12 pl-8 last:pb-0 md:pl-12"
@@ -848,6 +900,23 @@ function PathSection() {
                   <EmphasizeFigures text={paragraph} />
                 </p>
               ))}
+              {/*
+                本人の当時の写真を、本文の下に添える。主役は文章のまま。
+                誌面のように扱いをそろえる：比率は全部 3:2、色味は彩度を少し落としてコントラストを上げ、
+                撮った機材の違う昔の写真どうしでも「同じアルバムの写真」に見えるようにする
+              */}
+              {image && (
+                <figure className="mt-7 max-w-sm md:max-w-md">
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    className={`aspect-[3/2] w-full rounded-sm object-cover ${image.position} contrast-[1.06] saturate-[0.82]`}
+                    loading="lazy"
+                  />
+                </figure>
+              )}
             </li>
           ))}
         </ol>
@@ -1094,6 +1163,7 @@ export default function RenewPage() {
       <GreetingSection />
       <TroubleSection />
       <ThinkingSection />
+      <PhotoBand />
       <TopSeedSection />
       <PathSection />
       <ProfileSection />
