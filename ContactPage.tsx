@@ -41,7 +41,7 @@ function PrivacyPolicy() {
         プライバシーポリシー
       </h2>
 
-      {/* 本文は変えていない。会社名・住所は、個人情報を扱う事業者として示しておく必要があるため残す */}
+      {/* 本文は旧サイトのまま。「8. お問い合わせ先」だけ、本人判断で iroha Seed のみ・住所なしにした */}
       <div className="mt-10 space-y-8 text-sm leading-relaxed text-[#1c1c1e]/75">
         <div>
           <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">1. 個人情報の取得について</h3>
@@ -78,10 +78,10 @@ function PrivacyPolicy() {
         </div>
         <div>
           <h3 className="mb-3 text-base font-bold text-[#1c1c1e]">8. お問い合わせ先</h3>
+          {/* 本人判断で、窓口名は iroha Seed だけにし、住所は載せない（求めがあれば答えられる状態にしておけば足りる） */}
           <div className="mt-2 border-t border-[#1c1c1e]/15 pt-4">
-            <p className="mb-1 font-bold text-[#1c1c1e]">株式会社廣創（iroha Seed）</p>
-            <p>福岡県福岡市城南区七隈3-2-29-101</p>
-            <p className="mt-1">メール：iroha.seed.yamamoto@gmail.com</p>
+            <p className="mb-1 font-bold text-[#1c1c1e]">iroha Seed</p>
+            <p>メール：iroha.seed.yamamoto@gmail.com</p>
           </div>
         </div>
         <p className="pt-4 text-right text-xs text-[#1c1c1e]/55">制定日：2026年5月18日</p>
