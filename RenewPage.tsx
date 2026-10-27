@@ -212,18 +212,28 @@ function GreetingSection() {
   );
 }
 
-/** ③ プロフィール：人となりを項目で見せる。事実が確認できたものだけ並べる */
-const PROFILE = [
+/**
+ * ⑦ プロフィール：人となりを項目で見せる。事実が確認できたものだけ並べる。
+ * 初めて見た人が上から読むだけで分かるよう、「誰か → 何をしている人か → 人となり」の順に並べる
+ */
+const PROFILE: { label: string; value: string | string[] }[] = [
   { label: '名前', value: '山本 剛史（やまもと つよし）' },
-  { label: '出身', value: '山口県' },
-  { label: '対応エリア', value: '全国（オンライン・訪問どちらも）' },
-  {
-    label: 'いまの仕事',
-    value: 'マーケティング顧問（Top SEED）と、Kindle出版プロデュース',
-  },
   { label: '会社', value: '株式会社廣創　代表取締役社長' },
   { label: 'マーケティング事業部', value: 'iroha Seed（イロハシード）' },
+  {
+    // 仕事が複数あるため、文章ではなく箇条書きで並べる。主の仕事 Top SEED を先頭に、内容の近い順
+    label: 'いまの仕事',
+    value: [
+      'マーケティング顧問（Top SEED）',
+      'マーケティングコンサルティング（BtoB）',
+      'クリエイティブ制作（ホームページ・LP・名刺・チラシなど）',
+      'AI活用サポート',
+      'Kindle出版プロデュース',
+    ],
+  },
   { label: 'これまで', value: '建築・飲食・IT・製薬' },
+  { label: '出身', value: '山口県' },
+  { label: '対応エリア', value: '全国（オンライン・訪問どちらも）' },
 ];
 
 function ProfileSection() {
@@ -247,7 +257,31 @@ function ProfileSection() {
                 {label}
               </dt>
               <dd className="text-[15px] leading-relaxed text-[#1c1c1e] md:text-base">
-                {value}
+                {Array.isArray(value) ? (
+                  <ul className="space-y-1.5">
+                    {value.map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span aria-hidden="true" className={`select-none ${GREEN.light}`}>
+                          ・
+                        </span>
+                        {/* かっこ内は途中で折り返さず、ひとまとまりで次の行へ送る */}
+                        <span>
+                          {item.split(/(?=（)/).map((part) =>
+                            part.startsWith('（') ? (
+                              <span key={part} className="whitespace-nowrap">
+                                {part}
+                              </span>
+                            ) : (
+                              part
+                            ),
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  value
+                )}
               </dd>
             </div>
           ))}
