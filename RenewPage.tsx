@@ -137,7 +137,7 @@ const PROFILE = [
   { label: '対応エリア', value: '全国（オンライン・訪問どちらも）' },
   {
     label: 'いまの仕事',
-    value: '売れない原因の診断と、集客から成約までの設計',
+    value: 'マーケティング顧問（Top SEED）と、Kindle出版プロデュース',
   },
   { label: '会社', value: '株式会社廣創　代表取締役社長' },
   { label: 'マーケティング事業部', value: 'iroha Seed（イロハシード）' },
@@ -340,7 +340,6 @@ const NOT_DOING = [
 /** サービス概要：今の本文にある内容を短く言い直したもの。新しい事実は足さない */
 const SEED_OVERVIEW = [
   { label: '形式', value: '顧問として、継続して関わります。単発で作って終わり、ではありません。' },
-  { label: '進め方', value: '月ごとに、一緒に回していきます。' },
   { label: '中身', value: 'S・E・E・D の4ステップ' },
 ];
 
@@ -451,7 +450,7 @@ function TopSeedSection() {
       <div className="mt-14 max-w-3xl md:mt-16">
         <SubHeading>名前の由来</SubHeading>
         <p className="mt-4 text-sm leading-[2.1] text-white/65 md:text-[15px]">
-          トップシードというのは、スポーツでいう「第1シード」のことです。優勝候補として、一番に選ばれる存在。そこを目指すための支援プランとして、この名前にしました。
+          トップシードというのは、スポーツでいう「第1シード」のことです。優勝候補として、一番に選ばれる存在。そこを目指すためのサービスとして、この名前にしました。
         </p>
       </div>
 
@@ -618,23 +617,24 @@ const CHAPTERS = [
  * 数字を集めて並べる見せ方は使わない（文脈のない数字はAIっぽく見えるため）。
  */
 const FIGURES = ['500人', '3,138個', '全国3位', '2,500万円', '100棟'];
-const FIGURE_PATTERN = new RegExp(`(${FIGURES.join('|')})`);
+// 数字の直後の句読点も一緒に切り出し、「。」だけが次の行に落ちないようにする
+const FIGURE_PATTERN = new RegExp(`((?:${FIGURES.join('|')})[。、]?)`);
 
 function EmphasizeFigures({ text }: { text: string }) {
   return (
     <>
-      {text.split(FIGURE_PATTERN).map((part, i) =>
-        FIGURES.includes(part) ? (
-          <strong
-            key={i}
-            className="mx-0.5 whitespace-nowrap font-serif text-[1.6em] font-black leading-none text-[#1c1c1e]"
-          >
-            {part}
-          </strong>
-        ) : (
-          part
-        ),
-      )}
+      {text.split(FIGURE_PATTERN).map((part, i) => {
+        const figure = FIGURES.find((f) => part.startsWith(f));
+        if (!figure) return part;
+        return (
+          <span key={i} className="whitespace-nowrap">
+            <strong className="mx-0.5 font-serif text-[1.6em] font-black leading-none text-[#1c1c1e]">
+              {figure}
+            </strong>
+            {part.slice(figure.length)}
+          </span>
+        );
+      })}
     </>
   );
 }
@@ -785,11 +785,11 @@ const FAQS = [
   },
   {
     q: '相談から始まるまでの流れは？',
-    a: 'まず無料診断でお話を聞きます。オンラインで30〜60分ほどです。そのうえで課題と方向性をお伝えして、納得いただけた場合だけ始めます。強引な勧誘はしません。',
+    a: 'まず無料相談でお話を聞きます。オンラインで30〜60分ほどです。そのうえで課題と方向性をお伝えして、納得いただけた場合だけ始めます。強引な勧誘はしません。',
   },
   {
     q: '料金はどのくらいですか？',
-    a: '状況や課題の深さによって変わります。まず無料診断でお話を聞いてから、合うかたちをご提案します。',
+    a: '状況や課題の深さによって変わります。まず無料相談でお話を聞いてから、合うかたちをご提案します。',
   },
   {
     q: 'SNS運用や広告の代行もお願いできますか？',
@@ -866,7 +866,7 @@ function ContactSection() {
         </SectionHeading>
 
         <p className="mt-8 text-[15px] leading-[2] text-white/80 md:text-lg md:leading-[2.1]">
-          ここまで読んで「少し話してみたいかも」と思っていただけたなら、たぶん合うと思います。売り込むことはしません。まずは現状をお聞かせください。
+          最後まで読んでくださったなら、きっと何か引っかかるところがあったのだと思います。売り込むことはしません。まずは現状をお聞かせください。
         </p>
 
         <div className="mt-12">
