@@ -811,9 +811,9 @@ const CHAPTERS = [
       src: '/history-melonpan.jpg',
       alt: 'メロンパン店の店頭で、ショーケースの前に立つ山本剛史',
       width: 675,
-      height: 840,
-      // 手首で切らないよう、カウンターに置いた両手まで入る位置にする
-      position: 'object-[50%_52%]',
+      height: 844,
+      // 主役のメロンパン（ショーケース）まで入るよう、元写真を帽子からパンまでの縦長に切り直してある
+      position: 'object-center',
     },
   },
   {
@@ -906,17 +906,18 @@ function PathSection() {
               ))}
               {/*
                 本人の当時の写真を、本文の下に添える。主役は文章のまま。
-                誌面のように扱いをそろえる：比率は全部 3:2、色味は彩度を少し落としてコントラストを上げ、
-                撮った機材の違う昔の写真どうしでも「同じアルバムの写真」に見えるようにする
+                誌面のように扱いをそろえる：比率は全部 4:5 の縦長、色味は彩度を少し落としてコントラストを上げ、
+                撮った機材の違う昔の写真どうしでも「同じアルバムの写真」に見えるようにする。
+                （3:2 の横長だと、メロンパン店の写真で主役のパンが切れてしまったため縦長にした）
               */}
               {image && (
-                <figure className="mt-7 max-w-sm md:max-w-md">
+                <figure className="mt-7 max-w-[17rem] md:max-w-[20rem]">
                   <img
                     src={image.src}
                     alt={image.alt}
                     width={image.width}
                     height={image.height}
-                    className={`aspect-[3/2] w-full rounded-sm object-cover ${image.position} contrast-[1.06] saturate-[0.82]`}
+                    className={`aspect-[4/5] w-full rounded-sm object-cover ${image.position} contrast-[1.06] saturate-[0.82]`}
                     loading="lazy"
                   />
                 </figure>
